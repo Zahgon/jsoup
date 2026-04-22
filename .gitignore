@@ -11,3 +11,6 @@ bin/
 .vscode/
 .java-version
 .DS_Store
+
+.aider*
+logs/
