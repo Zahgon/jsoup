@@ -4,14 +4,17 @@ import java.util.ArrayList;
 
 /**
  * A container for ParseErrors.
- * 
+ *
  * @author Jonathan Hedley
  */
-public class ParseErrorList extends ArrayList<ParseError>{
+public class ParseErrorList extends ArrayList<ParseError> {
+
     private static final int INITIAL_CAPACITY = 16;
+
     private final int initialCapacity;
+
     private final int maxSize;
-    
+
     ParseErrorList(int initialCapacity, int maxSize) {
         super(initialCapacity);
         this.initialCapacity = initialCapacity;
@@ -19,32 +22,31 @@ public class ParseErrorList extends ArrayList<ParseError>{
     }
 
     /**
-     Create a new ParseErrorList with the same settings, but no errors in the list
-     @param copy initial and max size details to copy
+     *     Create a new ParseErrorList with the same settings, but no errors in the list
+     *     @param copy initial and max size details to copy
      */
     ParseErrorList(ParseErrorList copy) {
         this(copy.initialCapacity, copy.maxSize);
     }
-    
+
     boolean canAddError() {
-        return size() < maxSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getMaxSize() {
-        return maxSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static ParseErrorList noTracking() {
-        return new ParseErrorList(0, 0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     public static ParseErrorList tracking(int maxSize) {
-        return new ParseErrorList(INITIAL_CAPACITY, maxSize);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object clone() {
-        // all class fields are primitive, so native clone is enough.
-        return super.clone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

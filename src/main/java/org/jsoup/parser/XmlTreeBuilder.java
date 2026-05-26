@@ -17,14 +17,12 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.nodes.XmlDeclaration;
 import org.jsoup.select.Elements;
 import org.jspecify.annotations.Nullable;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.jsoup.parser.Parser.NamespaceXml;
 
 /**
@@ -35,146 +33,69 @@ import static org.jsoup.parser.Parser.NamespaceXml;
  * @author Jonathan Hedley
  */
 public class XmlTreeBuilder extends TreeBuilder {
-    static final String XmlnsKey = "xmlns";
-    static final String XmlnsPrefix = "xmlns:";
-    private final ArrayDeque<HashMap<String, String>> namespacesStack = new ArrayDeque<>(); // stack of namespaces, prefix => urn
 
-    @Override ParseSettings defaultSettings() {
-        return ParseSettings.preserveCase;
+    static final String XmlnsKey = "xmlns";
+
+    static final String XmlnsPrefix = "xmlns:";
+
+    // stack of namespaces, prefix => urn
+    private final ArrayDeque<HashMap<String, String>> namespacesStack = new ArrayDeque<>();
+
+    @Override
+    ParseSettings defaultSettings() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void initialiseParse(Reader input, String baseUri, Parser parser) {
-        super.initialiseParse(input, baseUri, parser);
-        doc.outputSettings()
-            .syntax(Document.OutputSettings.Syntax.xml)
-            .escapeMode(Entities.EscapeMode.xhtml)
-            .prettyPrint(false); // as XML, we don't understand what whitespace is significant or not
-
-        namespacesStack.clear();
-        HashMap<String, String> ns = new HashMap<>();
-        ns.put("xml", NamespaceXml);
-        ns.put("", NamespaceXml);
-        namespacesStack.push(ns);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void initialiseParseFragment(@Nullable Element context) {
-        super.initialiseParseFragment(context);
-        if (context == null) return;
-
-        // transition to the tag's text state if available
-        TokeniserState textState = context.tag().textState();
-        if (textState != null) tokeniser.transition(textState);
-
-        // reconstitute the namespace stack by traversing the element and its parents (top down)
-        Elements chain = context.parents();
-        chain.add(0, context);
-        for (int i = chain.size() - 1; i >= 0; i--) {
-            Element el = chain.get(i);
-            HashMap<String, String> namespaces = new HashMap<>(namespacesStack.peek());
-            namespacesStack.push(namespaces);
-            if (el.attributesSize() > 0) {
-                processNamespaces(el.attributes(), namespaces);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Document parse(Reader input, String baseUri) {
-        return parse(input, baseUri, new Parser(this));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Document parse(String input, String baseUri) {
-        return parse(new StringReader(input), baseUri, new Parser(this));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override List<Node> completeParseFragment() {
-        return doc.childNodes();
+    @Override
+    List<Node> completeParseFragment() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     XmlTreeBuilder newInstance() {
-        return new XmlTreeBuilder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override public String defaultNamespace() {
-        return NamespaceXml;
+    @Override
+    public String defaultNamespace() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     TagSet defaultTagSet() {
-        return new TagSet(); // an empty tagset
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     int defaultMaxDepth() {
-        return Integer.MAX_VALUE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected boolean process(Token token) {
-        currentToken = token;
-
-        // start tag, end tag, doctype, xmldecl, comment, character, eof
-        switch (token.type) {
-            case StartTag:
-                insertElementFor(token.asStartTag());
-                break;
-            case EndTag:
-                popStackToClose(token.asEndTag());
-                break;
-            case Comment:
-                insertCommentFor(token.asComment());
-                break;
-            case Character:
-                insertCharacterFor(token.asCharacter());
-                break;
-            case Doctype:
-                insertDoctypeFor(token.asDoctype());
-                break;
-            case XmlDecl:
-                insertXmlDeclarationFor(token.asXmlDecl());
-                break;
-            case EOF: // could put some normalisation here if desired
-                break;
-            default:
-                Validate.fail("Unexpected token type: " + token.type);
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void insertElementFor(Token.StartTag startTag) {
-        // handle namespace for tag
-        HashMap<String, String> namespaces = new HashMap<>(namespacesStack.peek());
-        namespacesStack.push(namespaces);
-
-        Attributes attributes = startTag.attributes;
-        if (attributes != null) {
-            settings.normalizeAttributes(attributes);
-            attributes.deduplicate(settings);
-            processNamespaces(attributes, namespaces);
-            applyNamespacesToAttributes(attributes, namespaces);
-            startTag.finaliseAttributeRanges(settings);
-        }
-
-        enforceStackDepthLimit();
-
-        String tagName = startTag.tagName.value();
-        String ns = resolveNamespace(tagName, namespaces);
-        Tag tag = tagFor(tagName, startTag.normalName, ns, settings);
-        Element el = new Element(tag, null, attributes);
-        currentElement().appendChild(el);
-        push(el);
-
-        if (startTag.isSelfClosing()) {
-            tag.setSeenSelfClose();
-            pop(); // push & pop ensures onNodeInserted & onNodeClosed
-        } else if (tag.isEmpty()) {
-            pop(); // custom defined void tag
-        } else {
-            TokeniserState textState = tag.textState();
-            if (textState != null) tokeniser.transition(textState);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void processNamespaces(Attributes attributes, HashMap<String, String> namespaces) {
@@ -183,7 +104,8 @@ public class XmlTreeBuilder extends TreeBuilder {
             String key = attr.getKey();
             String value = attr.getValue();
             if (key.equals(XmlnsKey)) {
-                namespaces.put("", value); // new default for this level
+                // new default for this level
+                namespaces.put("", value);
             } else if (key.startsWith(XmlnsPrefix)) {
                 String nsPrefix = key.substring(XmlnsPrefix.length());
                 namespaces.put(nsPrefix, value);
@@ -194,16 +116,17 @@ public class XmlTreeBuilder extends TreeBuilder {
     private static void applyNamespacesToAttributes(Attributes attributes, HashMap<String, String> namespaces) {
         // second pass, apply namespace to attributes. Collects them first then adds (as userData is an attribute)
         Map<String, String> attrPrefix = new HashMap<>();
-        for (Attribute attr: attributes) {
+        for (Attribute attr : attributes) {
             String prefix = attr.prefix();
             if (!prefix.isEmpty()) {
-                if (prefix.equals(XmlnsKey)) continue;
+                if (prefix.equals(XmlnsKey))
+                    continue;
                 String ns = namespaces.get(prefix);
-                if (ns != null) attrPrefix.put(SharedConstants.XmlnsAttr + prefix, ns);
+                if (ns != null)
+                    attrPrefix.put(SharedConstants.XmlnsAttr + prefix, ns);
             }
         }
-        for (Map.Entry<String, String> entry : attrPrefix.entrySet())
-            attributes.userData(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, String> entry : attrPrefix.entrySet()) attributes.userData(entry.getKey(), entry.getValue());
     }
 
     private static String resolveNamespace(String tagName, HashMap<String, String> namespaces) {
@@ -218,42 +141,28 @@ public class XmlTreeBuilder extends TreeBuilder {
     }
 
     void insertLeafNode(LeafNode node) {
-        currentElement().appendChild(node);
-        onNodeInserted(node);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void insertCommentFor(Token.Comment commentToken) {
-        Comment comment = new Comment(commentToken.getData());
-        insertLeafNode(comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void insertCharacterFor(Token.Character token) {
-        final String data = token.getData();
-        LeafNode node;
-        if      (token.isCData())                       node = new CDataNode(data);
-        else if (currentElement().tag().is(Tag.Data))   node = new DataNode(data);
-        else                                            node = new TextNode(data);
-        insertLeafNode(node);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void insertDoctypeFor(Token.Doctype token) {
-        DocumentType doctypeNode = new DocumentType(settings.normalizeTag(token.getName()), token.getPublicIdentifier(), token.getSystemIdentifier());
-        doctypeNode.setPubSysKey(token.getPubSysKey());
-        if (token.hasInternalSubset())
-            doctypeNode.setInternalSubset(token.getInternalSubset());
-        insertLeafNode(doctypeNode);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void insertXmlDeclarationFor(Token.XmlDecl token) {
-        XmlDeclaration decl = new XmlDeclaration(token.name(), token.isDeclaration);
-        if (token.attributes != null) decl.attributes().addAll(token.attributes);
-        insertLeafNode(decl);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     Element pop() {
-        namespacesStack.pop();
-        return super.pop();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -263,29 +172,9 @@ public class XmlTreeBuilder extends TreeBuilder {
      * @param endTag tag to close
      */
     protected void popStackToClose(Token.EndTag endTag) {
-        // like in HtmlTreeBuilder - don't scan up forever for very (artificially) deeply nested stacks
-        String elName = settings.normalizeTag(endTag.name());
-        Element firstFound = null;
-
-        final int bottom = stack.size() - 1;
-        final int upper = bottom >= maxQueueDepth ? bottom - maxQueueDepth : 0;
-
-        for (int pos = stack.size() -1; pos >= upper; pos--) {
-            Element next = stack.get(pos);
-            if (next.nodeName().equals(elName)) {
-                firstFound = next;
-                break;
-            }
-        }
-        if (firstFound == null)
-            return; // not found, skip
-
-        for (int pos = stack.size() -1; pos >= 0; pos--) {
-            Element next = pop();
-            if (next == firstFound) {
-                break;
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    private static final int maxQueueDepth = 256; // an arbitrary tension point between real XML and crafted pain
+
+    // an arbitrary tension point between real XML and crafted pain
+    private static final int maxQueueDepth = 256;
 }

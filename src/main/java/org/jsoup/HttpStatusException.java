@@ -6,7 +6,9 @@ import java.io.IOException;
  * Signals that a HTTP request resulted in a not OK HTTP response.
  */
 public class HttpStatusException extends IOException {
+
     private final int statusCode;
+
     private final String url;
 
     public HttpStatusException(String message, int statusCode, String url) {
@@ -16,10 +18,10 @@ public class HttpStatusException extends IOException {
     }
 
     public int getStatusCode() {
-        return statusCode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getUrl() {
-        return url;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

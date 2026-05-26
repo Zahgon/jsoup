@@ -2,7 +2,6 @@ package org.jsoup.helper;
 
 import org.jsoup.Connection;
 import org.jspecify.annotations.Nullable;
-
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,14 +11,14 @@ import java.net.Proxy;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.jsoup.helper.HttpConnection.Response;
 
 /**
- Execute HTTP requests using the HttpURLConnection implementation. The HttpClient is used by default if available; set system property
- {@code jsoup.useHttpClient} to {@code false} to explicitly prefer the HttpUrlConnection.
+ * Execute HTTP requests using the HttpURLConnection implementation. The HttpClient is used by default if available; set system property
+ * {@code jsoup.useHttpClient} to {@code false} to explicitly prefer the HttpUrlConnection.
  */
 class UrlConnectionExecutor extends RequestExecutor {
+
     @Nullable
     HttpURLConnection conn;
 
@@ -29,66 +28,29 @@ class UrlConnectionExecutor extends RequestExecutor {
 
     @Override
     HttpConnection.Response execute() throws IOException {
-        try {
-            conn = createConnection(req);
-            conn.connect();
-            if (conn.getDoOutput()) {
-                try (OutputStream out = conn.getOutputStream()) {
-                    Response.writePost(req, out);
-                } catch (IOException e) {
-                    conn.disconnect();
-                    throw e;
-                }
-            }
-
-            // set up url, method, header, cookies
-            Response res = new Response(req);
-            res.executor = this;
-            res.method = Connection.Method.valueOf(conn.getRequestMethod());
-            res.url = conn.getURL();
-            res.statusCode = conn.getResponseCode();
-            res.statusMessage = conn.getResponseMessage();
-            if (res.statusMessage == null) res.statusMessage = ""; // getResponseMessage may be null but statusMessage() is not null
-            res.contentType = conn.getContentType();
-            res.contentLength = conn.getContentLength();
-            Map<String, List<String>> resHeaders = createHeaderMap(conn);
-            res.prepareResponse(resHeaders, prevRes);
-
-            return res;
-        } catch (IOException e) {
-            safeClose();
-            throw e;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     InputStream responseBody() throws IOException {
-        if (conn == null) throw new IllegalStateException("Not yet executed");
-        return conn.getErrorStream() != null ? conn.getErrorStream() : conn.getInputStream();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void safeClose() {
-        if (conn != null) {
-            conn.disconnect();
-            conn = null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // set up connection defaults, and details from request
     private static HttpURLConnection createConnection(HttpConnection.Request req) throws IOException {
         Proxy proxy = req.proxy();
-        final HttpURLConnection conn = (HttpURLConnection) (
-            proxy == null ?
-                req.url().openConnection() :
-                req.url().openConnection(proxy)
-        );
-
+        final HttpURLConnection conn = (HttpURLConnection) (proxy == null ? req.url().openConnection() : req.url().openConnection(proxy));
         conn.setRequestMethod(req.method().name());
-        conn.setInstanceFollowRedirects(false); // don't rely on native redirection support
+        // don't rely on native redirection support
+        conn.setInstanceFollowRedirects(false);
         conn.setConnectTimeout(req.timeout());
-        conn.setReadTimeout(req.timeout() / 2); // gets reduced after connection is made and status is read
-
+        // gets reduced after connection is made and status is read
+        conn.setReadTimeout(req.timeout() / 2);
         if (conn instanceof HttpsURLConnection) {
             HttpsURLConnection scon = (HttpsURLConnection) conn;
             if (req.sslContext != null)
@@ -97,10 +59,12 @@ class UrlConnectionExecutor extends RequestExecutor {
                 scon.setSSLSocketFactory(req.sslSocketFactory());
         }
         if (req.authenticator != null)
-            AuthenticationHandler.handler.enable(req.authenticator, conn); // removed in finally
+            // removed in finally
+            AuthenticationHandler.handler.enable(req.authenticator, conn);
         if (req.method().hasBody())
             conn.setDoOutput(true);
-        CookieUtil.applyCookiesToRequest(req, conn::addRequestProperty); // from the Request key/val cookies and the Cookie Store
+        // from the Request key/val cookies and the Cookie Store
+        CookieUtil.applyCookiesToRequest(req, conn::addRequestProperty);
         for (Map.Entry<String, List<String>> header : req.multiHeaders().entrySet()) {
             for (String value : header.getValue()) {
                 conn.addRequestProperty(header.getKey(), value);
@@ -120,8 +84,8 @@ class UrlConnectionExecutor extends RequestExecutor {
                 break;
             i++;
             if (key == null || val == null)
-                continue; // skip http1.1 line
-
+                // skip http1.1 line
+                continue;
             final List<String> vals = headers.computeIfAbsent(key, k -> new java.util.ArrayList<>());
             vals.add(val);
         }

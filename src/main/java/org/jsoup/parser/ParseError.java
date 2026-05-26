@@ -4,8 +4,11 @@ package org.jsoup.parser;
  * A Parse Error records an error in the input HTML that occurs in either the tokenisation or the tree building phase.
  */
 public class ParseError {
+
     private final int pos;
+
     private final String cursorPos;
+
     private final String errorMsg;
 
     ParseError(CharacterReader reader, String errorMsg) {
@@ -37,7 +40,7 @@ public class ParseError {
      * @return the error message.
      */
     public String getErrorMessage() {
-        return errorMsg;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -45,19 +48,19 @@ public class ParseError {
      * @return error offset within input
      */
     public int getPosition() {
-        return pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the formatted line:column cursor position where the error occurred.
-     @return line:number cursor position
+     *     Get the formatted line:column cursor position where the error occurred.
+     *     @return line:number cursor position
      */
     public String getCursorPos() {
-        return cursorPos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "<" + cursorPos + ">: " + errorMsg;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

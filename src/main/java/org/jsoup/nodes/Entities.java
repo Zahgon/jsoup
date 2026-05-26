@@ -7,14 +7,12 @@ import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.parser.CharacterReader;
 import org.jsoup.parser.Parser;
-
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-
 import static org.jsoup.nodes.Entities.EscapeMode.base;
 import static org.jsoup.nodes.Entities.EscapeMode.extended;
 
@@ -23,23 +21,36 @@ import static org.jsoup.nodes.Entities.EscapeMode.extended;
  * HTML named character references</a>.
  */
 public class Entities {
+
     // constants for escape options:
     static final int ForText = 0x1;
+
     static final int ForAttribute = 0x2;
+
     static final int Normalise = 0x4;
+
     static final int TrimLeading = 0x8;
+
     static final int TrimTrailing = 0x10;
 
     private static final int empty = -1;
+
     private static final String emptyName = "";
+
     static final int codepointRadix = 36;
-    private static final char[] codeDelims = {',', ';'};
-    private static final HashMap<String, String> multipoints = new HashMap<>(); // name -> multiple character references
+
+    private static final char[] codeDelims = { ',', ';' };
+
+    // name -> multiple character references
+    private static final HashMap<String, String> multipoints = new HashMap<>();
 
     private static final int BaseCount = 106;
-    private static final ArrayList<String> baseSorted = new ArrayList<>(BaseCount); // names sorted longest first, for prefix matching
+
+    // names sorted longest first, for prefix matching
+    private static final ArrayList<String> baseSorted = new ArrayList<>(BaseCount);
 
     public enum EscapeMode {
+
         /**
          * Restricted entities suitable for XHTML output: lt, gt, amp, and quot only.
          */
@@ -61,10 +72,14 @@ public class Entities {
 
         // table of named references to their codepoints. sorted so we can binary search. built by BuildEntities.
         private String[] nameKeys;
-        private int[] codeVals; // limitation is the few references with multiple characters; those go into multipoints.
+
+        // limitation is the few references with multiple characters; those go into multipoints.
+        private int[] codeVals;
 
         // table of codepoints to named entities.
-        private int[] codeKeys; // we don't support multicodepoints to single named value currently
+        // we don't support multicodepoints to single named value currently
+        private int[] codeKeys;
+
         private String[] nameVals;
 
         EscapeMode(String file, int size) {
@@ -72,19 +87,11 @@ public class Entities {
         }
 
         int codepointForName(final String name) {
-            int index = Arrays.binarySearch(nameKeys, name);
-            return index >= 0 ? codeVals[index] : empty;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         String nameForCodepoint(final int codepoint) {
-            final int index = Arrays.binarySearch(codeKeys, codepoint);
-            if (index >= 0) {
-                // the results are ordered so lower case versions of same codepoint come after uppercase, and we prefer to emit lower
-                // (and binary search for same item with multi results is undefined
-                return (index < nameVals.length - 1 && codeKeys[index + 1] == codepoint) ?
-                    nameVals[index + 1] : nameVals[index];
-            }
-            return emptyName;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -98,7 +105,7 @@ public class Entities {
      * @return true if a known named entity
      */
     public static boolean isNamedEntity(final String name) {
-        return extended.codepointForName(name) != empty;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -109,7 +116,7 @@ public class Entities {
      * @see #isNamedEntity(String)
      */
     public static boolean isBaseNamedEntity(final String name) {
-        return base.codepointForName(name) != empty;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,94 +126,74 @@ public class Entities {
      * @return the string value of the character(s) represented by this entity, or "" if not defined
      */
     public static String getByName(String name) {
-        String val = multipoints.get(name);
-        if (val != null)
-            return val;
-        int codepoint = extended.codepointForName(name);
-        if (codepoint != empty)
-            return new String(new int[]{codepoint}, 0, 1);
-        return emptyName;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static int codepointsForName(final String name, final int[] codepoints) {
-        String val = multipoints.get(name);
-        if (val != null) {
-            codepoints[0] = val.codePointAt(0);
-            codepoints[1] = val.codePointAt(1);
-            return 2;
-        }
-        int codepoint = extended.codepointForName(name);
-        if (codepoint != empty) {
-            codepoints[0] = codepoint;
-            return 1;
-        }
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Finds the longest base named entity that is a prefix of the input. That is, input "notit" would return "not".
-
-     @return longest entity name that is a prefix of the input, or "" if no entity matches
+     *     Finds the longest base named entity that is a prefix of the input. That is, input "notit" would return "not".
+     *
+     *     @return longest entity name that is a prefix of the input, or "" if no entity matches
      */
     public static String findPrefix(String input) {
-        for (String name : baseSorted) {
-            if (input.startsWith(name)) return name;
-        }
-        return emptyName;
-        // if perf critical, could look at using a Trie vs a scan
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     HTML escape an input string. That is, {@code <} is returned as {@code &lt;}. The escaped string is suitable for use
-     both in attributes and in text data.
-     @param data the un-escaped string to escape
-     @param out the output settings to use. This configures the character set escaped against (that is, if a
-     character is supported in the output character set, it doesn't have to be escaped), and also HTML or XML
-     settings.
-     @return the escaped string
+     *     HTML escape an input string. That is, {@code <} is returned as {@code &lt;}. The escaped string is suitable for use
+     *     both in attributes and in text data.
+     *     @param data the un-escaped string to escape
+     *     @param out the output settings to use. This configures the character set escaped against (that is, if a
+     *     character is supported in the output character set, it doesn't have to be escaped), and also HTML or XML
+     *     settings.
+     *     @return the escaped string
      */
     public static String escape(String data, OutputSettings out) {
-        return escapeString(data, out.escapeMode(), out.charset());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     HTML escape an input string, using the default settings (UTF-8, base entities). That is, {@code <} is
-     returned as {@code &lt;}. The escaped string is suitable for use both in attributes and in text data.
-     @param data the un-escaped string to escape
-     @return the escaped string
-     @see #escape(String, OutputSettings)
+     *     HTML escape an input string, using the default settings (UTF-8, base entities). That is, {@code <} is
+     *     returned as {@code &lt;}. The escaped string is suitable for use both in attributes and in text data.
+     *     @param data the un-escaped string to escape
+     *     @return the escaped string
+     *     @see #escape(String, OutputSettings)
      */
     public static String escape(String data) {
-        return escapeString(data, base, DataUtil.UTF_8);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static String escapeString(String data, EscapeMode escapeMode, Charset charset) {
-        if (data == null) return "";
+        if (data == null)
+            return "";
         StringBuilder sb = StringUtil.borrowBuilder();
         doEscape(data, QuietAppendable.wrap(sb), escapeMode, charset, ForText | ForAttribute);
         return StringUtil.releaseBuilder(sb);
     }
 
     static void escape(QuietAppendable accum, String data, OutputSettings out, int options) {
-        doEscape(data, accum, out.escapeMode(), out.charset(), options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void doEscape(String data, QuietAppendable accum, EscapeMode mode, Charset charset, int options) {
         final CoreCharset coreCharset = CoreCharset.byName(charset.name());
         final CharsetEncoder fallback = encoderFor(charset);
         final int length = data.length();
-
         int codePoint;
         boolean lastWasWhite = false;
         boolean reachedNonWhite = false;
         boolean skipped = false;
         for (int offset = 0; offset < length; offset += Character.charCount(codePoint)) {
             codePoint = data.codePointAt(offset);
-
             if ((options & Normalise) != 0) {
                 if (StringUtil.isWhitespace(codePoint)) {
-                    if ((options & TrimLeading) != 0 && !reachedNonWhite) continue;
-                    if (lastWasWhite) continue;
+                    if ((options & TrimLeading) != 0 && !reachedNonWhite)
+                        continue;
+                    if (lastWasWhite)
+                        continue;
                     if ((options & TrimTrailing) != 0) {
                         skipped = true;
                         continue;
@@ -218,7 +205,8 @@ public class Entities {
                     lastWasWhite = false;
                     reachedNonWhite = true;
                     if (skipped) {
-                        accum.append(' '); // wasn't the end, so need to place a normalized space
+                        // wasn't the end, so need to place a normalized space
+                        accum.append(' ');
                         skipped = false;
                     }
                 }
@@ -227,18 +215,16 @@ public class Entities {
         }
     }
 
-    private static void appendEscaped(int codePoint, QuietAppendable accum, int options, EscapeMode escapeMode,
-        CoreCharset coreCharset, CharsetEncoder fallback) {
+    private static void appendEscaped(int codePoint, QuietAppendable accum, int options, EscapeMode escapeMode, CoreCharset coreCharset, CharsetEncoder fallback) {
         // specific character range for xml 1.0; drop (not encode) if so
         if (EscapeMode.xhtml == escapeMode && !isValidXmlChar(codePoint)) {
             return;
         }
-
         // surrogate pairs, split implementation for efficiency on single char common case (saves creating strings, char[]):
         final char c = (char) codePoint;
         if (codePoint < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
             // html specific and required escapes:
-            switch (c) {
+            switch(c) {
                 case '&':
                     accum.append("&amp;");
                     break;
@@ -252,8 +238,10 @@ public class Entities {
                     accum.append("&gt;");
                     break;
                 case '"':
-                    if ((options & ForAttribute) != 0) accum.append("&quot;");
-                    else accum.append(c);
+                    if ((options & ForAttribute) != 0)
+                        accum.append("&quot;");
+                    else
+                        accum.append(c);
                     break;
                 case '\'':
                     // special case for the Entities.escape(string) method when we are maximally escaping. Otherwise, because we output attributes in "", there's no need to escape.
@@ -266,8 +254,10 @@ public class Entities {
                     accum.append(c);
                     break;
                 default:
-                    if (c < 0x20 || !canEncode(coreCharset, c, fallback)) appendEncoded(accum, escapeMode, codePoint);
-                    else accum.append(c);
+                    if (c < 0x20 || !canEncode(coreCharset, c, fallback))
+                        appendEncoded(accum, escapeMode, codePoint);
+                    else
+                        accum.append(c);
             }
         } else {
             if (canEncode(coreCharset, c, fallback)) {
@@ -284,14 +274,18 @@ public class Entities {
     private static final ThreadLocal<char[]> charBuf = ThreadLocal.withInitial(() -> new char[2]);
 
     private static void appendNbsp(QuietAppendable accum, EscapeMode escapeMode) {
-        if (escapeMode != EscapeMode.xhtml) accum.append("&nbsp;");
-        else accum.append("&#xa0;");
+        if (escapeMode != EscapeMode.xhtml)
+            accum.append("&nbsp;");
+        else
+            accum.append("&#xa0;");
     }
 
     private static void appendApos(QuietAppendable accum, int options, EscapeMode escapeMode) {
         if ((options & ForAttribute) != 0 && (options & ForText) != 0) {
-            if (escapeMode == EscapeMode.xhtml) accum.append("&#x27;");
-            else accum.append("&apos;");
+            if (escapeMode == EscapeMode.xhtml)
+                accum.append("&#x27;");
+            else
+                accum.append("&apos;");
         } else {
             accum.append('\'');
         }
@@ -299,7 +293,8 @@ public class Entities {
 
     private static void appendEncoded(QuietAppendable accum, EscapeMode escapeMode, int codePoint) {
         final String name = escapeMode.nameForCodepoint(codePoint);
-        if (!emptyName.equals(name)) // ok for identity check
+        if (// ok for identity check
+        !emptyName.equals(name))
             accum.append('&').append(name).append(';');
         else
             accum.append("&#x").append(Integer.toHexString(codePoint)).append(';');
@@ -312,7 +307,7 @@ public class Entities {
      * @return the unescaped string
      */
     public static String unescape(String string) {
-        return unescape(string, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -323,7 +318,7 @@ public class Entities {
      * @return unescaped string
      */
     static String unescape(String string, boolean strict) {
-        return Parser.unescapeEntities(string, strict);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /*
@@ -341,11 +336,12 @@ public class Entities {
      */
     private static boolean canEncode(final CoreCharset charset, final char c, final CharsetEncoder fallback) {
         // todo add more charset tests if impacted by Android's bad perf in canEncode
-        switch (charset) {
+        switch(charset) {
             case ascii:
                 return c < 0x80;
             case utf:
-                return !(c >= Character.MIN_SURROGATE && c < (Character.MAX_SURROGATE + 1)); // !Character.isSurrogate(c); but not in Android 10 desugar
+                // !Character.isSurrogate(c); but not in Android 10 desugar
+                return !(c >= Character.MIN_SURROGATE && c < (Character.MAX_SURROGATE + 1));
             default:
                 return fallback.canEncode(c);
         }
@@ -354,24 +350,21 @@ public class Entities {
     private static boolean isValidXmlChar(int codePoint) {
         // https://www.w3.org/TR/2006/REC-xml-20060816/Overview.html#charsets
         // Char	   ::=   	#x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]	any Unicode character, excluding the surrogate blocks, FFFE, and FFFF.
-        return (codePoint == 0x9 || codePoint == 0xA || codePoint == 0xD || (codePoint >= 0x20 && codePoint <= 0xD7FF)
-            || (codePoint >= 0xE000 && codePoint <= 0xFFFD) || (codePoint >= 0x10000 && codePoint <= 0x10FFFF));
+        return (codePoint == 0x9 || codePoint == 0xA || codePoint == 0xD || (codePoint >= 0x20 && codePoint <= 0xD7FF) || (codePoint >= 0xE000 && codePoint <= 0xFFFD) || (codePoint >= 0x10000 && codePoint <= 0x10FFFF));
     }
 
     enum CoreCharset {
+
         ascii, utf, fallback;
 
         static CoreCharset byName(final String name) {
-            if (name.equals("US-ASCII"))
-                return ascii;
-            if (name.startsWith("UTF-")) // covers UTF-8, UTF-16, et al
-                return utf;
-            return fallback;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     // cache the last used fallback encoder to save recreating on every use
     private static final ThreadLocal<CharsetEncoder> LocalEncoder = new ThreadLocal<>();
+
     private static CharsetEncoder encoderFor(Charset charset) {
         CharsetEncoder encoder = LocalEncoder.get();
         if (encoder == null || !encoder.charset().equals(charset)) {
@@ -386,12 +379,10 @@ public class Entities {
         e.codeVals = new int[size];
         e.codeKeys = new int[size];
         e.nameVals = new String[size];
-
         int i = 0;
         try (CharacterReader reader = new CharacterReader(pointsData)) {
             while (!reader.isEmpty()) {
                 // NotNestedLessLess=10913,824;1887&
-
                 final String name = reader.consumeTo('=');
                 reader.advance();
                 final int cp1 = Integer.parseInt(reader.consumeToAny(codeDelims), codepointRadix);
@@ -407,18 +398,15 @@ public class Entities {
                 final String indexS = reader.consumeTo('&');
                 final int index = Integer.parseInt(indexS, codepointRadix);
                 reader.advance();
-
                 e.nameKeys[i] = name;
                 e.codeVals[i] = cp1;
                 e.codeKeys[index] = cp1;
                 e.nameVals[index] = name;
-
                 if (cp2 != empty) {
-                    multipoints.put(name, new String(new int[]{cp1, cp2}, 0, 2));
+                    multipoints.put(name, new String(new int[] { cp1, cp2 }, 0, 2));
                 }
                 i++;
             }
-
             Validate.isTrue(i == size, "Unexpected count of entities loaded");
         }
     }

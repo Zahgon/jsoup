@@ -9,234 +9,178 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.NodeInternals;
 import org.jsoup.select.NodeVisitor;
 import org.jspecify.annotations.Nullable;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.jsoup.parser.Parser.NamespaceHtml;
 
 /**
  * @author Jonathan Hedley
  */
 abstract class TreeBuilder {
-    protected Parser parser;
-    CharacterReader reader;
-    Tokeniser tokeniser;
-    Document doc; // current doc we are building into
-    ArrayList<Element> stack; // the stack of open elements
-    String baseUri; // current base uri, for creating new elements
-    Token currentToken; // currentToken is used for error and source position tracking. Null at start of fragment parse
-    ParseSettings settings;
-    TagSet tagSet; // the tags we're using in this parse
-    @Nullable NodeVisitor nodeListener; // optional listener for node add / removes
 
-    private Token.StartTag start; // start tag to process
-    private final Token.EndTag end  = new Token.EndTag(this);
+    protected Parser parser;
+
+    CharacterReader reader;
+
+    Tokeniser tokeniser;
+
+    // current doc we are building into
+    Document doc;
+
+    // the stack of open elements
+    ArrayList<Element> stack;
+
+    // current base uri, for creating new elements
+    String baseUri;
+
+    // currentToken is used for error and source position tracking. Null at start of fragment parse
+    Token currentToken;
+
+    ParseSettings settings;
+
+    // the tags we're using in this parse
+    TagSet tagSet;
+
+    // optional listener for node add / removes
+    @Nullable
+    NodeVisitor nodeListener;
+
+    // start tag to process
+    private Token.StartTag start;
+
+    private final Token.EndTag end = new Token.EndTag(this);
+
     abstract ParseSettings defaultSettings();
 
-    boolean trackSourceRange; // optionally tracks source ranges of nodes and attributes
-    @Nullable LineMap lineMap; // shared line map for retained source ranges
+    // optionally tracks source ranges of nodes and attributes
+    boolean trackSourceRange;
+
+    // shared line map for retained source ranges
+    @Nullable
+    LineMap lineMap;
 
     void initialiseParse(Reader input, String baseUri, Parser parser) {
-        Validate.notNullParam(input, "input");
-        Validate.notNullParam(baseUri, "baseUri");
-        Validate.notNull(parser);
-
-        doc = new Document(parser.defaultNamespace(), baseUri);
-        doc.parser(parser);
-        this.parser = parser;
-        settings = parser.settings();
-        reader = new CharacterReader(input);
-        trackSourceRange = parser.isTrackPosition();
-        reader.trackNewlines(parser.isTrackErrors() || trackSourceRange);
-        lineMap = trackSourceRange ? reader.lineMap() : null;
-        if (parser.isTrackErrors()) parser.getErrors().clear();
-        tokeniser = new Tokeniser(this);
-        stack = new ArrayList<>(32);
-        tagSet = parser.tagSet();
-        start = new Token.StartTag(this);
-        currentToken = start; // init current token to the virtual start token.
-        this.baseUri = baseUri;
-        onNodeInserted(doc);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void completeParse() {
-        // tidy up - as the Parser and Treebuilder are retained in document for settings / fragments
-        if (reader == null) return;
-        if (lineMap != null) lineMap.complete();
-        reader.close();
-        reader = null;
-        lineMap = null;
-        tokeniser = null;
-        stack = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Document parse(Reader input, String baseUri, Parser parser) {
-        initialiseParse(input, baseUri, parser);
-        runParser();
-        return doc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     List<Node> parseFragment(Reader inputFragment, @Nullable Element context, String baseUri, Parser parser) {
-        initialiseParse(inputFragment, baseUri, parser);
-        initialiseParseFragment(context);
-        runParser();
-        return completeParseFragment();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void initialiseParseFragment(@Nullable Element context) {
-        // in Html, sets up context; no-op in XML
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     abstract List<Node> completeParseFragment();
 
-    /** Set the node listener, which will then get callbacks for node insert and removals. */
+    /**
+     * Set the node listener, which will then get callbacks for node insert and removals.
+     */
     void nodeListener(NodeVisitor nodeListener) {
-        this.nodeListener = nodeListener;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Create a new copy of this TreeBuilder
-     @return copy, ready for a new parse
+     *     Create a new copy of this TreeBuilder
+     *     @return copy, ready for a new parse
      */
     abstract TreeBuilder newInstance();
 
     void runParser() {
-        do {} while (stepParser()); // run until stepParser sees EOF
-        completeParse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean stepParser() {
-        // if we have reached the end already, step by popping off the stack, to hit nodeRemoved callbacks:
-        if (currentToken.type == Token.TokenType.EOF) {
-            if (stack == null) {
-                return false;
-            } if (stack.isEmpty()) {
-                onNodeClosed(doc); // the root doc is not on the stack, so let this final step close it
-                stack = null;
-                return true;
-            }
-            pop();
-            return true;
-        }
-        final Token token = tokeniser.read();
-        currentToken = token;
-        process(token);
-        token.reset();
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     abstract boolean process(Token token);
 
     boolean processStartTag(String name) {
-        // these are "virtual" start tags (auto-created by the treebuilder), so not tracking the start position
-        final Token.StartTag start = this.start;
-        if (currentToken == start) { // don't recycle an in-use token
-            return process(new Token.StartTag(this).name(name));
-        }
-        return process(start.reset().name(name));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean processStartTag(String name, Attributes attrs) {
-        final Token.StartTag start = this.start;
-        if (currentToken == start) { // don't recycle an in-use token
-            return process(new Token.StartTag(this).nameAttr(name, attrs));
-        }
-        start.reset();
-        start.nameAttr(name, attrs);
-        return process(start);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     boolean processEndTag(String name) {
-        if (currentToken == end) { // don't recycle an in-use token
-            return process(new Token.EndTag(this).name(name));
-        }
-        return process(end.reset().name(name));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Removes the last Element from the stack, hits onNodeClosed, and then returns it.
+     *     Removes the last Element from the stack, hits onNodeClosed, and then returns it.
      * @return
      */
     Element pop() {
-        int size = stack.size();
-        Element removed = stack.remove(size - 1);
-        onNodeClosed(removed);
-        return removed;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Adds the specified Element to the end of the stack, and hits onNodeInserted.
+     *     Adds the specified Element to the end of the stack, and hits onNodeInserted.
      * @param element
      */
     final void push(Element element) {
-        stack.add(element);
-        onNodeInserted(element);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Ensures the stack respects {@link Parser#getMaxDepth()} by closing the deepest open elements until there is room for
-     a new insertion.
+     *     Ensures the stack respects {@link Parser#getMaxDepth()} by closing the deepest open elements until there is room for
+     *     a new insertion.
      */
     final void enforceStackDepthLimit() {
-        final int maxDepth = parser.getMaxDepth();
-        if (maxDepth == Integer.MAX_VALUE) return;
-        while (stack.size() >= maxDepth) {
-            Element trimmed = pop();
-            onStackPrunedForDepth(trimmed);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Hook for the HTML Tree Builder that needs to clean up when an element is removed due to the depth limit
+     *     Hook for the HTML Tree Builder that needs to clean up when an element is removed due to the depth limit
      */
     void onStackPrunedForDepth(Element element) {
-        // default no-op
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Default maximum depth for parsers using this tree builder.
+     *     Default maximum depth for parsers using this tree builder.
      */
     int defaultMaxDepth() {
-        return 512;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the current element (last on the stack). If all items have been removed, returns the document instead
-     (which might not actually be on the stack; use stack.size() == 0 to test if required.
-     @return the last element on the stack, if any; or the root document
+     *     Get the current element (last on the stack). If all items have been removed, returns the document instead
+     *     (which might not actually be on the stack; use stack.size() == 0 to test if required.
+     *     @return the last element on the stack, if any; or the root document
      */
     Element currentElement() {
-        int size = stack.size();
-        return size > 0 ? stack.get(size-1) : doc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Checks if the Current Element's normal name equals the supplied name, in the HTML namespace.
-     @param normalName name to check
-     @return true if there is a current element on the stack, and its name equals the supplied
+     *     Checks if the Current Element's normal name equals the supplied name, in the HTML namespace.
+     *     @param normalName name to check
+     *     @return true if there is a current element on the stack, and its name equals the supplied
      */
     boolean currentElementIs(String normalName) {
-        if (stack.size() == 0)
-            return false;
-        Element current = currentElement();
-        return current != null && current.normalName().equals(normalName)
-            && current.tag().namespace().equals(NamespaceHtml);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Checks if the Current Element's normal name equals the supplied name, in the specified namespace.
-     @param normalName name to check
-     @param namespace the namespace
-     @return true if there is a current element on the stack, and its name equals the supplied
+     *     Checks if the Current Element's normal name equals the supplied name, in the specified namespace.
+     *     @param normalName name to check
+     *     @param namespace the namespace
+     *     @return true if there is a current element on the stack, and its name equals the supplied
      */
     boolean currentElementIs(String normalName, String namespace) {
-        if (stack.size() == 0)
-            return false;
-        Element current = currentElement();
-        return current != null && current.normalName().equals(normalName)
-            && current.tag().namespace().equals(namespace);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -244,7 +188,7 @@ abstract class TreeBuilder {
      * @param msg error message
      */
     void error(String msg) {
-        error(msg, (Object[]) null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -253,91 +197,53 @@ abstract class TreeBuilder {
      * @param args template arguments
      */
     void error(String msg, Object... args) {
-        ParseErrorList errors = parser.getErrors();
-        if (errors.canAddError())
-            errors.add(new ParseError(reader, msg, args));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Tag tagFor(String tagName, String normalName, String namespace, ParseSettings settings) {
-        return tagSet.valueOf(tagName, normalName, namespace, settings.preserveTagCase());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Tag tagFor(Token.Tag token) {
-        return tagSet.valueOf(token.name(), token.normalName, defaultNamespace(), settings.preserveTagCase());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the default namespace for this TreeBuilder
+     *     Gets the default namespace for this TreeBuilder
      * @return the default namespace
      */
     String defaultNamespace() {
-        return NamespaceHtml;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     TagSet defaultTagSet() {
-        return TagSet.Html();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Called by implementing TreeBuilders when a node has been inserted. This implementation includes optionally tracking
-     the source range of the node.  @param node the node that was just inserted
+     *     Called by implementing TreeBuilders when a node has been inserted. This implementation includes optionally tracking
+     *     the source range of the node.  @param node the node that was just inserted
      */
     void onNodeInserted(Node node) {
-        trackNodePosition(node, true);
-
-        if (nodeListener != null)
-            nodeListener.head(node, stack.size());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Called by implementing TreeBuilders when a node is explicitly closed. This implementation includes optionally
-     tracking the closing source range of the node.  @param node the node being closed
+     *     Called by implementing TreeBuilders when a node is explicitly closed. This implementation includes optionally
+     *     tracking the closing source range of the node.  @param node the node being closed
      */
     void onNodeClosed(Node node) {
-        trackNodePosition(node, false);
-
-        if (nodeListener != null)
-            nodeListener.tail(node, stack.size());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void trackNodePosition(Node node, boolean isStart) {
-        if (!trackSourceRange) return;
-
-        final Token token = currentToken;
-        int startPos = token.startPos();
-        int endPos = token.endPos();
-
-        // handle implicit element open / closes.
-        if (node instanceof Element) {
-            final Element el = (Element) node;
-            if (token.isEOF()) {
-                if (el.endSourceRange().isTracked())
-                    return; // /body and /html are left on stack until EOF, don't reset them
-                startPos = endPos = reader.pos();
-            } else if (isStart) { // opening tag
-                if  (!token.isStartTag() || !el.normalName().equals(token.asStartTag().normalName)) {
-                    endPos = startPos;
-                }
-            } else { // closing tag
-                if (!el.tag().isEmpty() && !el.tag().isSelfClosing()) {
-                    if (!token.isEndTag() || !el.normalName().equals(token.asEndTag().normalName)) {
-                        endPos = startPos;
-                    }
-                }
-            }
-        }
-
-        if (isStart)
-            NodeInternals.sourceRange(node, lineMap(), startPos, endPos);
-        else if (node instanceof Element)
-            NodeInternals.endSourceRange((Element) node, lineMap(), startPos, endPos);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Internal method, used by parser tokens to attach source ranges to Nodes and Attributes.
+     *     Internal method, used by parser tokens to attach source ranges to Nodes and Attributes.
      */
     LineMap lineMap() {
-        assert lineMap != null;
-        return lineMap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

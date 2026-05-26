@@ -18,9 +18,11 @@ public class PseudoTextElement extends Element {
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlTail(QuietAppendable accum, Document.OutputSettings out) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

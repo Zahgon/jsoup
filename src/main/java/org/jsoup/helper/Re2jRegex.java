@@ -1,9 +1,10 @@
 package org.jsoup.helper;
 
 /**
- re2j-backed Regex implementation; must only be touched when re2j is on the classpath.
+ * re2j-backed Regex implementation; must only be touched when re2j is on the classpath.
  */
 final class Re2jRegex extends Regex {
+
     private static final java.util.regex.Pattern unused = java.util.regex.Pattern.compile("");
 
     private final com.google.re2j.Pattern re2jPattern;
@@ -14,26 +15,21 @@ final class Re2jRegex extends Regex {
     }
 
     public static Regex compile(String regex) {
-        try {
-            return new Re2jRegex(com.google.re2j.Pattern.compile(regex));
-        } catch (RuntimeException e) {
-            throw new ValidationException("Pattern syntax error: " + e.getMessage());
-        } catch (OutOfMemoryError | StackOverflowError e) { // defensive check on regex to normalize exception
-            throw new ValidationException("Pattern complexity error: " + e.getMessage());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Matcher matcher(CharSequence input) {
-        return new Re2jMatcher(re2jPattern.matcher(input));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return re2jPattern.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final class Re2jMatcher implements Matcher {
+
         private final com.google.re2j.Matcher delegate;
 
         Re2jMatcher(com.google.re2j.Matcher delegate) {
@@ -42,7 +38,7 @@ final class Re2jRegex extends Regex {
 
         @Override
         public boolean find() {
-            return delegate.find();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

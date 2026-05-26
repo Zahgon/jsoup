@@ -13,30 +13,34 @@ import java.util.function.Function;
  * An internal class containing functions for use with {@link Map#computeIfAbsent(Object, Function)}.
  * @deprecated for removal in jsoup 1.23.1. Replace usages with direct constructor references / lambdas.
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Deprecated
 public final class Functions {
+
     private static final Function ListFunction = key -> new ArrayList<>();
+
     private static final Function SetFunction = key -> new HashSet<>();
+
     private static final Function MapFunction = key -> new HashMap<>();
+
     private static final Function IdentityMapFunction = key -> new IdentityHashMap<>();
 
     private Functions() {
     }
 
     public static <T, U> Function<T, List<U>> listFunction() {
-        return (Function<T, List<U>>) ListFunction;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <T, U> Function<T, Set<U>> setFunction() {
-        return (Function<T, Set<U>>) SetFunction;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <T, K, V> Function<T, Map<K, V>> mapFunction() {
-        return (Function<T, Map<K, V>>) MapFunction;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static <T, K, V> Function<T, IdentityHashMap<K, V>> identityMapFunction() {
-        return (Function<T, IdentityHashMap<K, V>>) IdentityMapFunction;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

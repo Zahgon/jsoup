@@ -6,7 +6,6 @@ import org.jsoup.internal.SharedConstants;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.parser.ParseSettings;
 import org.jspecify.annotations.Nullable;
-
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-
 import static org.jsoup.internal.Normalizer.lowerCase;
 import static org.jsoup.nodes.Range.AttributeRange.UntrackedAttr;
 
@@ -40,24 +38,38 @@ import static org.jsoup.nodes.Range.AttributeRange.UntrackedAttr;
  * @author Jonathan Hedley, jonathan@hedley.net
  */
 public class Attributes implements Iterable<Attribute>, Cloneable {
+
     // The Attributes object is only created on the first use of an attribute; the Element will just have a null
     // Attribute slot otherwise
+    // Indicates an internal key. Can't be set via HTML. (It could be set via accessor, but not too worried about that. Suppressed from list, iter, size.)
+    static final char InternalPrefix = '/';
 
-    static final char InternalPrefix = '/'; // Indicates an internal key. Can't be set via HTML. (It could be set via accessor, but not too worried about that. Suppressed from list, iter, size.)
-    protected static final String dataPrefix = "data-"; // data attributes
+    // data attributes
+    protected static final String dataPrefix = "data-";
+
     private static final String EmptyString = "";
 
     // manages the key/val arrays
-    private static final int InitialCapacity = 3; // sampling found mean count when attrs present = 1.49; 1.08 overall. 2.6:1 don't have any attrs.
+    // sampling found mean count when attrs present = 1.49; 1.08 overall. 2.6:1 don't have any attrs.
+    private static final int InitialCapacity = 3;
+
     private static final int GrowthFactor = 2;
+
     static final int NotFound = -1;
 
     // the number of instance fields is kept as low as possible giving an object size of 24 bytes
-    int size = 0; // number of slots used (not total capacity, which is keys.length). Package visible for actual size (incl internal)
-    @Nullable String[] keys = new String[InitialCapacity]; // keys is not null, but contents may be. Same for vals
-    @Nullable Object[] vals = new Object[InitialCapacity]; // Genericish: all non-internal attribute values must be Strings and are cast on access.
-    // todo - make keys iterable without creating Attribute objects
+    // number of slots used (not total capacity, which is keys.length). Package visible for actual size (incl internal)
+    int size = 0;
 
+    // keys is not null, but contents may be. Same for vals
+    @Nullable
+    String[] keys = new String[InitialCapacity];
+
+    // Genericish: all non-internal attribute values must be Strings and are cast on access.
+    @Nullable
+    Object[] vals = new Object[InitialCapacity];
+
+    // todo - make keys iterable without creating Attribute objects
     // check there's room for more
     private void checkCapacity(int minNewSize) {
         Validate.isTrue(minNewSize >= size);
@@ -67,39 +79,23 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         int newCap = curCap >= InitialCapacity ? size * GrowthFactor : InitialCapacity;
         if (minNewSize > newCap)
             newCap = minNewSize;
-
         keys = Arrays.copyOf(keys, newCap);
         vals = Arrays.copyOf(vals, newCap);
     }
 
     int indexOfKey(String key) {
-        Validate.notNull(key);
-        for (int i = 0; i < size; i++) {
-            if (key.equals(keys[i]))
-                return i;
-        }
-        return NotFound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Finds a visible attribute's range index, skipping internal metadata slots.
+     *     Finds a visible attribute's range index, skipping internal metadata slots.
      */
     int visibleIndexOfKey(String key) {
-        Validate.notNull(key);
-        int visible = 0;
-        for (int i = 0; i < size; i++) {
-            String attrKey = keys[i];
-            if (isInternalKey(attrKey))
-                continue;
-            if (key.equals(attrKey))
-                return visible;
-            visible++;
-        }
-        return NotFound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Maps an attribute array slot to the matching visible attribute index.
+     *     Maps an attribute array slot to the matching visible attribute index.
      */
     private int visibleIndex(int index) {
         int visible = 0;
@@ -122,31 +118,30 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
     // we track boolean attributes as null in values - they're just keys. so returns empty for consumers
     // casts to String, so only for non-internal attributes
     static String checkNotNull(@Nullable Object val) {
-        return val == null ? EmptyString : (String) val;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get an attribute value by key.
-     @param key the (case-sensitive) attribute key
-     @return the attribute value if set; or empty string if not set (or a boolean attribute).
-     @see #hasKey(String)
+     *     Get an attribute value by key.
+     *     @param key the (case-sensitive) attribute key
+     *     @return the attribute value if set; or empty string if not set (or a boolean attribute).
+     *     @see #hasKey(String)
      */
     public String get(String key) {
-        int i = indexOfKey(key);
-        return i == NotFound ? EmptyString : checkNotNull(vals[i]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get an Attribute by key. The Attribute will remain connected to these Attributes, so changes made via
-     {@link Attribute#setKey(String)}, {@link Attribute#setValue(String)} etc will cascade back to these Attributes and
-     their owning Element.
-     @param key the (case-sensitive) attribute key
-     @return the Attribute for this key, or null if not present.
-     @since 1.17.2
+     *     Get an Attribute by key. The Attribute will remain connected to these Attributes, so changes made via
+     *     {@link Attribute#setKey(String)}, {@link Attribute#setValue(String)} etc will cascade back to these Attributes and
+     *     their owning Element.
+     *     @param key the (case-sensitive) attribute key
+     *     @return the Attribute for this key, or null if not present.
+     *     @since 1.17.2
      */
-    @Nullable public Attribute attribute(String key) {
-        int i = indexOfKey(key);
-        return i == NotFound ? null : new Attribute(key, checkNotNull(vals[i]), this);
+    @Nullable
+    public Attribute attribute(String key) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,8 +150,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return the first matching attribute value if set; or empty string if not set (ora boolean attribute).
      */
     public String getIgnoreCase(String key) {
-        int i = indexOfKeyIgnoreCase(key);
-        return i == NotFound ? EmptyString : checkNotNull(vals[i]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,8 +158,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @see Attributes#put(String, String)
      */
     public Attributes add(String key, @Nullable String value) {
-        addObject(key, value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void addObject(String key, @Nullable Object value) {
@@ -182,44 +175,29 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return these attributes, for chaining
      */
     public Attributes put(String key, @Nullable String value) {
-        Validate.notNull(key);
-        int i = indexOfKey(key);
-        if (i != NotFound)
-            vals[i] = value;
-        else
-            addObject(key, value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the map holding any user-data associated with these Attributes. Will be created empty on first use. Held as
-     an internal attribute, not a field member, to reduce the memory footprint of Attributes when not used. Can hold
-     arbitrary objects; use for connecting W3C nodes to Elements, etc.
+     *     Get the map holding any user-data associated with these Attributes. Will be created empty on first use. Held as
+     *     an internal attribute, not a field member, to reduce the memory footprint of Attributes when not used. Can hold
+     *     arbitrary objects; use for connecting W3C nodes to Elements, etc.
      * @return the map holding user-data
      */
     @SuppressWarnings("unchecked")
     Map<String, Object> userData() {
-        final Map<String, Object> userData;
-        int i = indexOfKey(SharedConstants.UserDataKey);
-        if (i == NotFound) {
-            userData = new HashMap<>();
-            addObject(SharedConstants.UserDataKey, userData);
-        } else {
-            userData = (Map<String, Object>) vals[i];
-        }
-        assert userData != null;
-        return userData;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Check if these attributes have any user data associated with them.
+     *     Check if these attributes have any user data associated with them.
      */
     boolean hasUserData() {
-        return hasKey(SharedConstants.UserDataKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get an arbitrary user-data object by key.
+     *     Get an arbitrary user-data object by key.
      * @param key case-sensitive key to the object.
      * @return the object associated to this key, or {@code null} if not found.
      * @see #userData(String key, Object val)
@@ -227,14 +205,11 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      */
     @Nullable
     public Object userData(String key) {
-        Validate.notNull(key);
-        if (!hasUserData()) return null; // no user data exists
-        Map<String, Object> userData = userData();
-        return userData.get(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Set an arbitrary user-data object by key. Will be treated as an internal attribute, so will not be emitted in HTML.
+     *     Set an arbitrary user-data object by key. Will be treated as an internal attribute, so will not be emitted in HTML.
      * @param key case-sensitive key
      * @param value object value. Providing a {@code null} value has the effect of removing the key from the userData map.
      * @return these attributes
@@ -242,56 +217,32 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @since 1.17.1
      */
     public Attributes userData(String key, @Nullable Object value) {
-        Validate.notNull(key);
-        if (value == null && !hasKey(SharedConstants.UserDataKey)) return this; // no user data exists, so short-circuit
-        Map<String, Object> userData = userData();
-        if (value == null)  userData.remove(key);
-        else                userData.put(key, value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the range spans, if source tracking was used.
+     *     Gets the range spans, if source tracking was used.
      */
     Range.@Nullable Spans spans() {
-        int i = indexOfKey(SharedConstants.RangeSpansKey);
-        return i == NotFound ? null : (Range.Spans) vals[i];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets or creates the range spans for this attributes object.
+     *     Gets or creates the range spans for this attributes object.
      */
     Range.Spans ensureSpans() {
-        Range.Spans rangeSpans = spans();
-        if (rangeSpans == null) {
-            rangeSpans = new Range.Spans();
-            addObject(SharedConstants.RangeSpansKey, rangeSpans);
-        }
-        return rangeSpans;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Sets the range spans when expanding compact leaf storage.
+     *     Sets the range spans when expanding compact leaf storage.
      */
     void putSpans(Range.Spans rangeSpans) {
-        int i = indexOfKey(SharedConstants.RangeSpansKey);
-        if (i == NotFound)
-            addObject(SharedConstants.RangeSpansKey, rangeSpans);
-        else
-            vals[i] = rangeSpans;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void putIgnoreCase(String key, @Nullable String value) {
-        int i = indexOfKeyIgnoreCase(key);
-        if (i != NotFound) {
-            vals[i] = value;
-            String old = keys[i];
-            assert old != null;
-            if (!old.equals(key)) // case changed, update
-                keys[i] = key;
-        }
-        else
-            addObject(key, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -301,23 +252,16 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return these attributes, for chaining
      */
     public Attributes put(String key, boolean value) {
-        if (value)
-            putIgnoreCase(key, null);
-        else
-            remove(key);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Set a new attribute, or replace an existing one by key.
-     @param attribute attribute with case-sensitive key
-     @return these attributes, for chaining
+     *     Set a new attribute, or replace an existing one by key.
+     *     @param attribute attribute with case-sensitive key
+     *     @return these attributes, for chaining
      */
     public Attributes put(Attribute attribute) {
-        Validate.notNull(attribute);
-        put(attribute.getKey(), attribute.getValue());
-        attribute.parent = this;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // removes and shifts up
@@ -328,53 +272,49 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         // Source ranges are stored by visible attribute index; internal metadata slots have no matching range record.
         if (rangeSpans != null && !isInternalKey(keys[index]))
             rangeSpans.removeAttributeRange(visibleIndex(index));
-
         int shifted = size - index - 1;
         if (shifted > 0) {
             System.arraycopy(keys, index + 1, keys, index, shifted);
             System.arraycopy(vals, index + 1, vals, index, shifted);
         }
         size--;
-        keys[size] = null; // release hold
+        // release hold
+        keys[size] = null;
         vals[size] = null;
     }
 
     /**
-     Remove an attribute by key. <b>Case sensitive.</b>
-     @param key attribute key to remove
+     *     Remove an attribute by key. <b>Case sensitive.</b>
+     *     @param key attribute key to remove
      */
     public void remove(String key) {
-        int i = indexOfKey(key);
-        if (i != NotFound)
-            remove(i);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Remove an attribute by key. <b>Case insensitive.</b>
-     @param key attribute key to remove
+     *     Remove an attribute by key. <b>Case insensitive.</b>
+     *     @param key attribute key to remove
      */
     public void removeIgnoreCase(String key) {
-        int i = indexOfKeyIgnoreCase(key);
-        if (i != NotFound)
-            remove(i);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Tests if these attributes contain an attribute with this key.
-     @param key case-sensitive key to check for
-     @return true if key exists, false otherwise
+     *     Tests if these attributes contain an attribute with this key.
+     *     @param key case-sensitive key to check for
+     *     @return true if key exists, false otherwise
      */
     public boolean hasKey(String key) {
-        return indexOfKey(key) != NotFound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Tests if these attributes contain an attribute with this key.
-     @param key key to check for
-     @return true if key exists, false otherwise
+     *     Tests if these attributes contain an attribute with this key.
+     *     @param key key to check for
+     *     @return true if key exists, false otherwise
      */
     public boolean hasKeyIgnoreCase(String key) {
-        return indexOfKeyIgnoreCase(key) != NotFound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -383,8 +323,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return true if key exists, and it has a value
      */
     public boolean hasDeclaredValueForKey(String key) {
-        int i = indexOfKey(key);
-        return i != NotFound && vals[i] != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -393,81 +332,61 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return true if key exists, and it has a value
      */
     public boolean hasDeclaredValueForKeyIgnoreCase(String key) {
-        int i = indexOfKeyIgnoreCase(key);
-        return i != NotFound && vals[i] != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the number of attributes in this set, excluding any internal-only attributes (e.g. user data).
-     <p>Internal attributes are excluded from the {@link #html()}, {@link #asList()}, and {@link #iterator()}
-     methods.</p>
-
-     @return size
+     *     Get the number of attributes in this set, excluding any internal-only attributes (e.g. user data).
+     *     <p>Internal attributes are excluded from the {@link #html()}, {@link #asList()}, and {@link #iterator()}
+     *     methods.</p>
+     *
+     *     @return size
      */
     public int size() {
-        if (size == 0) return 0;
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (!isInternalKey(keys[i]))  count++;
-        }
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Test if this Attributes list is empty.
-     <p>This does not include internal attributes, such as user data.</p>
+     *     Test if this Attributes list is empty.
+     *     <p>This does not include internal attributes, such as user data.</p>
      */
     public boolean isEmpty() {
-        return size() == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Add all the attributes from the incoming set to this set.
-     @param incoming attributes to add to these attributes.
+     *     Add all the attributes from the incoming set to this set.
+     *     @param incoming attributes to add to these attributes.
      */
     public void addAll(Attributes incoming) {
-        int incomingSize = incoming.size(); // not adding internal
-        if (incomingSize == 0) return;
-        checkCapacity(size + incomingSize);
-
-        boolean needsPut = size != 0; // if this set is empty, no need to check existing set, so can add() vs put()
-        // (and save bashing on the indexOfKey()
-        for (Attribute attr : incoming) {
-            if (needsPut)
-                put(attr);
-            else
-                addObject(attr.getKey(), attr.getValue());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the source ranges (start to end position) in the original input source from which this attribute's <b>name</b>
-     and <b>value</b> were parsed.
-     <p>Position tracking must be enabled before parsing the content.</p>
-     @param key the attribute name
-     @return the ranges for the attribute's name and value, or {@code untracked} if the attribute does not exist or its range
-     was not tracked.
-     @see org.jsoup.parser.Parser#setTrackPosition(boolean)
-     @see Attribute#sourceRange()
-     @see Node#sourceRange()
-     @see Element#endSourceRange()
-     @since 1.17.1
+     *     Get the source ranges (start to end position) in the original input source from which this attribute's <b>name</b>
+     *     and <b>value</b> were parsed.
+     *     <p>Position tracking must be enabled before parsing the content.</p>
+     *     @param key the attribute name
+     *     @return the ranges for the attribute's name and value, or {@code untracked} if the attribute does not exist or its range
+     *     was not tracked.
+     *     @see org.jsoup.parser.Parser#setTrackPosition(boolean)
+     *     @see Attribute#sourceRange()
+     *     @see Node#sourceRange()
+     *     @see Element#endSourceRange()
+     *     @since 1.17.1
      */
     public Range.AttributeRange sourceRange(String key) {
-        int index = visibleIndexOfKey(key);
-        if (index == NotFound) return UntrackedAttr;
-        Range.Spans rangeSpans = spans();
-        return rangeSpans != null ? rangeSpans.attributeRange(index) : UntrackedAttr;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Deprecated parser-internal source range setup method, retained for source compatibility. Source ranges are normally
-     produced by enabling parser position tracking before parsing.
-     @param key the attribute name
-     @param range the range for the attribute's name and value
-     @return these attributes, for chaining
-     @since 1.18.2
-     @deprecated Use parser position tracking instead. Will be removed in jsoup 1.24.1.
+     *     Deprecated parser-internal source range setup method, retained for source compatibility. Source ranges are normally
+     *     produced by enabling parser position tracking before parsing.
+     *     @param key the attribute name
+     *     @param range the range for the attribute's name and value
+     *     @return these attributes, for chaining
+     *     @since 1.18.2
+     *     @deprecated Use parser position tracking instead. Will be removed in jsoup 1.24.1.
      */
     @Deprecated
     public Attributes sourceRange(String key, Range.AttributeRange range) {
@@ -477,67 +396,17 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         return this;
     }
 
-
     @Override
     public Iterator<Attribute> iterator() {
-        //noinspection ReturnOfInnerClass
-        return new Iterator<Attribute>() {
-            int expectedSize = size;
-            int i = 0;
-
-            @Override
-            public boolean hasNext() {
-                checkModified();
-                while (i < size) {
-                    String key = keys[i];
-                    assert key != null;
-                    if (isInternalKey(key)) // skip over internal keys
-                        i++;
-                    else
-                        break;
-                }
-
-                return i < size;
-            }
-
-            @Override
-            public Attribute next() {
-                checkModified();
-                if (i >= size) throw new NoSuchElementException();
-                String key = keys[i];
-                assert key != null;
-                final Attribute attr = new Attribute(key, (String) vals[i], Attributes.this);
-                i++;
-                return attr;
-            }
-
-            private void checkModified() {
-                if (size != expectedSize) throw new ConcurrentModificationException("Use Iterator#remove() instead to remove attributes while iterating.");
-            }
-
-            @Override
-            public void remove() {
-                Attributes.this.remove(--i); // next() advanced, so rewind
-                expectedSize--;
-            }
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the attributes as a List, for iteration.
-     @return a view of the attributes as an unmodifiable List.
+     *     Get the attributes as a List, for iteration.
+     *     @return a view of the attributes as an unmodifiable List.
      */
     public List<Attribute> asList() {
-        ArrayList<Attribute> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            String key = keys[i];
-            assert key != null;
-            if (isInternalKey(key))
-                continue; // skip internal keys
-            Attribute attr = new Attribute(key, (String) vals[i], Attributes.this);
-            list.add(attr);
-        }
-        return Collections.unmodifiableList(list);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -546,35 +415,24 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return map of custom data attributes.
      */
     public Map<String, String> dataset() {
-        return new Dataset(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the HTML representation of these attributes.
-     @return HTML
+     *     Get the HTML representation of these attributes.
+     *     @return HTML
      */
     public String html() {
-        StringBuilder sb = StringUtil.borrowBuilder();
-        html(QuietAppendable.wrap(sb), new Document.OutputSettings()); // output settings a bit funky, but this html() seldom used
-        return StringUtil.releaseBuilder(sb);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final void html(final QuietAppendable accum, final Document.OutputSettings out) {
-        final int sz = size;
-        for (int i = 0; i < sz; i++) {
-            String key = keys[i];
-            assert key != null;
-            if (isInternalKey(key))
-                continue;
-            final String validated = Attribute.getValidKey(key, out.syntax());
-            if (validated != null)
-                Attribute.htmlNoValidate(validated, (String) vals[i], accum.append(' '), out);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return html();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -585,19 +443,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      */
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Attributes that = (Attributes) o;
-        if (size != that.size) return false;
-        for (int i = 0; i < size; i++) {
-            String key = keys[i];
-            assert key != null;
-            int thatI = that.indexOfKey(key);
-            if (thatI == NotFound || !Objects.equals(vals[i], that.vals[thatI]))
-                return false;
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -606,51 +452,20 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      */
     @Override
     public int hashCode() {
-        int result = size;
-        result = 31 * result + Arrays.hashCode(keys);
-        result = 31 * result + Arrays.hashCode(vals);
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Attributes clone() {
-        Attributes clone;
-        try {
-            clone = (Attributes) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
-        clone.size = size;
-        clone.keys = Arrays.copyOf(keys, size);
-        clone.vals = Arrays.copyOf(vals, size);
-
-        // make a copy of the user data map. (Contents are shallow).
-        int i = indexOfKey(SharedConstants.UserDataKey);
-        if (i != NotFound) {
-            clone.vals[i] = new HashMap<>((Map<String, Object>) vals[i]);
-        }
-
-        // make a copy of the range spans, if present.
-        i = indexOfKey(SharedConstants.RangeSpansKey);
-        if (i != NotFound) {
-            clone.vals[i] = ((Range.Spans) vals[i]).copy();
-        }
-
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Internal method. Lowercases all (non-internal) keys.
      */
     public void normalize() {
-        for (int i = 0; i < size; i++) {
-            assert keys[i] != null;
-            String key = keys[i];
-            assert key != null;
-            if (!isInternalKey(key))
-                keys[i] = lowerCase(key);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -659,24 +474,11 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return number of removed dupes
      */
     public int deduplicate(ParseSettings settings) {
-        if (size == 0) return 0;
-        boolean preserve = settings.preserveAttributeCase();
-        int dupes = 0;
-        for (int i = 0; i < size; i++) {
-            String keyI = keys[i];
-            assert keyI != null;
-            for (int j = i + 1; j < size; j++) {
-                if ((preserve && keyI.equals(keys[j])) || (!preserve && keyI.equalsIgnoreCase(keys[j]))) {
-                    dupes++;
-                    remove(j);
-                    j--;
-                }
-            }
-        }
-        return dupes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static class Dataset extends AbstractMap<String, String> {
+
         private final Attributes attributes;
 
         private Dataset(Attributes attributes) {
@@ -685,51 +487,46 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
 
         @Override
         public Set<Entry<String, String>> entrySet() {
-            return new EntrySet();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String put(String key, String value) {
-            String dataKey = dataKey(key);
-            String oldValue = attributes.hasKey(dataKey) ? attributes.get(dataKey) : null;
-            attributes.put(dataKey, value);
-            return oldValue;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private class EntrySet extends AbstractSet<Map.Entry<String, String>> {
 
             @Override
             public Iterator<Map.Entry<String, String>> iterator() {
-                return new DatasetIterator();
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             @Override
             public int size() {
-                int count = 0;
-                Iterator<Entry<String, String>> iter = new DatasetIterator();
-                while (iter.hasNext())
-                    count++;
-                return count;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         }
 
         private class DatasetIterator implements Iterator<Map.Entry<String, String>> {
+
             private final Iterator<Attribute> attrIter = attributes.iterator();
+
             private Attribute attr;
-            @Override public boolean hasNext() {
-                while (attrIter.hasNext()) {
-                    attr = attrIter.next();
-                    if (attr.isDataAttribute()) return true;
-                }
-                return false;
+
+            @Override
+            public boolean hasNext() {
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
-            @Override public Entry<String, String> next() {
-                return new Attribute(attr.getKey().substring(dataPrefix.length()), attr.getValue());
+            @Override
+            public Entry<String, String> next() {
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
-            @Override public void remove() {
-                attributes.remove(attr.getKey());
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         }
     }
@@ -739,10 +536,10 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
     }
 
     static String internalKey(String key) {
-        return InternalPrefix + key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static boolean isInternalKey(String key) {
-        return key.length() > 1 && key.charAt(0) == InternalPrefix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

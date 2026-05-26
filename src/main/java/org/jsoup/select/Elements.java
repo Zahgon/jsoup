@@ -9,7 +9,6 @@ import org.jsoup.nodes.FormElement;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jspecify.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,13 +20,15 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
- A list of {@link Element}s, with methods that act on every element in the list.
- <p>To get an {@code Elements} object, use the {@link Element#select(String)} method.</p>
- <p>Methods that {@link #set(int, Element) set}, {@link #remove(int) remove}, or {@link #replaceAll(UnaryOperator)
- replace} Elements in the list will also act on the underlying {@link org.jsoup.nodes.Document DOM}.</p>
-
- @author Jonathan Hedley, jonathan@hedley.net */
+ * A list of {@link Element}s, with methods that act on every element in the list.
+ * <p>To get an {@code Elements} object, use the {@link Element#select(String)} method.</p>
+ * <p>Methods that {@link #set(int, Element) set}, {@link #remove(int) remove}, or {@link #replaceAll(UnaryOperator)
+ * replace} Elements in the list will also act on the underlying {@link org.jsoup.nodes.Document DOM}.</p>
+ *
+ * @author Jonathan Hedley, jonathan@hedley.net
+ */
 public class Elements extends Nodes<Element> {
+
     public Elements() {
     }
 
@@ -44,7 +45,7 @@ public class Elements extends Nodes<Element> {
     }
 
     public Elements(Element... elements) {
-    	super(Arrays.asList(elements));
+        super(Arrays.asList(elements));
     }
 
     /**
@@ -53,54 +54,43 @@ public class Elements extends Nodes<Element> {
      */
     @Override
     public Elements clone() {
-        Elements clone = new Elements(size());
-        for (Element e : this)
-            clone.add(e.clone());
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Convenience method to get the Elements as a plain ArrayList. This allows modification to the list of elements
-     without modifying the source Document. I.e. whereas calling {@code elements.remove(0)} will remove the element from
-     both the Elements and the DOM, {@code elements.asList().remove(0)} will remove the element from the list only.
-     <p>Each Element is still the same DOM connected Element.</p>
-
-     @return a new ArrayList containing the elements in this list
-     @since 1.19.2
-     @see #Elements(List)
+     *     Convenience method to get the Elements as a plain ArrayList. This allows modification to the list of elements
+     *     without modifying the source Document. I.e. whereas calling {@code elements.remove(0)} will remove the element from
+     *     both the Elements and the DOM, {@code elements.asList().remove(0)} will remove the element from the list only.
+     *     <p>Each Element is still the same DOM connected Element.</p>
+     *
+     *     @return a new ArrayList containing the elements in this list
+     *     @since 1.19.2
+     *     @see #Elements(List)
      */
     @Override
     public ArrayList<Element> asList() {
-        return new ArrayList<>(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // attribute methods
     /**
-     Get an attribute value from the first matched element that has the attribute.
-     @param attributeKey The attribute key.
-     @return The attribute value from the first matched element that has the attribute. If no elements were matched (isEmpty() == true),
-     or if the no elements have the attribute, returns empty string.
-     @see #hasAttr(String)
+     *     Get an attribute value from the first matched element that has the attribute.
+     *     @param attributeKey The attribute key.
+     *     @return The attribute value from the first matched element that has the attribute. If no elements were matched (isEmpty() == true),
+     *     or if the no elements have the attribute, returns empty string.
+     *     @see #hasAttr(String)
      */
     public String attr(String attributeKey) {
-        for (Element element : this) {
-            if (element.hasAttr(attributeKey))
-                return element.attr(attributeKey);
-        }
-        return "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Checks if any of the matched elements have this attribute defined.
-     @param attributeKey attribute key
-     @return true if any of the elements have the attribute; false if none do.
+     *     Checks if any of the matched elements have this attribute defined.
+     *     @param attributeKey attribute key
+     *     @return true if any of the elements have the attribute; false if none do.
      */
     public boolean hasAttr(String attributeKey) {
-        for (Element element : this) {
-            if (element.hasAttr(attributeKey))
-                return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,12 +101,7 @@ public class Elements extends Nodes<Element> {
      * @return a list of each element's attribute value for the attribute
      */
     public List<String> eachAttr(String attributeKey) {
-        List<String> attrs = new ArrayList<>(size());
-        for (Element element : this) {
-            if (element.hasAttr(attributeKey))
-                attrs.add(element.attr(attributeKey));
-        }
-        return attrs;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,10 +111,7 @@ public class Elements extends Nodes<Element> {
      * @return this
      */
     public Elements attr(String attributeKey, String attributeValue) {
-        for (Element element : this) {
-            element.attr(attributeKey, attributeValue);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,85 +120,63 @@ public class Elements extends Nodes<Element> {
      * @return this (for chaining)
      */
     public Elements removeAttr(String attributeKey) {
-        for (Element element : this) {
-            element.removeAttr(attributeKey);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Add the class name to every matched element's {@code class} attribute.
-     @param className class name to add
-     @return this
+     *     Add the class name to every matched element's {@code class} attribute.
+     *     @param className class name to add
+     *     @return this
      */
     public Elements addClass(String className) {
-        for (Element element : this) {
-            element.addClass(className);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Remove the class name from every matched element's {@code class} attribute, if present.
-     @param className class name to remove
-     @return this
+     *     Remove the class name from every matched element's {@code class} attribute, if present.
+     *     @param className class name to remove
+     *     @return this
      */
     public Elements removeClass(String className) {
-        for (Element element : this) {
-            element.removeClass(className);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Toggle the class name on every matched element's {@code class} attribute.
-     @param className class name to add if missing, or remove if present, from every element.
-     @return this
+     *     Toggle the class name on every matched element's {@code class} attribute.
+     *     @param className class name to add if missing, or remove if present, from every element.
+     *     @return this
      */
     public Elements toggleClass(String className) {
-        for (Element element : this) {
-            element.toggleClass(className);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Determine if any of the matched elements have this class name set in their {@code class} attribute.
-     @param className class name to check for
-     @return true if any do, false if none do
+     *     Determine if any of the matched elements have this class name set in their {@code class} attribute.
+     *     @param className class name to check for
+     *     @return true if any do, false if none do
      */
     public boolean hasClass(String className) {
-        for (Element element : this) {
-            if (element.hasClass(className))
-                return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Get the form element's value of the first matched element.
      * @return The form element's value, or empty if not set.
      * @see Element#val()
      */
     public String val() {
-        if (size() > 0)
-            //noinspection ConstantConditions
-            return first().val(); // first() != null as size() > 0
-        else
-            return "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Set the form element's value in each of the matched elements.
      * @param value The value to set into each matched element
      * @return this (for chaining)
      */
     public Elements val(String value) {
-        for (Element element : this)
-            element.val(value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Get the combined text of all the matched elements.
      * <p>
@@ -227,22 +187,16 @@ public class Elements extends Nodes<Element> {
      * @see #eachText()
      */
     public String text() {
-        return stream()
-            .map(Element::text)
-            .collect(StringUtil.joining(" "));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Test if any matched Element has any text content, that is not just whitespace.
-     @return true if any element has non-blank text content.
-     @see Element#hasText()
+     *     Test if any matched Element has any text content, that is not just whitespace.
+     *     @return true if any element has non-blank text content.
+     *     @see Element#hasText()
      */
     public boolean hasText() {
-        for (Element element: this) {
-            if (element.hasText())
-                return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -254,14 +208,9 @@ public class Elements extends Nodes<Element> {
      * @see #text()
      */
     public List<String> eachText() {
-        ArrayList<String> texts = new ArrayList<>(size());
-        for (Element el: this) {
-            if (el.hasText())
-                texts.add(el.text());
-        }
-        return texts;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Get the combined inner HTML of all matched elements.
      * @return string of all element's inner HTML.
@@ -269,9 +218,7 @@ public class Elements extends Nodes<Element> {
      * @see #outerHtml()
      */
     public String html() {
-        return stream()
-            .map(Element::html)
-            .collect(StringUtil.joining("\n"));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -283,12 +230,9 @@ public class Elements extends Nodes<Element> {
      * @see Element#tagName(String)
      */
     public Elements tagName(String tagName) {
-        for (Element element : this) {
-            element.tagName(tagName);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Set the inner HTML of each matched element.
      * @param html HTML to parse and set into each matched element.
@@ -296,12 +240,9 @@ public class Elements extends Nodes<Element> {
      * @see Element#html(String)
      */
     public Elements html(String html) {
-        for (Element element : this) {
-            element.html(html);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Add the supplied HTML to the start of each matched element's inner HTML.
      * @param html HTML to add inside each element, before the existing HTML
@@ -309,12 +250,9 @@ public class Elements extends Nodes<Element> {
      * @see Element#prepend(String)
      */
     public Elements prepend(String html) {
-        for (Element element : this) {
-            element.prepend(html);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Add the supplied HTML to the end of each matched element's inner HTML.
      * @param html HTML to add inside each element, after the existing HTML
@@ -322,52 +260,46 @@ public class Elements extends Nodes<Element> {
      * @see Element#append(String)
      */
     public Elements append(String html) {
-        for (Element element : this) {
-            element.append(html);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Insert the supplied HTML before each matched element's outer HTML.
-
-     @param html HTML to insert before each element
-     @return this, for chaining
-     @see Element#before(String)
+     *     Insert the supplied HTML before each matched element's outer HTML.
+     *
+     *     @param html HTML to insert before each element
+     *     @return this, for chaining
+     *     @see Element#before(String)
      */
     @Override
     public Elements before(String html) {
-        super.before(html);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Insert the supplied HTML after each matched element's outer HTML.
-
-     @param html HTML to insert after each element
-     @return this, for chaining
-     @see Element#after(String)
+     *     Insert the supplied HTML after each matched element's outer HTML.
+     *
+     *     @param html HTML to insert after each element
+     *     @return this, for chaining
+     *     @see Element#after(String)
      */
     @Override
     public Elements after(String html) {
-        super.after(html);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Wrap the supplied HTML around each matched elements. For example, with HTML
-     {@code <p><b>This</b> is <b>Jsoup</b></p>},
-     <code>doc.select("b").wrap("&lt;i&gt;&lt;/i&gt;");</code>
-     becomes {@code <p><i><b>This</b></i> is <i><b>jsoup</b></i></p>}
-
-     @param html HTML to wrap around each element, e.g. {@code <div class="head"></div>}. Can be arbitrarily deep.
-     @return this (for chaining)
-     @see Element#wrap
+     *     Wrap the supplied HTML around each matched elements. For example, with HTML
+     *     {@code <p><b>This</b> is <b>Jsoup</b></p>},
+     *     <code>doc.select("b").wrap("&lt;i&gt;&lt;/i&gt;");</code>
+     *     becomes {@code <p><i><b>This</b></i> is <i><b>jsoup</b></i></p>}
+     *
+     *     @param html HTML to wrap around each element, e.g. {@code <div class="head"></div>}. Can be arbitrarily deep.
+     *     @return this (for chaining)
+     *     @see Element#wrap
      */
     @Override
     public Elements wrap(String html) {
-        super.wrap(html);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -376,7 +308,7 @@ public class Elements extends Nodes<Element> {
      * <p>
      * This is useful for e.g removing unwanted formatting elements but keeping their contents.
      * </p>
-     * 
+     *
      * E.g. with HTML: <p>{@code <div><font>One</font> <font><a href="/">Two</a></font></div>}</p>
      * <p>{@code doc.select("font").unwrap();}</p>
      * <p>HTML = {@code <div>One <a href="/">Two</a></div>}</p>
@@ -385,10 +317,7 @@ public class Elements extends Nodes<Element> {
      * @see Node#unwrap
      */
     public Elements unwrap() {
-        for (Element element : this) {
-            element.unwrap();
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -403,10 +332,7 @@ public class Elements extends Nodes<Element> {
      * @see #remove()
      */
     public Elements empty() {
-        for (Element element : this) {
-            element.empty();
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -425,48 +351,44 @@ public class Elements extends Nodes<Element> {
      */
     @Override
     public Elements remove() {
-        super.remove();
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     // filters
-    
     /**
      * Find matching elements within this element list.
      * @param query A {@link Selector} query
      * @return the filtered list of elements, or an empty list if none match.
      */
     public Elements select(String query) {
-        return Selector.select(query, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Find the first Element that matches the {@link Selector} CSS query within this element list.
-     <p>This is effectively the same as calling {@code elements.select(query).first()}, but is more efficient as query
-     execution stops on the first hit.</p>
-
-     @param cssQuery a {@link Selector} query
-     @return the first matching element, or <b>{@code null}</b> if there is no match.
-     @see #expectFirst(String)
-     @since 1.19.1
+     *     Find the first Element that matches the {@link Selector} CSS query within this element list.
+     *     <p>This is effectively the same as calling {@code elements.select(query).first()}, but is more efficient as query
+     *     execution stops on the first hit.</p>
+     *
+     *     @param cssQuery a {@link Selector} query
+     *     @return the first matching element, or <b>{@code null}</b> if there is no match.
+     *     @see #expectFirst(String)
+     *     @since 1.19.1
      */
-    public @Nullable Element selectFirst(String cssQuery) {
-        return Selector.selectFirst(cssQuery, this);
+    @Nullable
+    public Element selectFirst(String cssQuery) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Just like {@link #selectFirst(String)}, but if there is no match, throws an {@link IllegalArgumentException}.
-
-     @param cssQuery a {@link Selector} query
-     @return the first matching element
-     @throws IllegalArgumentException if no match is found
-     @since 1.19.1
+     *     Just like {@link #selectFirst(String)}, but if there is no match, throws an {@link IllegalArgumentException}.
+     *
+     *     @param cssQuery a {@link Selector} query
+     *     @return the first matching element
+     *     @throws IllegalArgumentException if no match is found
+     *     @since 1.19.1
      */
     public Element expectFirst(String cssQuery) {
-        return Validate.expectNotNull(
-            Selector.selectFirst(cssQuery, this),
-            "No elements matched the query '%s' in the elements.", cssQuery
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -480,10 +402,9 @@ public class Elements extends Nodes<Element> {
      * @return a new elements list that contains only the filtered results
      */
     public Elements not(String query) {
-        Elements out = Selector.select(query, this);
-        return Selector.filterOut(this, out);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Get the <i>nth</i> matched element as an Elements object.
      * <p>
@@ -492,21 +413,16 @@ public class Elements extends Nodes<Element> {
      * @return Elements containing only the specified element, or, if that element did not exist, an empty list.
      */
     public Elements eq(int index) {
-        return size() > index ? new Elements(get(index)) : new Elements();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     /**
      * Test if any of the matched elements match the supplied query.
      * @param query A selector
      * @return true if at least one element in the list matches the query.
      */
     public boolean is(String query) {
-        Evaluator eval = Selector.evaluatorOf(query);
-        for (Element e : this) {
-            if (e.is(eval))
-                return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -514,7 +430,7 @@ public class Elements extends Nodes<Element> {
      * @return next element siblings.
      */
     public Elements next() {
-        return siblings(null, true, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -523,7 +439,7 @@ public class Elements extends Nodes<Element> {
      * @return next element siblings.
      */
     public Elements next(String query) {
-        return siblings(query, true, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -531,7 +447,7 @@ public class Elements extends Nodes<Element> {
      * @return all following element siblings.
      */
     public Elements nextAll() {
-        return siblings(null, true, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -540,7 +456,7 @@ public class Elements extends Nodes<Element> {
      * @return all following element siblings.
      */
     public Elements nextAll(String query) {
-        return siblings(query, true, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -548,7 +464,7 @@ public class Elements extends Nodes<Element> {
      * @return previous element siblings.
      */
     public Elements prev() {
-        return siblings(null, false, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -557,7 +473,7 @@ public class Elements extends Nodes<Element> {
      * @return previous element siblings.
      */
     public Elements prev(String query) {
-        return siblings(query, false, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -565,7 +481,7 @@ public class Elements extends Nodes<Element> {
      * @return all previous element siblings.
      */
     public Elements prevAll() {
-        return siblings(null, false, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -574,17 +490,19 @@ public class Elements extends Nodes<Element> {
      * @return all previous element siblings.
      */
     public Elements prevAll(String query) {
-        return siblings(query, false, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Elements siblings(@Nullable String query, boolean next, boolean all) {
         Elements els = new Elements();
-        Evaluator eval = query != null? Selector.evaluatorOf(query) : null;
+        Evaluator eval = query != null ? Selector.evaluatorOf(query) : null;
         for (Element e : this) {
             do {
                 Element sib = next ? e.nextElementSibling() : e.previousElementSibling();
-                if (sib == null) break;
-                if (eval == null || sib.is(eval)) els.add(sib);
+                if (sib == null)
+                    break;
+                if (eval == null || sib.is(eval))
+                    els.add(sib);
                 e = sib;
             } while (all);
         }
@@ -596,30 +514,28 @@ public class Elements extends Nodes<Element> {
      * @return all of the parents and ancestor elements of the matched elements
      */
     public Elements parents() {
-        HashSet<Element> combo = new LinkedHashSet<>();
-        for (Element e: this) {
-            combo.addAll(e.parents());
-        }
-        return new Elements(combo);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // list-like methods
     /**
-     Get the first matched element.
-     @return The first matched element, or <code>null</code> if contents is empty.
+     *     Get the first matched element.
+     *     @return The first matched element, or <code>null</code> if contents is empty.
      */
     @Override
-    public @Nullable Element first() {
-        return super.first();
+    @Nullable
+    public Element first() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the last matched element.
-     @return The last matched element, or <code>null</code> if contents is empty.
+     *     Get the last matched element.
+     *     @return The last matched element, or <code>null</code> if contents is empty.
      */
     @Override
-    public @Nullable Element last() {
-        return super.last();
+    @Nullable
+    public Element last() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -628,8 +544,7 @@ public class Elements extends Nodes<Element> {
      * @return this, for chaining
      */
     public Elements traverse(NodeVisitor nodeVisitor) {
-        NodeTraversor.traverse(nodeVisitor, this);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -638,8 +553,7 @@ public class Elements extends Nodes<Element> {
      * @return this, for chaining
      */
     public Elements filter(NodeFilter nodeFilter) {
-        NodeTraversor.filter(nodeFilter, this);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -648,11 +562,7 @@ public class Elements extends Nodes<Element> {
      * no forms.
      */
     public List<FormElement> forms() {
-        ArrayList<FormElement> forms = new ArrayList<>();
-        for (Element el: this)
-            if (el instanceof FormElement)
-                forms.add((FormElement) el);
-        return forms;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -660,7 +570,7 @@ public class Elements extends Nodes<Element> {
      * @return Comment nodes, or an empty list if none.
      */
     public List<Comment> comments() {
-        return childNodesOfType(Comment.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -668,7 +578,7 @@ public class Elements extends Nodes<Element> {
      * @return TextNode nodes, or an empty list if none.
      */
     public List<TextNode> textNodes() {
-        return childNodesOfType(TextNode.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -677,12 +587,12 @@ public class Elements extends Nodes<Element> {
      * @return Comment nodes, or an empty list if none.
      */
     public List<DataNode> dataNodes() {
-        return childNodesOfType(DataNode.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T extends Node> List<T> childNodesOfType(Class<T> tClass) {
         ArrayList<T> nodes = new ArrayList<>();
-        for (Element el: this) {
+        for (Element el : this) {
             for (int i = 0; i < el.childNodeSize(); i++) {
                 Node node = el.childNode(i);
                 if (tClass.isInstance(node))
@@ -693,44 +603,42 @@ public class Elements extends Nodes<Element> {
     }
 
     // list methods that update the DOM:
-
     /**
-     Replace the Element at the specified index in this list, and in the DOM.
-
-     @param index index of the element to replace
-     @param element element to be stored at the specified position
-     @return the old Element at this index
-     @since 1.17.1
+     *     Replace the Element at the specified index in this list, and in the DOM.
+     *
+     *     @param index index of the element to replace
+     *     @param element element to be stored at the specified position
+     *     @return the old Element at this index
+     *     @since 1.17.1
      */
     @Override
     public Element set(int index, Element element) {
-        return super.set(index, element);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Remove the Element at the specified index in this ist, and from the DOM.
-
-     @param index the index of the element to be removed
-     @return the old element at this index
-     @see #deselect(int)
-     @since 1.17.1
+     *     Remove the Element at the specified index in this ist, and from the DOM.
+     *
+     *     @param index the index of the element to be removed
+     *     @return the old element at this index
+     *     @see #deselect(int)
+     *     @since 1.17.1
      */
     @Override
     public Element remove(int index) {
-        return super.remove(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-
     /**
-     Remove the Element at the specified index in this list, but not from the DOM.
-
-     @param index the index of the element to be removed
-     @return the old element at this index
-     @see #remove(int)
-     @since 1.19.2
+     *     Remove the Element at the specified index in this list, but not from the DOM.
+     *
+     *     @param index the index of the element to be removed
+     *     @return the old element at this index
+     *     @see #remove(int)
+     *     @since 1.19.2
      */
     @Override
     public Element deselect(int index) {
-        return super.deselect(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

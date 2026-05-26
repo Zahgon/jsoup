@@ -3,15 +3,14 @@ package org.jsoup.nodes;
 import org.jsoup.internal.QuietAppendable;
 import org.jsoup.internal.StringUtil;
 
-
 /**
  * An XML Declaration. Includes support for treating the declaration contents as pseudo attributes.
  */
 public class XmlDeclaration extends LeafNode {
 
     /**
-     First char is `!` if isDeclaration, like in {@code  <!ENTITY ...>}.
-     Otherwise, is `?`, a processing instruction, like {@code <?xml .... ?>} (and note trailing `?`).
+     *     First char is `!` if isDeclaration, like in {@code  <!ENTITY ...>}.
+     *     Otherwise, is `?`, a processing instruction, like {@code <?xml .... ?>} (and note trailing `?`).
      */
     private final boolean isDeclaration;
 
@@ -25,8 +24,9 @@ public class XmlDeclaration extends LeafNode {
         this.isDeclaration = isDeclaration;
     }
 
-    @Override public String nodeName() {
-        return "#declaration";
+    @Override
+    public String nodeName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -34,7 +34,7 @@ public class XmlDeclaration extends LeafNode {
      * @return name of this declaration.
      */
     public String name() {
-        return coreValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -42,16 +42,15 @@ public class XmlDeclaration extends LeafNode {
      * @return XML declaration
      */
     public String getWholeDeclaration() {
-        StringBuilder sb = StringUtil.borrowBuilder();
-        getWholeDeclaration(QuietAppendable.wrap(sb), new Document.OutputSettings());
-        return StringUtil.releaseBuilder(sb).trim();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void getWholeDeclaration(QuietAppendable accum, Document.OutputSettings out) {
         for (Attribute attribute : attributes()) {
             String key = attribute.getKey();
             String val = attribute.getValue();
-            if (!key.equals(nodeName())) { // skips coreValue (name)
+            if (!key.equals(nodeName())) {
+                // skips coreValue (name)
                 accum.append(' ');
                 // basically like Attribute, but skip empty vals in XML
                 accum.append(key);
@@ -66,27 +65,21 @@ public class XmlDeclaration extends LeafNode {
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
-        accum
-            .append("<")
-            .append(isDeclaration ? "!" : "?")
-            .append(coreValue());
-        getWholeDeclaration(accum, out);
-        accum
-            .append(isDeclaration ? "" : "?")
-            .append(">");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlTail(QuietAppendable accum, Document.OutputSettings out) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return outerHtml();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public XmlDeclaration clone() {
-        return (XmlDeclaration) super.clone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

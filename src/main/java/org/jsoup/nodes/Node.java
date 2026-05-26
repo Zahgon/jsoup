@@ -7,7 +7,6 @@ import org.jsoup.parser.ParseSettings;
 import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeVisitor;
 import org.jspecify.annotations.Nullable;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,14 +18,21 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- The base, abstract Node model. {@link Element}, {@link Document}, {@link Comment}, {@link TextNode}, et al.,
- are instances of Node.
-
- @author Jonathan Hedley, jonathan@hedley.net */
+ * The base, abstract Node model. {@link Element}, {@link Document}, {@link Comment}, {@link TextNode}, et al.,
+ * are instances of Node.
+ *
+ * @author Jonathan Hedley, jonathan@hedley.net
+ */
 public abstract class Node implements Cloneable {
+
     static final List<Node> EmptyNodes = Collections.emptyList();
+
     static final String EmptyString = "";
-    @Nullable Element parentNode; // Nodes don't always have parents
+
+    // Nodes don't always have parents
+    @Nullable
+    Element parentNode;
+
     int siblingIndex;
 
     /**
@@ -36,60 +42,59 @@ public abstract class Node implements Cloneable {
     }
 
     /**
-     Get the node name of this node. Use for debugging purposes and not logic switching (for that, use instanceof).
-     @return node name
+     *     Get the node name of this node. Use for debugging purposes and not logic switching (for that, use instanceof).
+     *     @return node name
      */
     public abstract String nodeName();
 
     /**
-     Get the normalized name of this node. For node types other than Element, this is the same as {@link #nodeName()}.
-     For an Element, will be the lower-cased tag name.
-     @return normalized node name
-     @since 1.15.4.
+     *     Get the normalized name of this node. For node types other than Element, this is the same as {@link #nodeName()}.
+     *     For an Element, will be the lower-cased tag name.
+     *     @return normalized node name
+     *     @since 1.15.4.
      */
     public String normalName() {
-        return nodeName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the node's value. For a TextNode, the whole text; for a Comment, the comment data; for an Element,
-     wholeOwnText. Returns "" if there is no value.
-     @return the node's value
+     *     Get the node's value. For a TextNode, the whole text; for a Comment, the comment data; for an Element,
+     *     wholeOwnText. Returns "" if there is no value.
+     *     @return the node's value
      */
     public String nodeValue() {
-        return "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Test if this node has the specified normalized name, in any namespace.
+     *     Test if this node has the specified normalized name, in any namespace.
      * @param normalName a normalized element name (e.g. {@code div}).
      * @return true if the element's normal name matches exactly
      * @since 1.17.2
      */
     public boolean nameIs(String normalName) {
-        return normalName().equals(normalName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Test if this node's parent has the specified normalized name.
+     *     Test if this node's parent has the specified normalized name.
      * @param normalName a normalized name (e.g. {@code div}).
      * @return true if the parent element's normal name matches exactly
      * @since 1.17.2
      */
     public boolean parentNameIs(String normalName) {
-        return parentNode != null && parentNode.normalName().equals(normalName);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Test if this node's parent is an Element with the specified normalized name and namespace.
+     *     Test if this node's parent is an Element with the specified normalized name and namespace.
      * @param normalName a normalized element name (e.g. {@code div}).
      * @param namespace the namespace
      * @return true if the parent element's normal name matches exactly, and that element is in the specified namespace
      * @since 1.17.2
      */
     public boolean parentElementIs(String normalName, String namespace) {
-        return parentNode != null && parentNode instanceof Element
-            && ((Element) parentNode).elementIs(normalName, namespace);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,12 +103,12 @@ public abstract class Node implements Cloneable {
     protected abstract boolean hasAttributes();
 
     /**
-     Checks if this node has a parent. Nodes won't have parents if (e.g.) they are newly created and not added as a child
-     to an existing node, or if they are a {@link #shallowClone()}. In such cases, {@link #parent()} will return {@code null}.
-     @return if this node has a parent.
+     *     Checks if this node has a parent. Nodes won't have parents if (e.g.) they are newly created and not added as a child
+     *     to an existing node, or if they are a {@link #shallowClone()}. In such cases, {@link #parent()} will return {@code null}.
+     *     @return if this node has a parent.
      */
     public boolean hasParent() {
-        return parentNode != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,16 +127,7 @@ public abstract class Node implements Cloneable {
      * @see #absUrl(String)
      */
     public String attr(String attributeKey) {
-        Validate.notNull(attributeKey);
-        if (!hasAttributes())
-            return EmptyString;
-
-        String val = attributes().getIgnoreCase(attributeKey);
-        if (val.length() > 0)
-            return val;
-        else if (attributeKey.startsWith("abs:"))
-            return absUrl(attributeKey.substring("abs:".length()));
-        else return "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,13 +137,12 @@ public abstract class Node implements Cloneable {
     public abstract Attributes attributes();
 
     /**
-     Get the number of attributes that this Node has.
-     @return the number of attributes
-     @since 1.14.2
+     *     Get the number of attributes that this Node has.
+     *     @return the number of attributes
+     *     @since 1.14.2
      */
     public int attributesSize() {
-        // added so that we can test how many attributes exist without implicitly creating the Attributes object
-        return hasAttributes() ? attributes().size() : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -158,11 +153,7 @@ public abstract class Node implements Cloneable {
      * @return this (for chaining)
      */
     public Node attr(String attributeKey, String attributeValue) {
-        Document doc = ownerDocument();
-        ParseSettings settings = doc != null ? doc.parser().settings() : ParseSettings.htmlDefault;
-        attributeKey = settings.normalizeAttribute(attributeKey);
-        attributes().putIgnoreCase(attributeKey, attributeValue);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -171,16 +162,7 @@ public abstract class Node implements Cloneable {
      * @return true if the attribute exists, false if not.
      */
     public boolean hasAttr(String attributeKey) {
-        Validate.notNull(attributeKey);
-        if (!hasAttributes())
-            return false;
-
-        if (attributeKey.startsWith("abs:")) {
-            String key = attributeKey.substring("abs:".length());
-            if (attributes().hasKeyIgnoreCase(key) && !absUrl(key).isEmpty())
-                return true;
-        }
-        return attributes().hasKeyIgnoreCase(attributeKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -189,10 +171,7 @@ public abstract class Node implements Cloneable {
      * @return this (for chaining)
      */
     public Node removeAttr(String attributeKey) {
-        Validate.notNull(attributeKey);
-        if (hasAttributes())
-            attributes().removeIgnoreCase(attributeKey);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -200,22 +179,15 @@ public abstract class Node implements Cloneable {
      * @return this, for chaining
      */
     public Node clearAttributes() {
-        if (hasAttributes()) {
-            Iterator<Attribute> it = attributes().iterator();
-            while (it.hasNext()) {
-                it.next();
-                it.remove();
-            }
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the base URI that applies to this node. Will return an empty string if not defined. Used to make relative links
-     absolute.
-
-     @return base URI
-     @see #absUrl
+     *     Get the base URI that applies to this node. Will return an empty string if not defined. Used to make relative links
+     *     absolute.
+     *
+     *     @return base URI
+     *     @see #absUrl
      */
     public abstract String baseUri();
 
@@ -226,12 +198,11 @@ public abstract class Node implements Cloneable {
     protected abstract void doSetBaseUri(String baseUri);
 
     /**
-     Update the base URI of this node and all of its descendants.
-     @param baseUri base URI to set
+     *     Update the base URI of this node and all of its descendants.
+     *     @param baseUri base URI to set
      */
     public void setBaseUri(final String baseUri) {
-        Validate.notNull(baseUri);
-        doSetBaseUri(baseUri);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,38 +229,28 @@ public abstract class Node implements Cloneable {
      * @see java.net.URL#URL(java.net.URL, String)
      */
     public String absUrl(String attributeKey) {
-        Validate.notEmpty(attributeKey);
-        if (!(hasAttributes() && attributes().hasKeyIgnoreCase(attributeKey))) // not using hasAttr, so that we don't recurse down hasAttr->absUrl
-            return "";
-
-        return StringUtil.resolve(baseUri(), attributes().getIgnoreCase(attributeKey));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract List<Node> ensureChildNodes();
 
     /**
-     Get a child node by its 0-based index.
-     @param index index of child node
-     @return the child node at this index.
-     @throws IndexOutOfBoundsException if the index is out of bounds.
+     *     Get a child node by its 0-based index.
+     *     @param index index of child node
+     *     @return the child node at this index.
+     *     @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public Node childNode(int index) {
-        return ensureChildNodes().get(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get this node's children. Presented as an unmodifiable list: new children can not be added, but the child nodes
-     themselves can be manipulated.
-     @return list of children. If no children, returns an empty list.
+     *     Get this node's children. Presented as an unmodifiable list: new children can not be added, but the child nodes
+     *     themselves can be manipulated.
+     *     @return list of children. If no children, returns an empty list.
      */
     public List<Node> childNodes() {
-        if (childNodeSize() == 0)
-            return EmptyNodes;
-
-        List<Node> children = ensureChildNodes();
-        List<Node> rewrap = new ArrayList<>(children.size()); // wrapped so that looping and moving will not throw a CME as the source changes
-        rewrap.addAll(children);
-        return Collections.unmodifiableList(rewrap);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -298,12 +259,7 @@ public abstract class Node implements Cloneable {
      * @return a deep copy of this node's children
      */
     public List<Node> childNodesCopy() {
-        final List<Node> nodes = ensureChildNodes();
-        final ArrayList<Node> children = new ArrayList<>(nodes.size());
-        for (Node node : nodes) {
-            children.add(node.clone());
-        }
-        return children;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -313,7 +269,7 @@ public abstract class Node implements Cloneable {
     public abstract int childNodeSize();
 
     protected Node[] childNodesAsArray() {
-        return ensureChildNodes().toArray(new Node[0]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -323,31 +279,34 @@ public abstract class Node implements Cloneable {
     public abstract Node empty();
 
     /**
-     Gets this node's parent node. This is always an Element.
-     @return parent node; or null if no parent.
-     @see #hasParent()
-     @see #parentElement();
+     *     Gets this node's parent node. This is always an Element.
+     *     @return parent node; or null if no parent.
+     *     @see #hasParent()
+     *     @see #parentElement();
      */
-    public @Nullable Node parent() {
-        return parentNode;
+    @Nullable
+    public Node parent() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets this node's parent Element.
-     @return parent element; or null if this node has no parent.
-     @see #hasParent()
-     @since 1.21.1
+     *     Gets this node's parent Element.
+     *     @return parent element; or null if this node has no parent.
+     *     @see #hasParent()
+     *     @since 1.21.1
      */
-    public @Nullable Element parentElement() {
-        return parentNode;
+    @Nullable
+    public Element parentElement() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets this node's parent node. Not overridable by extending classes, so useful if you really just need the Node type.
-     @return parent node; or null if no parent.
+     *     Gets this node's parent node. Not overridable by extending classes, so useful if you really just need the Node type.
+     *     @return parent node; or null if no parent.
      */
-    public @Nullable final Node parentNode() {
-        return parentNode;
+    @Nullable
+    public final Node parentNode() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -355,23 +314,16 @@ public abstract class Node implements Cloneable {
      * @return topmost ancestor.
      */
     public Node root() {
-        Node node = this;
-        while (node.parentNode != null)
-            node = node.parentNode;
-        return node;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Gets the Document associated with this Node.
      * @return the Document associated with this Node, or null if there is no such Document.
      */
-    public @Nullable Document ownerDocument() {
-        Node node = this;
-        while (node != null) {
-            if (node instanceof Document) return (Document) node;
-            node = node.parentNode;
-        }
-        return null;
+    @Nullable
+    public Document ownerDocument() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -379,8 +331,7 @@ public abstract class Node implements Cloneable {
      * an orphan, nothing happens.
      */
     public void remove() {
-        if (parentNode != null)
-            parentNode.removeChild(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -390,8 +341,7 @@ public abstract class Node implements Cloneable {
      * @see #after(String)
      */
     public Node before(String html) {
-        addSiblingHtml(siblingIndex(), html);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -401,14 +351,7 @@ public abstract class Node implements Cloneable {
      * @see #after(Node)
      */
     public Node before(Node node) {
-        Validate.notNull(node);
-        Validate.notNull(parentNode);
-
-        // if the incoming node is a sibling of this, remove it first so siblingIndex is correct on add
-        if (node.parentNode == parentNode) node.remove();
-
-        parentNode.addChildren(siblingIndex(), node);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -418,8 +361,7 @@ public abstract class Node implements Cloneable {
      * @see #before(String)
      */
     public Node after(String html) {
-        addSiblingHtml(siblingIndex() + 1, html);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -429,66 +371,26 @@ public abstract class Node implements Cloneable {
      * @see #before(Node)
      */
     public Node after(Node node) {
-        Validate.notNull(node);
-        Validate.notNull(parentNode);
-
-        // if the incoming node is a sibling of this, remove it first so siblingIndex is correct on add
-        if (node.parentNode == parentNode) node.remove();
-
-        parentNode.addChildren(siblingIndex() + 1, node);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void addSiblingHtml(int index, String html) {
         Validate.notNull(html);
         Validate.notNull(parentNode);
-
         Element context = parentNode instanceof Element ? (Element) parentNode : null;
         List<Node> nodes = NodeUtils.parser(this).parseFragmentInput(html, context, baseUri());
         parentNode.addChildren(index, nodes.toArray(new Node[0]));
     }
 
     /**
-     Wrap the supplied HTML around this node.
-
-     @param html HTML to wrap around this node, e.g. {@code <div class="head"></div>}. Can be arbitrarily deep. If
-     the input HTML does not parse to a result starting with an Element, this will be a no-op.
-     @return this node, for chaining.
+     *     Wrap the supplied HTML around this node.
+     *
+     *     @param html HTML to wrap around this node, e.g. {@code <div class="head"></div>}. Can be arbitrarily deep. If
+     *     the input HTML does not parse to a result starting with an Element, this will be a no-op.
+     *     @return this node, for chaining.
      */
     public Node wrap(String html) {
-        Validate.notEmpty(html);
-
-        // Parse context - parent (because wrapping), this, or null
-        Element context =
-            parentNode != null && parentNode instanceof Element ? (Element) parentNode :
-                this instanceof Element ? (Element) this :
-                    null;
-        List<Node> wrapChildren = NodeUtils.parser(this).parseFragmentInput(html, context, baseUri());
-        Node wrapNode = wrapChildren.get(0);
-        if (!(wrapNode instanceof Element)) // nothing to wrap with; noop
-            return this;
-
-        Element wrap = (Element) wrapNode;
-        Element deepest = getDeepChild(wrap);
-        if (parentNode != null)
-            parentNode.replaceChild(this, wrap);
-        deepest.addChildren(this); // side effect of tricking wrapChildren to lose first
-
-        // remainder (unbalanced wrap, like <div></div><p></p> -- The <p> is remainder
-        if (wrapChildren.size() > 0) {
-            //noinspection ForLoopReplaceableByForEach (beacause it allocates an Iterator which is wasteful here)
-            for (int i = 0; i < wrapChildren.size(); i++) {
-                Node remainder = wrapChildren.get(i);
-                // if no parent, this could be the wrap node, so skip
-                if (wrap == remainder)
-                    continue;
-
-                if (remainder.parentNode != null)
-                    remainder.parentNode.removeChild(remainder);
-                wrap.after(remainder);
-            }
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -506,13 +408,9 @@ public abstract class Node implements Cloneable {
      * @see #remove()
      * @see #wrap(String)
      */
-    public @Nullable Node unwrap() {
-        Validate.notNull(parentNode);
-        Node firstChild = firstChild();
-        parentNode.addChildren(siblingIndex(), this.childNodesAsArray());
-        this.remove();
-
-        return firstChild;
+    @Nullable
+    public Node unwrap() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static Element getDeepChild(Element el) {
@@ -529,151 +427,58 @@ public abstract class Node implements Cloneable {
      * @param in the node that will replace the existing node.
      */
     public void replaceWith(Node in) {
-        Validate.notNull(in);
-        if (parentNode == null) parentNode = in.parentNode; // allows old to have been temp removed before replacing
-        Validate.notNull(parentNode);
-        parentNode.replaceChild(this, in);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void setParentNode(Node parentNode) {
-        Validate.notNull(parentNode);
-        if (this.parentNode != null)
-            this.parentNode.removeChild(this);
-        assert parentNode instanceof Element;
-        this.parentNode = (Element) parentNode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void replaceChild(Node out, Node in) {
-        Validate.isTrue(out.parentNode == this);
-        Validate.notNull(in);
-        if (out == in) return; // no-op self replacement
-
-        if (in.parentNode != null)
-            in.parentNode.removeChild(in);
-
-        final int index = out.siblingIndex();
-        ensureChildNodes().set(index, in);
-        in.parentNode = (Element) this;
-        in.setSiblingIndex(index);
-        out.parentNode = null;
-
-        ((Element) this).childNodes.incrementMod(); // as mod count not changed in set(), requires explicit update, to invalidate the child element cache
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void removeChild(Node out) {
-        Validate.isTrue(out.parentNode == this);
-        Element el = (Element) this;
-        if (el.hasValidChildren()) // can remove by index
-            ensureChildNodes().remove(out.siblingIndex);
-        else
-            ensureChildNodes().remove(out); // iterates, but potentially not every one
-
-        el.invalidateChildren();
-        out.parentNode = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void addChildren(Node... children) {
-        //most used. short circuit addChildren(int), which hits reindex children and array copy
-        final List<Node> nodes = ensureChildNodes();
-
-        for (Node child: children) {
-            reparentChild(child);
-            nodes.add(child);
-            child.setSiblingIndex(nodes.size()-1);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void addChildren(int index, Node... children) {
-        // todo clean up all these and use the list, not the var array. just need to be careful when iterating the incoming (as we are removing as we go)
-        Validate.notNull(children);
-        if (children.length == 0) return;
-        final List<Node> nodes = ensureChildNodes();
-
-        // fast path - if used as a wrap (index=0, children = child[0].parent.children - do inplace
-        final Node firstParent = children[0].parent();
-        if (firstParent != null && firstParent.childNodeSize() == children.length) {
-            boolean sameList = true;
-            final List<Node> firstParentNodes = firstParent.ensureChildNodes();
-            // identity check contents to see if same
-            int i = children.length;
-            while (i-- > 0) {
-                if (children[i] != firstParentNodes.get(i)) {
-                    sameList = false;
-                    break;
-                }
-            }
-            if (sameList) { // moving, so OK to empty firstParent and short-circuit
-                firstParent.empty();
-                nodes.addAll(index, Arrays.asList(children));
-                i = children.length;
-                assert this instanceof Element;
-                while (i-- > 0) {
-                    children[i].parentNode = (Element) this;
-                }
-                ((Element) this).invalidateChildren();
-                return;
-            }
-        }
-
-        Validate.noNullElements(children);
-        for (Node child : children) {
-            reparentChild(child);
-        }
-        nodes.addAll(index, Arrays.asList(children));
-        ((Element) this).invalidateChildren();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
+
     protected void reparentChild(Node child) {
-        child.setParentNode(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Retrieves this node's sibling nodes. Similar to {@link #childNodes() node.parent.childNodes()}, but does not
-     include this node (a node is not a sibling of itself).
-     @return node siblings. If the node has no parent, returns an empty list.
+     *     Retrieves this node's sibling nodes. Similar to {@link #childNodes() node.parent.childNodes()}, but does not
+     *     include this node (a node is not a sibling of itself).
+     *     @return node siblings. If the node has no parent, returns an empty list.
      */
     public List<Node> siblingNodes() {
-        if (parentNode == null)
-            return Collections.emptyList();
-
-        List<Node> nodes = parentNode.ensureChildNodes();
-        List<Node> siblings = new ArrayList<>(nodes.size() - 1);
-        for (Node node: nodes)
-            if (node != this)
-                siblings.add(node);
-        return siblings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get this node's next sibling.
-     @return next sibling, or {@code null} if this is the last sibling
+     *     Get this node's next sibling.
+     *     @return next sibling, or {@code null} if this is the last sibling
      */
-    public @Nullable Node nextSibling() {
-        if (parentNode == null)
-            return null; // root
-
-        final List<Node> siblings = parentNode.ensureChildNodes();
-        final int index = siblingIndex() + 1;
-        if (siblings.size() > index) {
-            Node node = siblings.get(index);
-            assert (node.siblingIndex == index); // sanity test that invalidations haven't missed
-            return node;
-        } else
-            return null;
+    @Nullable
+    public Node nextSibling() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get this node's previous sibling.
-     @return the previous sibling, or @{code null} if this is the first sibling
+     *     Get this node's previous sibling.
+     *     @return the previous sibling, or @{code null} if this is the first sibling
      */
-    public @Nullable Node previousSibling() {
-        if (parentNode == null)
-            return null; // root
-
-        if (siblingIndex() > 0)
-            return parentNode.ensureChildNodes().get(siblingIndex-1);
-        else
-            return null;
+    @Nullable
+    public Node previousSibling() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -683,99 +488,80 @@ public abstract class Node implements Cloneable {
      * @see org.jsoup.nodes.Element#elementSiblingIndex()
      */
     public int siblingIndex() {
-        if (parentNode != null && !parentNode.childNodes.validChildren)
-            parentNode.reindexChildren();
-
-        return siblingIndex;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void setSiblingIndex(int siblingIndex) {
-        this.siblingIndex = siblingIndex;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the first child node of this node, or {@code null} if there is none. This could be any Node type, such as an
-     Element, TextNode, Comment, etc. Use {@link Element#firstElementChild()} to get the first Element child.
-     @return the first child node, or null if there are no children.
-     @see Element#firstElementChild()
-     @see #lastChild()
-     @since 1.15.2
+     *     Gets the first child node of this node, or {@code null} if there is none. This could be any Node type, such as an
+     *     Element, TextNode, Comment, etc. Use {@link Element#firstElementChild()} to get the first Element child.
+     *     @return the first child node, or null if there are no children.
+     *     @see Element#firstElementChild()
+     *     @see #lastChild()
+     *     @since 1.15.2
      */
-    public @Nullable Node firstChild() {
-        if (childNodeSize() == 0) return null;
-        return ensureChildNodes().get(0);
+    @Nullable
+    public Node firstChild() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the last child node of this node, or {@code null} if there is none.
-     @return the last child node, or null if there are no children.
-     @see Element#lastElementChild()
-     @see #firstChild()
-     @since 1.15.2
+     *     Gets the last child node of this node, or {@code null} if there is none.
+     *     @return the last child node, or null if there are no children.
+     *     @see Element#lastElementChild()
+     *     @see #firstChild()
+     *     @since 1.15.2
      */
-    public @Nullable Node lastChild() {
-        final int size = childNodeSize();
-        if (size == 0) return null;
-        List<Node> children = ensureChildNodes();
-        return children.get(size - 1);
+    @Nullable
+    public Node lastChild() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the first sibling of this node. That may be this node.
-
-     @return the first sibling node
-     @since 1.21.1
+     *     Gets the first sibling of this node. That may be this node.
+     *
+     *     @return the first sibling node
+     *     @since 1.21.1
      */
     public Node firstSibling() {
-        if (parentNode != null) {
-            //noinspection DataFlowIssue
-            return parentNode.firstChild();
-        } else
-            return this; // orphan is its own first sibling
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the last sibling of this node. That may be this node.
-
-     @return the last sibling (aka the parent's last child)
-     @since 1.21.1
+     *     Gets the last sibling of this node. That may be this node.
+     *
+     *     @return the last sibling (aka the parent's last child)
+     *     @since 1.21.1
      */
     public Node lastSibling() {
-        if (parentNode != null) {
-            //noinspection DataFlowIssue (not nullable, would be this if no other sibs)
-            return parentNode.lastChild();
-        } else
-            return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the next sibling Element of this node. E.g., if a {@code div} contains two {@code p}s, the
-     {@code nextElementSibling} of the first {@code p} is the second {@code p}.
-     <p>This is similar to {@link #nextSibling()}, but specifically finds only Elements.</p>
-
-     @return the next element, or null if there is no next element
-     @see #previousElementSibling()
+     *     Gets the next sibling Element of this node. E.g., if a {@code div} contains two {@code p}s, the
+     *     {@code nextElementSibling} of the first {@code p} is the second {@code p}.
+     *     <p>This is similar to {@link #nextSibling()}, but specifically finds only Elements.</p>
+     *
+     *     @return the next element, or null if there is no next element
+     *     @see #previousElementSibling()
      */
-    public @Nullable Element nextElementSibling() {
-        Node next = this;
-        while ((next = next.nextSibling()) != null) {
-            if (next instanceof Element) return (Element) next;
-        }
-        return null;
+    @Nullable
+    public Element nextElementSibling() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the previous Element sibling of this node.
-
-     @return the previous element, or null if there is no previous element
-     @see #nextElementSibling()
+     *     Gets the previous Element sibling of this node.
+     *
+     *     @return the previous element, or null if there is no previous element
+     *     @see #nextElementSibling()
      */
-    public @Nullable Element previousElementSibling() {
-        Node prev = this;
-        while ((prev = prev.previousSibling()) != null) {
-            if (prev instanceof Element) return (Element) prev;
-        }
-        return null;
+    @Nullable
+    public Element previousElementSibling() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -784,22 +570,18 @@ public abstract class Node implements Cloneable {
      * @return this node, for chaining
      */
     public Node traverse(NodeVisitor nodeVisitor) {
-        Validate.notNull(nodeVisitor);
-        nodeVisitor.traverse(this);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Perform the supplied action on this Node and each of its descendants, during a depth-first traversal. Nodes may be
-     inspected, changed, added, replaced, or removed.
-     @param action the function to perform on the node
-     @return this Node, for chaining
-     @see Element#forEach(Consumer)
+     *     Perform the supplied action on this Node and each of its descendants, during a depth-first traversal. Nodes may be
+     *     inspected, changed, added, replaced, or removed.
+     *     @param action the function to perform on the node
+     *     @return this Node, for chaining
+     *     @see Element#forEach(Consumer)
      */
     public Node forEachNode(Consumer<? super Node> action) {
-        Validate.notNull(action);
-        nodeStream().forEach(action);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -808,103 +590,96 @@ public abstract class Node implements Cloneable {
      * @return this node, for chaining
      */
     public Node filter(NodeFilter nodeFilter) {
-        Validate.notNull(nodeFilter);
-        nodeFilter.traverse(this);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Returns a Stream of this Node and all of its descendant Nodes. The stream has document order.
-     @return a stream of all nodes.
-     @see Element#stream()
-     @since 1.17.1
+     *     Returns a Stream of this Node and all of its descendant Nodes. The stream has document order.
+     *     @return a stream of all nodes.
+     *     @see Element#stream()
+     *     @since 1.17.1
      */
     public Stream<Node> nodeStream() {
-        return NodeUtils.stream(this, Node.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Returns a Stream of this and descendant nodes, containing only nodes of the specified type. The stream has document
-     order.
-     @return a stream of nodes filtered by type.
-     @see Element#stream()
-     @since 1.17.1
+     *     Returns a Stream of this and descendant nodes, containing only nodes of the specified type. The stream has document
+     *     order.
+     *     @return a stream of nodes filtered by type.
+     *     @see Element#stream()
+     *     @since 1.17.1
      */
     public <T extends Node> Stream<T> nodeStream(Class<T> type) {
-        return NodeUtils.stream(this, type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the outer HTML of this node. For example, on a {@code p} element, may return {@code <p>Para</p>}.
-     @return outer HTML
-     @see Element#html()
-     @see Element#text()
+     *     Get the outer HTML of this node. For example, on a {@code p} element, may return {@code <p>Para</p>}.
+     *     @return outer HTML
+     *     @see Element#html()
+     *     @see Element#text()
      */
     public String outerHtml() {
-        StringBuilder sb = StringUtil.borrowBuilder();
-        outerHtml(QuietAppendable.wrap(sb));
-        return StringUtil.releaseBuilder(sb);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void outerHtml(Appendable accum) {
-        outerHtml(QuietAppendable.wrap(accum));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void outerHtml(QuietAppendable accum) {
-        Printer printer = Printer.printerFor(this, accum);
-        printer.traverse(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the outer HTML of this node.
-
-     @param accum accumulator to place HTML into
-     @param out
+     *     Get the outer HTML of this node.
+     *
+     *     @param accum accumulator to place HTML into
+     *     @param out
      */
     abstract void outerHtmlHead(final QuietAppendable accum, final Document.OutputSettings out);
 
     abstract void outerHtmlTail(final QuietAppendable accum, final Document.OutputSettings out);
 
     /**
-     Write this node and its children to the given {@link Appendable}.
-
-     @param appendable the {@link Appendable} to write to.
-     @return the supplied {@link Appendable}, for chaining.
-     @throws org.jsoup.SerializationException if the appendable throws an IOException.
+     *     Write this node and its children to the given {@link Appendable}.
+     *
+     *     @param appendable the {@link Appendable} to write to.
+     *     @return the supplied {@link Appendable}, for chaining.
+     *     @throws org.jsoup.SerializationException if the appendable throws an IOException.
      */
     public <T extends Appendable> T html(T appendable) {
-        outerHtml(appendable);
-        return appendable;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the source range (start and end positions) in the original input source from which this node was parsed.
-     Position tracking must be enabled prior to parsing the content. For an Element, this will be the positions of the
-     start tag.
-     @return the range for the start of the node, or {@code untracked} if its range was not tracked.
-     @see org.jsoup.parser.Parser#setTrackPosition(boolean)
-     @see Range#isImplicit()
-     @see Element#endSourceRange()
-     @see Attributes#sourceRange(String name)
-     @since 1.15.2
+     *     Get the source range (start and end positions) in the original input source from which this node was parsed.
+     *     Position tracking must be enabled prior to parsing the content. For an Element, this will be the positions of the
+     *     start tag.
+     *     @return the range for the start of the node, or {@code untracked} if its range was not tracked.
+     *     @see org.jsoup.parser.Parser#setTrackPosition(boolean)
+     *     @see Range#isImplicit()
+     *     @see Element#endSourceRange()
+     *     @see Attributes#sourceRange(String name)
+     *     @since 1.15.2
      */
     public Range sourceRange() {
-        return Range.ofStart(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets the range spans, if source tracking was used.
+     *     Gets the range spans, if source tracking was used.
      */
     Range.@Nullable Spans spans() {
-        if (!hasAttributes()) return null;
-        return attributes().spans();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Gets or creates range spans for this node.
+     *     Gets or creates range spans for this node.
      */
     Range.Spans ensureSpans() {
-        return attributes().ensureSpans();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -914,10 +689,12 @@ public abstract class Node implements Cloneable {
      */
     @Override
     public String toString() {
-        return outerHtml();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** @deprecated internal method moved into Printer; will be removed in jsoup 1.24.1. */
+    /**
+     * @deprecated internal method moved into Printer; will be removed in jsoup 1.24.1.
+     */
     @Deprecated
     protected void indent(Appendable accum, int depth, Document.OutputSettings out) throws IOException {
         accum.append('\n').append(StringUtil.padding(depth * out.indentAmount(), out.maxPaddingWidth()));
@@ -932,19 +709,17 @@ public abstract class Node implements Cloneable {
      */
     @Override
     public boolean equals(@Nullable Object o) {
-        // implemented just so that javadoc is clear this is an identity test
-        return this == o;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Provides a hashCode for this Node, based on its object identity. Changes to the Node's content will not impact the
-     result.
-     @return an object identity based hashcode for this Node
+     *     Provides a hashCode for this Node, based on its object identity. Changes to the Node's content will not impact the
+     *     result.
+     *     @return an object identity based hashcode for this Node
      */
     @Override
     public int hashCode() {
-        // implemented so that javadoc and scanners are clear this is an identity test
-        return super.hashCode();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -954,48 +729,27 @@ public abstract class Node implements Cloneable {
      * @return true if the content of this node is the same as the other
      */
     public boolean hasSameValue(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        return this.outerHtml().equals(((Node) o).outerHtml());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Create a stand-alone, deep copy of this node, and all of its children. The cloned node will have no siblings.
-     <p><ul>
-     <li>If this node is a {@link LeafNode}, the clone will have no parent.</li>
-     <li>If this node is an {@link Element}, the clone will have a simple owning {@link Document} to retain the
-     configured output settings and parser.</li>
-     </ul></p>
-     <p>The cloned node may be adopted into another Document or node structure using
-     {@link Element#appendChild(Node)}.</p>
-
-     @return a stand-alone cloned node, including clones of any children
-     @see #shallowClone()
+     *     Create a stand-alone, deep copy of this node, and all of its children. The cloned node will have no siblings.
+     *     <p><ul>
+     *     <li>If this node is a {@link LeafNode}, the clone will have no parent.</li>
+     *     <li>If this node is an {@link Element}, the clone will have a simple owning {@link Document} to retain the
+     *     configured output settings and parser.</li>
+     *     </ul></p>
+     *     <p>The cloned node may be adopted into another Document or node structure using
+     *     {@link Element#appendChild(Node)}.</p>
+     *
+     *     @return a stand-alone cloned node, including clones of any children
+     *     @see #shallowClone()
      */
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     // because it does call super.clone in doClone - analysis just isn't following
     @Override
     public Node clone() {
-        Node thisClone = doClone(null); // splits for orphan
-
-        // Queue up nodes that need their children cloned (BFS).
-        final LinkedList<Node> nodesToProcess = new LinkedList<>();
-        nodesToProcess.add(thisClone);
-
-        while (!nodesToProcess.isEmpty()) {
-            Node currParent = nodesToProcess.remove();
-
-            final int size = currParent.childNodeSize();
-            for (int i = 0; i < size; i++) {
-                final List<Node> childNodes = currParent.ensureChildNodes();
-                Node childClone = childNodes.get(i).doClone(currParent);
-                childNodes.set(i, childClone);
-                nodesToProcess.add(childClone);
-            }
-        }
-
-        return thisClone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1005,7 +759,7 @@ public abstract class Node implements Cloneable {
      * @see #clone()
      */
     public Node shallowClone() {
-        return doClone(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /*
@@ -1013,27 +767,6 @@ public abstract class Node implements Cloneable {
      * Not a deep copy of children.
      */
     protected Node doClone(@Nullable Node parent) {
-        assert parent == null || parent instanceof Element;
-        Node clone;
-
-        try {
-            clone = (Node) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
-
-        clone.parentNode = (Element) parent; // can be null, to create an orphan split
-        clone.siblingIndex = parent == null ? 0 : siblingIndex();
-        // if not keeping the parent, shallowClone the ownerDocument to preserve its settings
-        if (parent == null && !(this instanceof Document)) {
-            Document doc = ownerDocument();
-            if (doc != null) {
-                Document docClone = doc.shallowClone();
-                clone.parentNode = docClone;
-                docClone.ensureChildNodes().add(clone);
-            }
-        }
-
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

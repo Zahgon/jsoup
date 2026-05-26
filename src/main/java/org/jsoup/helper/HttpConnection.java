@@ -10,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.parser.StreamParser;
 import org.jspecify.annotations.Nullable;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedInputStream;
@@ -46,7 +45,6 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
-
 import static org.jsoup.Connection.Method.HEAD;
 import static org.jsoup.helper.DataUtil.UTF_8;
 import static org.jsoup.internal.Normalizer.lowerCase;
@@ -58,50 +56,62 @@ import static org.jsoup.internal.SharedConstants.DefaultBufferSize;
  */
 @SuppressWarnings("CharsetObjectCanBeUsed")
 public class HttpConnection implements Connection {
+
     public static final String CONTENT_ENCODING = "Content-Encoding";
+
     /**
      * Many users would get caught by not setting a user-agent and therefore getting different responses on their desktop
      * vs in jsoup, which would otherwise default to {@code Java}. So by default, use a desktop UA.
      */
-    public static final String DEFAULT_UA =
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36";
+    public static final String DEFAULT_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36";
+
     private static final String USER_AGENT = "User-Agent";
+
     public static final String CONTENT_TYPE = "Content-Type";
+
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+
     public static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
-    private static final int HTTP_TEMP_REDIR = 307; // http/1.1 temporary redirect, not in Java's set.
+
+    // http/1.1 temporary redirect, not in Java's set.
+    private static final int HTTP_TEMP_REDIR = 307;
+
     static final String DefaultUploadType = "application/octet-stream";
+
     private static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
 
     private HttpConnection.Request req;
+
     private Connection.@Nullable Response res;
-    @Nullable Object client; // The HttpClient for this Connection, if via the HttpClientExecutor
-    @Nullable RequestAuthenticator lastAuth; // The previous Authenticator used by this Connection, if via the HttpClientExecutor
+
+    // The HttpClient for this Connection, if via the HttpClientExecutor
+    @Nullable
+    Object client;
+
+    // The previous Authenticator used by this Connection, if via the HttpClientExecutor
+    @Nullable
+    RequestAuthenticator lastAuth;
 
     /**
-     Create a new Connection, with the request URL specified.
-     @param url the URL to fetch from
-     @return a new Connection object
+     *     Create a new Connection, with the request URL specified.
+     *     @param url the URL to fetch from
+     *     @return a new Connection object
      */
     public static Connection connect(String url) {
-        Connection con = new HttpConnection();
-        con.url(url);
-        return con;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Create a new Connection, with the request URL specified.
-     @param url the URL to fetch from
-     @return a new Connection object
+     *     Create a new Connection, with the request URL specified.
+     *     @param url the URL to fetch from
+     *     @return a new Connection object
      */
     public static Connection connect(URL url) {
-        Connection con = new HttpConnection();
-        con.url(url);
-        return con;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Create a new, empty HttpConnection.
+     *     Create a new, empty HttpConnection.
      */
     public HttpConnection() {
         req = new Request();
@@ -109,25 +119,26 @@ public class HttpConnection implements Connection {
     }
 
     /**
-     Create a new Request by deep-copying an existing Request. Note that the data and body of the original are not
-     copied. All other settings (proxy, parser, cookies, etc) are copied.
-     @param copy the request to copy
+     *     Create a new Request by deep-copying an existing Request. Note that the data and body of the original are not
+     *     copied. All other settings (proxy, parser, cookies, etc) are copied.
+     *     @param copy the request to copy
      */
     HttpConnection(Request copy) {
         req = new Request(copy);
     }
 
     static String encodeMimeName(String val) {
-        return val.replace("\"", "%22");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection newRequest() {
-        // copy the prototype request for the different settings, cookie manager, etc
-        return new HttpConnection(req);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** Create a new Connection that just wraps the provided Request and Response */
+    /**
+     * Create a new Connection that just wraps the provided Request and Response
+     */
     private HttpConnection(Request req, Response res) {
         this.req = req;
         this.res = res;
@@ -135,87 +146,67 @@ public class HttpConnection implements Connection {
 
     @Override
     public Connection url(URL url) {
-        req.url(url);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection url(String url) {
-        Validate.notEmptyParam(url, "url");
-        try {
-            req.url(new URL(url));
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(String.format("The supplied URL, '%s', is malformed. Make sure it is an absolute URL, and starts with 'http://' or 'https://'. See https://jsoup.org/cookbook/extracting-data/working-with-urls", url), e);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection proxy(@Nullable Proxy proxy) {
-        req.proxy(proxy);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection proxy(String host, int port) {
-        req.proxy(host, port);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection userAgent(String userAgent) {
-        Validate.notNullParam(userAgent, "userAgent");
-        req.header(USER_AGENT, userAgent);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection timeout(int millis) {
-        req.timeout(millis);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection maxBodySize(int bytes) {
-        req.maxBodySize(bytes);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection followRedirects(boolean followRedirects) {
-        req.followRedirects(followRedirects);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection referrer(String referrer) {
-        Validate.notNullParam(referrer, "referrer");
-        req.header("Referer", referrer);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection method(Method method) {
-        req.method(method);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection ignoreHttpErrors(boolean ignoreHttpErrors) {
-		req.ignoreHttpErrors(ignoreHttpErrors);
-		return this;
-	}
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     @Override
     public Connection ignoreContentType(boolean ignoreContentType) {
-        req.ignoreContentType(ignoreContentType);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(String key, String value) {
-        req.data(KeyVal.create(key, value));
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
@@ -227,190 +218,140 @@ public class HttpConnection implements Connection {
 
     @Override
     public Connection sslContext(SSLContext sslContext) {
-        req.sslContext(sslContext);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(String key, String filename, InputStream inputStream) {
-        req.data(KeyVal.create(key, filename, inputStream));
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(String key, String filename, InputStream inputStream, String contentType) {
-        req.data(KeyVal.create(key, filename, inputStream).contentType(contentType));
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(Map<String, String> data) {
-        Validate.notNullParam(data, "data");
-        for (Map.Entry<String, String> entry : data.entrySet()) {
-            req.data(KeyVal.create(entry.getKey(), entry.getValue()));
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(String... keyvals) {
-        Validate.notNullParam(keyvals, "keyvals");
-        Validate.isTrue(keyvals.length %2 == 0, "Must supply an even number of key value pairs");
-        for (int i = 0; i < keyvals.length; i += 2) {
-            String key = keyvals[i];
-            String value = keyvals[i+1];
-            Validate.notEmpty(key, "Data key must not be empty");
-            Validate.notNull(value, "Data value must not be null");
-            req.data(KeyVal.create(key, value));
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection data(Collection<Connection.KeyVal> data) {
-        Validate.notNullParam(data, "data");
-        for (Connection.KeyVal entry: data) {
-            req.data(entry);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection.@Nullable KeyVal data(String key) {
-        Validate.notEmptyParam(key, "key");
-        for (Connection.KeyVal keyVal : request().data()) {
-            if (keyVal.key().equals(key))
-                return keyVal;
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection requestBody(String body) {
-        req.requestBody(body);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection requestBodyStream(InputStream stream) {
-        req.requestBodyStream(stream);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection header(String name, String value) {
-        req.header(name, value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public Connection headers(Map<String,String> headers) {
-        Validate.notNullParam(headers, "headers");
-        for (Map.Entry<String,String> entry : headers.entrySet()) {
-            req.header(entry.getKey(),entry.getValue());
-        }
-        return this;
+    public Connection headers(Map<String, String> headers) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection cookie(String name, String value) {
-        req.cookie(name, value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection cookies(Map<String, String> cookies) {
-        Validate.notNullParam(cookies, "cookies");
-        for (Map.Entry<String, String> entry : cookies.entrySet()) {
-            req.cookie(entry.getKey(), entry.getValue());
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection cookieStore(CookieStore cookieStore) {
-        // create a new cookie manager using the new store
-        req.cookieManager = new CookieManager(cookieStore, null);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public CookieStore cookieStore() {
-        return req.cookieManager.getCookieStore();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection parser(Parser parser) {
-        req.parser(parser);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Document get() throws IOException {
-        req.method(Method.GET);
-        execute();
-        Validate.notNull(res);
-        return res.parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Document post() throws IOException {
-        req.method(Method.POST);
-        execute();
-        Validate.notNull(res);
-        return res.parse();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection.Response execute() throws IOException {
-        res = Response.execute(req);
-        return res;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection.Request request() {
-        return req;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection request(Connection.Request request) {
-        req = (HttpConnection.Request) request; // will throw a class-cast exception if the user has extended some but not all of Connection; that's desired
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection.Response response() {
-        if (res == null) {
-            throw new IllegalArgumentException("You must execute the request before getting a response.");
-        }
-        return res;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection response(Connection.Response response) {
-        res = response;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Connection postDataCharset(String charset) {
-        req.postDataCharset(charset);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override public Connection auth(@Nullable RequestAuthenticator authenticator) {
-        req.auth(authenticator);
-        return this;
+    @Override
+    public Connection auth(@Nullable RequestAuthenticator authenticator) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override public Connection onResponseProgress(Progress<Connection.Response> handler) {
-        req.responseProgress = handler;
-        return this;
+    @Override
+    public Connection onResponseProgress(Progress<Connection.Response> handler) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
     private static abstract class Base<T extends Connection.Base<T>> implements Connection.Base<T> {
-        private static final URL UnsetUrl; // only used if you created a new Request()
+
+        // only used if you created a new Request()
+        private static final URL UnsetUrl;
+
         static {
             try {
                 UnsetUrl = new URL("http://undefined/");
@@ -420,8 +361,11 @@ public class HttpConnection implements Connection {
         }
 
         URL url = UnsetUrl;
+
         Method method = Method.GET;
+
         Map<String, List<String>> headers;
+
         Map<String, String> cookies;
 
         private Base() {
@@ -430,86 +374,63 @@ public class HttpConnection implements Connection {
         }
 
         private Base(Base<T> copy) {
-            url = copy.url; // unmodifiable object
+            // unmodifiable object
+            url = copy.url;
             method = copy.method;
             headers = new LinkedHashMap<>();
             for (Map.Entry<String, List<String>> entry : copy.headers.entrySet()) {
                 headers.put(entry.getKey(), new ArrayList<>(entry.getValue()));
             }
-            cookies = new LinkedHashMap<>(); cookies.putAll(copy.cookies); // just holds strings
+            // just holds strings
+            cookies = new LinkedHashMap<>();
+            // just holds strings
+            cookies.putAll(copy.cookies);
         }
 
         @Override
         public URL url() {
-            if (url == UnsetUrl)
-                throw new IllegalArgumentException("URL not set. Make sure to call #url(...) before executing the request.");
-            return url;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T url(URL url) {
-            Validate.notNullParam(url, "url");
-            this.url = new UrlBuilder(url).build();
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Method method() {
-            return method;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T method(Method method) {
-            Validate.notNullParam(method, "method");
-            this.method = method;
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public String header(String name) {
-            Validate.notNullParam(name, "name");
-            List<String> vals = getHeadersCaseInsensitive(name);
-            if (!vals.isEmpty()) {
-                // https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-                return StringUtil.join(vals, ", ");
-            }
-
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T addHeader(String name, @Nullable String value) {
-            Validate.notEmptyParam(name, "name");
-            value = value == null ? "" : value;
-
-            List<String> values = headers(name);
-            if (values.isEmpty()) {
-                values = new ArrayList<>();
-                headers.put(name, values);
-            }
-            values.add(value);
-
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public List<String> headers(String name) {
-            Validate.notEmptyParam(name, "name");
-            return getHeadersCaseInsensitive(name);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T header(String name, String value) {
-            Validate.notEmptyParam(name, "name");
-            removeHeader(name); // ensures we don't get an "accept-encoding" and an "Accept-Encoding"
-            addHeader(name, value);
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean hasHeader(String name) {
-            Validate.notEmptyParam(name, "name");
-            return !getHeadersCaseInsensitive(name).isEmpty();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -517,50 +438,30 @@ public class HttpConnection implements Connection {
          */
         @Override
         public boolean hasHeaderWithValue(String name, String value) {
-            Validate.notEmpty(name);
-            Validate.notEmpty(value);
-            List<String> values = headers(name);
-            for (String candidate : values) {
-                if (value.equalsIgnoreCase(candidate))
-                    return true;
-            }
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T removeHeader(String name) {
-            Validate.notEmptyParam(name, "name");
-            Map.Entry<String, List<String>> entry = scanHeaders(name); // remove is case-insensitive too
-            if (entry != null)
-                headers.remove(entry.getKey()); // ensures correct case
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Map<String, String> headers() {
-            LinkedHashMap<String, String> map = new LinkedHashMap<>(headers.size());
-            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                String header = entry.getKey();
-                List<String> values = entry.getValue();
-                if (!values.isEmpty())
-                    map.put(header, values.get(0));
-            }
-            return map;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Map<String, List<String>> multiHeaders() {
-            return headers;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private List<String> getHeadersCaseInsensitive(String name) {
             Validate.notNull(name);
-
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
                 if (name.equalsIgnoreCase(entry.getKey()))
                     return entry.getValue();
             }
-
             return Collections.emptyList();
         }
 
@@ -575,75 +476,99 @@ public class HttpConnection implements Connection {
 
         @Override
         public String cookie(String name) {
-            Validate.notEmptyParam(name, "name");
-            return cookies.get(name);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T cookie(String name, String value) {
-            Validate.notEmptyParam(name, "name");
-            Validate.notNullParam(value, "value");
-            cookies.put(name, value);
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean hasCookie(String name) {
-            Validate.notEmptyParam(name, "name");
-            return cookies.containsKey(name);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public T removeCookie(String name) {
-            Validate.notEmptyParam(name, "name");
-            cookies.remove(name);
-            return (T) this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Map<String, String> cookies() {
-            return cookies;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static class Request extends HttpConnection.Base<Connection.Request> implements Connection.Request {
+
         static {
             System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
             // make sure that we can send Sec-Fetch-Site headers etc.
         }
 
         HttpConnection connection;
-        private @Nullable Proxy proxy;
-        private int timeoutMilliseconds;
-        private int maxBodySizeBytes;
-        private boolean followRedirects;
-        private final Collection<Connection.KeyVal> data;
-        private @Nullable Object body = null; // String or InputStream
-        @Nullable String mimeBoundary;
-        private boolean ignoreHttpErrors = false;
-        private boolean ignoreContentType = false;
-        private Parser parser;
-        private boolean parserDefined = false; // called parser(...) vs initialized in ctor
-        private String postDataCharset = DataUtil.defaultCharsetName;
-        private @Nullable SSLSocketFactory sslSocketFactory;
-        @Nullable SSLContext sslContext;
-        private CookieManager cookieManager;
-        @Nullable RequestAuthenticator authenticator;
-        private @Nullable Progress<Connection.Response> responseProgress;
 
-        private final ReentrantLock executing = new ReentrantLock(); // detects and warns if same request used concurrently
+        @Nullable
+        private Proxy proxy;
+
+        private int timeoutMilliseconds;
+
+        private int maxBodySizeBytes;
+
+        private boolean followRedirects;
+
+        private final Collection<Connection.KeyVal> data;
+
+        // String or InputStream
+        @Nullable
+        private Object body = null;
+
+        @Nullable
+        String mimeBoundary;
+
+        private boolean ignoreHttpErrors = false;
+
+        private boolean ignoreContentType = false;
+
+        private Parser parser;
+
+        // called parser(...) vs initialized in ctor
+        private boolean parserDefined = false;
+
+        private String postDataCharset = DataUtil.defaultCharsetName;
+
+        @Nullable
+        private SSLSocketFactory sslSocketFactory;
+
+        @Nullable
+        SSLContext sslContext;
+
+        private CookieManager cookieManager;
+
+        @Nullable
+        RequestAuthenticator authenticator;
+
+        @Nullable
+        private Progress<Connection.Response> responseProgress;
+
+        // detects and warns if same request used concurrently
+        private final ReentrantLock executing = new ReentrantLock();
 
         Request() {
             super();
-            timeoutMilliseconds = 30000; // 30 seconds
-            maxBodySizeBytes = 1024 * 1024 * 2; // 2MB
+            // 30 seconds
+            timeoutMilliseconds = 30000;
+            // 2MB
+            maxBodySizeBytes = 1024 * 1024 * 2;
             followRedirects = true;
             data = new ArrayList<>();
             method = Method.GET;
             addHeader("Accept-Encoding", "gzip");
             addHeader(USER_AGENT, DEFAULT_UA);
             parser = Parser.htmlParser();
-            cookieManager = new CookieManager(); // creates a default InMemoryCookieStore
+            // creates a default InMemoryCookieStore
+            cookieManager = new CookieManager();
         }
 
         Request(Request copy) {
@@ -654,79 +579,77 @@ public class HttpConnection implements Connection {
             timeoutMilliseconds = copy.timeoutMilliseconds;
             maxBodySizeBytes = copy.maxBodySizeBytes;
             followRedirects = copy.followRedirects;
-            data = new ArrayList<>(); // data not copied
+            // data not copied
+            data = new ArrayList<>();
             //body not copied
             ignoreHttpErrors = copy.ignoreHttpErrors;
             ignoreContentType = copy.ignoreContentType;
-            parser = copy.parser.newInstance(); // parsers and their tree-builders maintain state, so need a fresh copy
+            // parsers and their tree-builders maintain state, so need a fresh copy
+            parser = copy.parser.newInstance();
             parserDefined = copy.parserDefined;
-            sslSocketFactory = copy.sslSocketFactory; // these are all synchronized so safe to share
+            // these are all synchronized so safe to share
+            sslSocketFactory = copy.sslSocketFactory;
             sslContext = copy.sslContext;
             cookieManager = copy.cookieManager;
             authenticator = copy.authenticator;
             responseProgress = copy.responseProgress;
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public Proxy proxy() {
-            return proxy;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Request proxy(@Nullable Proxy proxy) {
-            this.proxy = proxy;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Request proxy(String host, int port) {
-            this.proxy = new Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved(host, port));
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public int timeout() {
-            return timeoutMilliseconds;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Request timeout(int millis) {
-            Validate.isTrue(millis >= 0, "Timeout milliseconds must be 0 (infinite) or greater");
-            timeoutMilliseconds = millis;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public int maxBodySize() {
-            return maxBodySizeBytes;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request maxBodySize(int bytes) {
-            Validate.isTrue(bytes >= 0, "maxSize must be 0 (unlimited) or larger");
-            maxBodySizeBytes = bytes;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean followRedirects() {
-            return followRedirects;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request followRedirects(boolean followRedirects) {
-            this.followRedirects = followRedirects;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean ignoreHttpErrors() {
-            return ignoreHttpErrors;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public SSLSocketFactory sslSocketFactory() {
-            return sslSocketFactory;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
@@ -735,116 +658,127 @@ public class HttpConnection implements Connection {
             this.sslSocketFactory = sslSocketFactory;
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public SSLContext sslContext() {
-            return sslContext;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request sslContext(SSLContext sslContext) {
-            this.sslContext = sslContext;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request ignoreHttpErrors(boolean ignoreHttpErrors) {
-            this.ignoreHttpErrors = ignoreHttpErrors;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean ignoreContentType() {
-            return ignoreContentType;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request ignoreContentType(boolean ignoreContentType) {
-            this.ignoreContentType = ignoreContentType;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Request data(Connection.KeyVal keyval) {
-            Validate.notNullParam(keyval, "keyval");
-            data.add(keyval);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Collection<Connection.KeyVal> data() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request requestBody(@Nullable String body) {
-            this.body = body;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public String requestBody() {
-            return body instanceof String ? (String) body : null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request requestBodyStream(InputStream stream) {
-            body = stream;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Request parser(Parser parser) {
-            this.parser = parser;
-            parserDefined = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Parser parser() {
-            return parser;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.Request postDataCharset(String charset) {
-            Validate.notNullParam(charset, "charset");
-            if (!Charset.isSupported(charset)) throw new IllegalCharsetNameException(charset);
-            this.postDataCharset = charset;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String postDataCharset() {
-            return postDataCharset;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         CookieManager cookieManager() {
-            return cookieManager;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override public Connection.Request auth(@Nullable RequestAuthenticator authenticator) {
-            this.authenticator = authenticator;
-            return this;
+        @Override
+        public Connection.Request auth(@Nullable RequestAuthenticator authenticator) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable public RequestAuthenticator auth() {
-            return authenticator;
+        @Override
+        @Nullable
+        public RequestAuthenticator auth() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static class Response extends HttpConnection.Base<Connection.Response> implements Connection.Response {
+
         private static final int MAX_REDIRECTS = 20;
+
         private static final String LOCATION = "Location";
+
         int statusCode;
+
         String statusMessage = "";
-        private @Nullable ByteBuffer byteData;
-        private @Nullable ControllableInputStream bodyStream;
-        @Nullable RequestExecutor executor;
-        private @Nullable String charset;
-        @Nullable String contentType;
+
+        @Nullable
+        private ByteBuffer byteData;
+
+        @Nullable
+        private ControllableInputStream bodyStream;
+
+        @Nullable
+        RequestExecutor executor;
+
+        @Nullable
+        private String charset;
+
+        @Nullable
+        String contentType;
+
         int contentLength;
+
         private boolean executed = false;
+
         private boolean inputStreamRead = false;
+
         private int numRedirects = 0;
+
         private final HttpConnection.Request req;
 
         /*
@@ -853,8 +787,8 @@ public class HttpConnection implements Connection {
         private static final Pattern xmlContentTypeRxp = Pattern.compile("(\\w+)/\\w*\\+?xml.*");
 
         /**
-         <b>Internal only! </b>Creates a dummy HttpConnection.Response, useful for testing. All actual responses
-         are created from the HttpURLConnection and fields defined.
+         *         <b>Internal only! </b>Creates a dummy HttpConnection.Response, useful for testing. All actual responses
+         *         are created from the HttpURLConnection and fields defined.
          */
         Response() {
             super();
@@ -865,136 +799,53 @@ public class HttpConnection implements Connection {
         }
 
         static Response execute(HttpConnection.Request req) throws IOException {
-            return execute(req, null);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         static Response execute(HttpConnection.Request req, @Nullable Response prevRes) throws IOException {
-            Validate.isTrue(req.executing.tryLock(), "Multiple threads were detected trying to execute the same request concurrently. Make sure to use Connection#newRequest() and do not share an executing request between threads.");
-            Validate.notNullParam(req, "req");
-            URL url = req.url();
-            Validate.notNull(url, "URL must be specified to connect");
-            String protocol = url.getProtocol();
-            if (!protocol.equals("http") && !protocol.equals("https"))
-                throw new MalformedURLException("Only http & https protocols supported");
-            final boolean supportsBody = req.method().hasBody();
-            final boolean hasBody = req.body != null;
-            if (!supportsBody)
-                Validate.isFalse(hasBody, "Cannot set a request body for HTTP method " + req.method());
-
-            // set up the request for execution
-            if (!req.data().isEmpty() && (!supportsBody || hasBody))
-                serialiseRequestUrl(req);
-            else if (supportsBody)
-                setOutputContentType(req);
-
-            long startTime = System.nanoTime();
-            RequestExecutor executor = RequestDispatch.get(req, prevRes);
-            Response res = null;
-            try {
-                res = executor.execute();
-
-                // redirect if there's a location header (from 3xx, or 201 etc)
-                if (res.hasHeader(LOCATION) && req.followRedirects()) {
-                    if (res.statusCode != HTTP_TEMP_REDIR) {
-                        req.method(Method.GET); // always redirect with a get. any data param from original req are dropped.
-                        req.data().clear();
-                        req.requestBody(null);
-                        req.removeHeader(CONTENT_TYPE);
-                    }
-
-                    String location = res.header(LOCATION);
-                    Validate.notNull(location);
-                    if (location.startsWith("http:/") && location.charAt(6) != '/') // fix broken Location: http:/temp/AAG_New/en/index.php
-                        location = location.substring(6);
-                    URL redir = StringUtil.resolve(req.url(), location);
-                    req.url(redir);
-
-                    return execute(req, res);
-                }
-                if ((res.statusCode < 200 || res.statusCode >= 400) && !req.ignoreHttpErrors())
-                        throw new HttpStatusException("HTTP error fetching URL", res.statusCode, req.url().toString());
-
-                // check that we can handle the returned content type; if not, abort before fetching it
-                String contentType = res.contentType();
-                if (contentType != null
-                        && !req.ignoreContentType()
-                        && !contentType.startsWith("text/")
-                        && !xmlContentTypeRxp.matcher(contentType).matches()
-                        )
-                    throw new UnsupportedMimeTypeException("Unhandled content type. Must be text/*, */xml, or */*+xml",
-                            contentType, req.url().toString());
-
-                // switch to the XML parser if content type is xml and not parser not explicitly set
-                if (contentType != null && xmlContentTypeRxp.matcher(contentType).matches()) {
-                    if (!req.parserDefined) req.parser(Parser.xmlParser());
-                }
-
-                res.charset = DataUtil.getCharsetFromContentType(res.contentType); // may be null, readInputStream deals with it
-                if (res.contentLength != 0 && req.method() != HEAD) { // -1 means unknown, chunked. sun throws an IO exception on 500 response with no content when trying to read body
-                    InputStream stream = executor.responseBody();
-                    if (res.hasHeaderWithValue(CONTENT_ENCODING, "gzip"))
-                        stream = new GZIPInputStream(stream);
-                    else if (res.hasHeaderWithValue(CONTENT_ENCODING, "deflate"))
-                        stream = new InflaterInputStream(stream, new Inflater(true));
-                    
-                    res.bodyStream = ControllableInputStream.wrap(
-                        stream, DefaultBufferSize, req.maxBodySize())
-                        .timeout(startTime, req.timeout());
-
-                    if (req.responseProgress != null) // set response progress listener
-                        res.bodyStream.onProgress(res.contentLength, req.responseProgress, res);
-                } else {
-                    res.byteData = DataUtil.emptyByteBuffer();
-                }
-            } catch (IOException e) {
-                if (res != null) res.safeClose(); // will be non-null if got to conn
-                throw e;
-            } finally {
-                req.executing.unlock();
-
-                // detach any thread local auth delegate
-                if (req.authenticator != null)
-                    AuthenticationHandler.handler.remove();
-            }
-
-            res.executed = true;
-            return res;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public int statusCode() {
-            return statusCode;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String statusMessage() {
-            return statusMessage;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public String charset() {
-            return charset;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Response charset(String charset) {
-            this.charset = charset;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public String contentType() {
-            return contentType;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        /** Called from parse() or streamParser(), validates and prepares the input stream, and aligns common settings. */
+        /**
+         * Called from parse() or streamParser(), validates and prepares the input stream, and aligns common settings.
+         */
         private ControllableInputStream prepareParse() {
             Validate.isTrue(executed, "Request must be executed (with .execute(), .get(), or .post() before parsing response");
             ControllableInputStream stream = bodyStream;
-            if (byteData != null) { // bytes have been read in to the buffer, parse that
+            if (byteData != null) {
+                // bytes have been read in to the buffer, parse that
                 ByteArrayInputStream bytes = new ByteArrayInputStream(byteData.array(), 0, byteData.limit());
-                stream = ControllableInputStream.wrap(bytes, 0); // no max
-                inputStreamRead = false; // ok to reparse if in bytes
+                // no max
+                stream = ControllableInputStream.wrap(bytes, 0);
+                // ok to reparse if in bytes
+                inputStreamRead = false;
             }
             Validate.isFalse(inputStreamRead, "Input stream already read and parsed, cannot re-read.");
             Validate.notNull(stream);
@@ -1002,52 +853,27 @@ public class HttpConnection implements Connection {
             return stream;
         }
 
-        @Override public Document parse() throws IOException {
-            ControllableInputStream stream = prepareParse();
-            Document doc = DataUtil.parseInputStream(stream, charset, url.toExternalForm(), req.parser());
-            doc.connection(new HttpConnection(req, this)); // because we're static, don't have the connection obj. // todo - maybe hold in the req?
-            charset = doc.outputSettings().charset().name(); // update charset from meta-equiv, possibly
-            safeClose();
-            return doc;
+        @Override
+        public Document parse() throws IOException {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override public StreamParser streamParser() throws IOException {
-            ControllableInputStream stream = prepareParse();
-            String baseUri = url.toExternalForm();
-            DataUtil.CharsetDoc charsetDoc = DataUtil.detectCharsetForStreamParser(stream, charset, baseUri, req.parser());
-
-            // set up the stream parser and rig this connection up to the parsed doc:
-            StreamParser streamer = new StreamParser(req.parser());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(charsetDoc.input, charsetDoc.charset));
-            streamer.parse(reader, baseUri); // initializes the parse and the document, but does not step() it
-            streamer.document().connection(new HttpConnection(req, this));
-            charset = charsetDoc.charset.name();
-
-            // we don't safeClose() as in parse(); caller must close streamParser to close InputStream stream
-            return streamer;
+        @Override
+        public StreamParser streamParser() throws IOException {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Reads the bodyStream into byteData. A no-op if already executed.
+         *         Reads the bodyStream into byteData. A no-op if already executed.
          */
         @Override
         public Connection.Response readFully() throws IOException {
-            Validate.isTrue(executed, "Request must be executed (with .execute(), .get(), or .post() before getting response body");
-            if (bodyStream != null && byteData == null) {
-                Validate.isFalse(inputStreamRead, "Request has already been read (with .parse())");
-                try {
-                    byteData = DataUtil.readToByteBuffer(bodyStream, req.maxBodySize());
-                } finally {
-                    inputStreamRead = true;
-                    safeClose();
-                }
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Reads the body, but throws an UncheckedIOException if an IOException occurs.
-         @throws UncheckedIOException if an IOException occurs
+         *         Reads the body, but throws an UncheckedIOException if an IOException occurs.
+         *         @throws UncheckedIOException if an IOException occurs
          */
         private void readByteDataUnchecked() {
             try {
@@ -1059,38 +885,17 @@ public class HttpConnection implements Connection {
 
         @Override
         public String readBody() throws IOException {
-            readFully();
-            return body();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String body() {
-            readByteDataUnchecked();
-            Validate.notNull(byteData);
-            // charset gets set from header on execute, and from meta-equiv on parse. parse may not have happened yet
-            String body = (charset == null ? UTF_8 : Charset.forName(charset))
-                .decode(byteData).toString();
-            ((Buffer)byteData).rewind(); // cast to avoid covariant return type change in jdk9
-            return body;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public byte[] bodyAsBytes() {
-            readByteDataUnchecked();
-            Validate.notNull(byteData);
-            Validate.isTrue(byteData.hasArray()); // we made it, so it should
-
-            byte[] array = byteData.array();
-            int offset = byteData.arrayOffset();
-            int length = byteData.limit();
-
-            if (offset == 0 && length == array.length) { // exact, just return it
-                return array;
-            } else { // trim to size
-                byte[] exactArray = new byte[length];
-                System.arraycopy(array, offset, exactArray, 0, length);
-                return exactArray;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
@@ -1102,19 +907,7 @@ public class HttpConnection implements Connection {
 
         @Override
         public BufferedInputStream bodyStream() {
-            Validate.isTrue(executed, "Request must be executed (with .execute(), .get(), or .post() before getting response body");
-
-            // if we have read to bytes (via readFully), return those as a stream.
-            if (byteData != null) {
-                return new BufferedInputStream(
-                    new ByteArrayInputStream(byteData.array(), 0, byteData.limit()),
-                    DefaultBufferSize);
-            }
-
-            Validate.isFalse(inputStreamRead, "Request has already been read");
-            Validate.notNull(bodyStream);
-            inputStreamRead = true;
-            return bodyStream.inputStream();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1131,8 +924,9 @@ public class HttpConnection implements Connection {
                     bodyStream = null;
                 }
             }
-
-            if (executor != null) executor.safeClose(); // disconnect
+            // disconnect
+            if (executor != null)
+                executor.safeClose();
         }
 
         Response(HttpConnection.Request request) {
@@ -1141,76 +935,40 @@ public class HttpConnection implements Connection {
 
         // set up url, method, header, cookies
         void prepareResponse(Map<String, List<String>> resHeaders, HttpConnection.@Nullable Response previousResponse) throws IOException {
-            processResponseHeaders(resHeaders); // includes cookie key/val read during header scan
-            CookieUtil.storeCookies(req, this, url, resHeaders); // add set cookies to cookie store
-
-            if (previousResponse != null) { // was redirected
-                // map previous response cookies into this response cookies() object
-                for (Map.Entry<String, String> prevCookie : previousResponse.cookies().entrySet()) {
-                    if (!hasCookie(prevCookie.getKey()))
-                        cookie(prevCookie.getKey(), prevCookie.getValue());
-                }
-                previousResponse.safeClose();
-
-                // enforce too many redirects:
-                numRedirects = previousResponse.numRedirects + 1;
-                if (numRedirects >= MAX_REDIRECTS)
-                    throw new IOException(String.format("Too many redirects occurred trying to load URL %s", previousResponse.url()));
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         void processResponseHeaders(Map<String, List<String>> resHeaders) {
-            for (Map.Entry<String, List<String>> entry : resHeaders.entrySet()) {
-                String name = entry.getKey();
-                if (name == null)
-                    continue; // http/1.1 line
-
-                List<String> values = entry.getValue();
-                for (String value : values) {
-                    addHeader(name, fixHeaderEncoding(value));
-                }
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Servers may encode response headers in UTF-8 instead of RFC defined 8859. The JVM decodes the headers (before we see them) as 8859, which can lead to mojibake data.
-         <p>This method attempts to detect that and re-decode the string as UTF-8.</p>
-         <p>However on Android, the headers will be decoded as UTF8, so we can detect and pass those directly.</p>
+         *         Servers may encode response headers in UTF-8 instead of RFC defined 8859. The JVM decodes the headers (before we see them) as 8859, which can lead to mojibake data.
+         *         <p>This method attempts to detect that and re-decode the string as UTF-8.</p>
+         *         <p>However on Android, the headers will be decoded as UTF8, so we can detect and pass those directly.</p>
          * @param val a header value string that may have been incorrectly decoded as 8859.
          * @return a potentially re-decoded string.
          */
         @Nullable
         static String fixHeaderEncoding(@Nullable String val) {
-            if (val == null) return val;
-            // If we can't encode the string as 8859, then it couldn't have been decoded as 8859
-            if (!StandardCharsets.ISO_8859_1.newEncoder().canEncode(val))
-                return val;
-            byte[] bytes = val.getBytes(ISO_8859_1);
-            if (looksLikeUtf8(bytes))
-                return new String(bytes, UTF_8);
-            else
-                return val;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private static boolean looksLikeUtf8(byte[] input) {
             int i = 0;
             // BOM:
-            if (input.length >= 3
-                && (input[0] & 0xFF) == 0xEF
-                && (input[1] & 0xFF) == 0xBB
-                && (input[2] & 0xFF) == 0xBF) {
+            if (input.length >= 3 && (input[0] & 0xFF) == 0xEF && (input[1] & 0xFF) == 0xBB && (input[2] & 0xFF) == 0xBF) {
                 i = 3;
             }
-
             int end;
             boolean foundNonAscii = false;
             for (int j = input.length; i < j; ++i) {
                 int o = input[i];
                 if ((o & 0x80) == 0) {
-                    continue; // ASCII
+                    // ASCII
+                    continue;
                 }
                 foundNonAscii = true;
-
                 // UTF-8 leading:
                 if ((o & 0xE0) == 0xC0) {
                     end = i + 1;
@@ -1221,10 +979,8 @@ public class HttpConnection implements Connection {
                 } else {
                     return false;
                 }
-
                 if (end >= input.length)
                     return false;
-
                 while (i < end) {
                     i++;
                     o = input[i];
@@ -1242,15 +998,12 @@ public class HttpConnection implements Connection {
             if (contentType != null) {
                 // no-op; don't add content type as already set (e.g. for requestBody())
                 // todo - if content type already set, we could add charset
-
                 // if user has set content type to multipart/form-data, auto add boundary.
-                if(contentType.contains(MULTIPART_FORM_DATA) && !contentType.contains("boundary")) {
+                if (contentType.contains(MULTIPART_FORM_DATA) && !contentType.contains("boundary")) {
                     bound = DataUtil.mimeBoundary();
                     req.header(CONTENT_TYPE, MULTIPART_FORM_DATA + "; boundary=" + bound);
                 }
-
-            }
-            else if (needsMultipart(req)) {
+            } else if (needsMultipart(req)) {
                 bound = DataUtil.mimeBoundary();
                 req.header(CONTENT_TYPE, MULTIPART_FORM_DATA + "; boundary=" + bound);
             } else {
@@ -1260,23 +1013,21 @@ public class HttpConnection implements Connection {
         }
 
         static void writePost(final HttpConnection.Request req, final OutputStream outputStream) throws IOException {
-            try (OutputStreamWriter osw = new OutputStreamWriter(outputStream, req.postDataCharset());
-                 BufferedWriter w = new BufferedWriter(osw)) {
-                implWritePost(req, w, outputStream);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private static void implWritePost(final HttpConnection.Request req, final BufferedWriter w, final OutputStream outputStream) throws IOException {
             final Collection<Connection.KeyVal> data = req.data();
             final String boundary = req.mimeBoundary;
-
-            if (boundary != null) { // a multipart post
+            if (boundary != null) {
+                // a multipart post
                 for (Connection.KeyVal keyVal : data) {
                     w.write("--");
                     w.write(boundary);
                     w.write("\r\n");
                     w.write("Content-Disposition: form-data; name=\"");
-                    w.write(encodeMimeName(keyVal.key())); // encodes " to %22
+                    // encodes " to %22
+                    w.write(encodeMimeName(keyVal.key()));
                     w.write("\"");
                     final InputStream input = keyVal.inputStream();
                     if (input != null) {
@@ -1298,7 +1049,8 @@ public class HttpConnection implements Connection {
                 w.write("--");
                 w.write(boundary);
                 w.write("--");
-            } else if (req.body != null) { // a single body (bytes or plain text);  data will be in query string
+            } else if (req.body != null) {
+                // a single body (bytes or plain text);  data will be in query string
                 if (req.body instanceof String) {
                     w.write((String) req.body);
                 } else if (req.body instanceof InputStream) {
@@ -1307,12 +1059,14 @@ public class HttpConnection implements Connection {
                 } else {
                     throw new IllegalStateException();
                 }
-            } else { // regular form data (application/x-www-form-urlencoded)
+            } else {
+                // regular form data (application/x-www-form-urlencoded)
                 boolean first = true;
                 for (Connection.KeyVal keyVal : data) {
-                    if (!first) w.append('&');
-                    else first = false;
-
+                    if (!first)
+                        w.append('&');
+                    else
+                        first = false;
                     w.write(URLEncoder.encode(keyVal.key(), req.postDataCharset()));
                     w.write('=');
                     w.write(URLEncoder.encode(keyVal.value(), req.postDataCharset()));
@@ -1323,13 +1077,13 @@ public class HttpConnection implements Connection {
         // for get url reqs, serialise the data map into the url
         private static void serialiseRequestUrl(Connection.Request req) throws IOException {
             UrlBuilder in = new UrlBuilder(req.url());
-
             for (Connection.KeyVal keyVal : req.data()) {
                 Validate.isFalse(keyVal.hasInputStream(), "InputStream data not supported in URL query string.");
                 in.appendKeyVal(keyVal);
             }
             req.url(in.build());
-            req.data().clear(); // moved into url as get params
+            // moved into url as get params
+            req.data().clear();
         }
     }
 
@@ -1343,18 +1097,23 @@ public class HttpConnection implements Connection {
     }
 
     public static class KeyVal implements Connection.KeyVal {
+
         private String key;
+
         private String value;
-        private @Nullable InputStream stream;
-        private @Nullable String contentType;
+
+        @Nullable
+        private InputStream stream;
+
+        @Nullable
+        private String contentType;
 
         public static KeyVal create(String key, String value) {
-            return new KeyVal(key, value);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public static KeyVal create(String key, String filename, InputStream stream) {
-            return new KeyVal(key, filename)
-                .inputStream(stream);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private KeyVal(String key, String value) {
@@ -1366,60 +1125,54 @@ public class HttpConnection implements Connection {
 
         @Override
         public KeyVal key(String key) {
-            Validate.notEmptyParam(key, "key");
-            this.key = key;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String key() {
-            return key;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public KeyVal value(String value) {
-            Validate.notNullParam(value, "value");
-            this.value = value;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String value() {
-            return value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public KeyVal inputStream(InputStream inputStream) {
-            Validate.notNullParam(value, "inputStream");
-            this.stream = inputStream;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public InputStream inputStream() {
-            return stream;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean hasInputStream() {
-            return stream != null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Connection.KeyVal contentType(String contentType) {
-            Validate.notEmpty(contentType);
-            this.contentType = contentType;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override @Nullable
+        @Override
+        @Nullable
         public String contentType() {
-            return contentType;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return key + "=" + value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

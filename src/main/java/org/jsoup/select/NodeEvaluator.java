@@ -5,7 +5,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.LeafNode;
 import org.jsoup.nodes.Node;
 import org.jsoup.helper.Regex;
-
 import static org.jsoup.internal.Normalizer.lowerCase;
 import static org.jsoup.internal.StringUtil.normaliseWhitespace;
 
@@ -13,21 +12,25 @@ abstract class NodeEvaluator extends Evaluator {
 
     @Override
     public boolean matches(Element root, Element element) {
-        return evaluateMatch(element);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override boolean matches(Element root, LeafNode leaf) {
-        return evaluateMatch(leaf);
+    @Override
+    boolean matches(Element root, LeafNode leaf) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     abstract boolean evaluateMatch(Node node);
-    
-    @Override boolean wantsNodes() {
-        return true;
+
+    @Override
+    boolean wantsNodes() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static class InstanceType extends NodeEvaluator {
+
         final java.lang.Class<? extends Node> type;
+
         final String selector;
 
         InstanceType(java.lang.Class<? extends Node> type, String selector) {
@@ -38,21 +41,22 @@ abstract class NodeEvaluator extends Evaluator {
 
         @Override
         boolean evaluateMatch(Node node) {
-            return type.isInstance(node);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int cost() {
-            return 1;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return selector;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class ContainsValue extends NodeEvaluator {
+
         private final String searchText;
 
         public ContainsValue(String searchText) {
@@ -61,42 +65,43 @@ abstract class NodeEvaluator extends Evaluator {
 
         @Override
         boolean evaluateMatch(Node node) {
-            return lowerCase(node.nodeValue()).contains(searchText);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int cost() {
-            return 6;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format(":contains(%s)", searchText);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     /**
-     Matches nodes with no value or only whitespace.
+     *     Matches nodes with no value or only whitespace.
      */
     static class BlankValue extends NodeEvaluator {
 
         @Override
         boolean evaluateMatch(Node node) {
-            return StringUtil.isBlank(node.nodeValue());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int cost() {
-            return 4;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return ":blank";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class MatchesValue extends NodeEvaluator {
+
         private final Regex pattern;
 
         protected MatchesValue(Regex pattern) {
@@ -105,17 +110,17 @@ abstract class NodeEvaluator extends Evaluator {
 
         @Override
         boolean evaluateMatch(Node node) {
-            return pattern.matcher(node.nodeValue()).find();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int cost() {
-            return 8;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format(":matches(%s)", pattern);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

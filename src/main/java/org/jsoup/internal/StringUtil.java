@@ -2,7 +2,6 @@ package org.jsoup.internal;
 
 import org.jsoup.helper.Validate;
 import org.jspecify.annotations.Nullable;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -13,14 +12,13 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
- A minimal String utility class. Designed for <b>internal</b> jsoup use only - the API and outcome may change without
- notice.
+ * A minimal String utility class. Designed for <b>internal</b> jsoup use only - the API and outcome may change without
+ * notice.
  */
 public final class StringUtil {
+
     // memoised padding up to 21 (blocks 0 to 20 spaces)
-    static final String[] padding = {"", " ", "  ", "   ", "    ", "     ", "      ", "       ", "        ",
-        "         ", "          ", "           ", "            ", "             ", "              ", "               ",
-        "                ", "                 ", "                  ", "                   ", "                    "};
+    static final String[] padding = { "", " ", "  ", "   ", "    ", "     ", "      ", "       ", "        ", "         ", "          ", "           ", "            ", "             ", "              ", "               ", "                ", "                 ", "                  ", "                   ", "                    " };
 
     /**
      * Join a collection of strings by a separator
@@ -29,7 +27,7 @@ public final class StringUtil {
      * @return joined string
      */
     public static String join(Collection<?> strings, String sep) {
-        return join(strings.iterator(), sep);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -39,19 +37,7 @@ public final class StringUtil {
      * @return joined string
      */
     public static String join(Iterator<?> strings, String sep) {
-        if (!strings.hasNext())
-            return "";
-
-        String start = strings.next().toString();
-        if (!strings.hasNext()) // only one, avoid builder
-            return start;
-
-        StringJoiner j = new StringJoiner(sep);
-        j.add(start);
-        while (strings.hasNext()) {
-            j.add(strings.next());
-        }
-        return j.complete();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -61,56 +47,52 @@ public final class StringUtil {
      * @return joined string
      */
     public static String join(String[] strings, String sep) {
-        return join(Arrays.asList(strings), sep);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     A StringJoiner allows incremental / filtered joining of a set of stringable objects.
-     @since 1.14.1
+     *     A StringJoiner allows incremental / filtered joining of a set of stringable objects.
+     *     @since 1.14.1
      */
     public static class StringJoiner {
-        @Nullable StringBuilder sb = borrowBuilder(); // sets null on builder release so can't accidentally be reused
+
+        // sets null on builder release so can't accidentally be reused
+        @Nullable
+        StringBuilder sb = borrowBuilder();
+
         final String separator;
+
         boolean first = true;
 
         /**
-         Create a new joiner, that uses the specified separator. MUST call {@link #complete()} or will leak a thread
-         local string builder.
-
-         @param separator the token to insert between strings
+         *         Create a new joiner, that uses the specified separator. MUST call {@link #complete()} or will leak a thread
+         *         local string builder.
+         *
+         *         @param separator the token to insert between strings
          */
         public StringJoiner(String separator) {
             this.separator = separator;
         }
 
         /**
-         Add another item to the joiner, will be separated
+         *         Add another item to the joiner, will be separated
          */
         public StringJoiner add(Object stringy) {
-            Validate.notNull(sb); // don't reuse
-            if (!first)
-                sb.append(separator);
-            sb.append(stringy);
-            first = false;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Append content to the current item; not separated
+         *         Append content to the current item; not separated
          */
         public StringJoiner append(Object stringy) {
-            Validate.notNull(sb); // don't reuse
-            sb.append(stringy);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Return the joined string, and release the builder back to the pool. This joiner cannot be reused.
+         *         Return the joined string, and release the builder back to the pool. This joiner cannot be reused.
          */
         public String complete() {
-            String string = releaseBuilder(sb);
-            sb = null;
-            return string;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -118,10 +100,10 @@ public final class StringUtil {
      * Returns space padding (up to the default max of 30). Use {@link #padding(int, int)} to specify a different limit.
      * @param width amount of padding desired
      * @return string of spaces * width
-     * @see #padding(int, int) 
-      */
+     * @see #padding(int, int)
+     */
     public static String padding(int width) {
-        return padding(width, 30);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,16 +113,7 @@ public final class StringUtil {
      * @return string of spaces * width
      */
     public static String padding(int width, int maxPaddingWidth) {
-        Validate.isTrue(width >= 0, "width must be >= 0");
-        Validate.isTrue(maxPaddingWidth >= -1);
-        if (maxPaddingWidth != -1)
-            width = Math.min(width, maxPaddingWidth);
-        if (width < padding.length)
-            return padding[width];        
-        char[] out = new char[width];
-        for (int i = 0; i < width; i++)
-            out[i] = ' ';
-        return String.valueOf(out);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -149,26 +122,16 @@ public final class StringUtil {
      * @return if string is blank
      */
     public static boolean isBlank(@Nullable String string) {
-        if (string == null || string.isEmpty())
-            return true;
-
-        int l = string.length();
-        for (int i = 0; i < l; i++) {
-            if (!StringUtil.isWhitespace(string.codePointAt(i)))
-                return false;
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Tests if a string starts with a newline character
-     @param string string to test
-     @return if its first character is a newline
+     *     Tests if a string starts with a newline character
+     *     @param string string to test
+     *     @return if its first character is a newline
      */
     public static boolean startsWithNewline(final String string) {
-        if (string == null || string.length() == 0)
-            return false;
-        return string.charAt(0) == '\n';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,15 +140,7 @@ public final class StringUtil {
      * @return true if only digit chars, false if empty or null or contains non-digit chars
      */
     public static boolean isNumeric(String string) {
-        if (string == null || string.length() == 0)
-            return false;
-
-        int l = string.length();
-        for (int i = 0; i < l; i++) {
-            if (!isDigit(string.charAt(i)))
-                return false;
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -194,8 +149,8 @@ public final class StringUtil {
      * @return true if code point is whitespace, false otherwise
      * @see #isActuallyWhitespace(int)
      */
-    public static boolean isWhitespace(int c){
-        return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r';
+    public static boolean isWhitespace(int c) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -203,14 +158,12 @@ public final class StringUtil {
      * @param c code point to test
      * @return true if code point is whitespace, false otherwise
      */
-    public static boolean isActuallyWhitespace(int c){
-        return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r' || c == 160;
-        // 160 is &nbsp; (non-breaking space). Not in the spec but expected.
+    public static boolean isActuallyWhitespace(int c) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isInvisibleChar(int c) {
-        return c == 8203 || c == 173; // zero width sp, soft hyphen
-        // previously also included zw non join, zw join - but removing those breaks semantic meaning of text
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -220,9 +173,7 @@ public final class StringUtil {
      * @return normalised string
      */
     public static String normaliseWhitespace(String string) {
-        StringBuilder sb = StringUtil.borrowBuilder();
-        appendNormalisedWhitespace(sb, string, false);
-        return StringUtil.releaseBuilder(sb);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -232,64 +183,28 @@ public final class StringUtil {
      * @param stripLeading set to true if you wish to remove any leading whitespace
      */
     public static void appendNormalisedWhitespace(StringBuilder accum, String string, boolean stripLeading) {
-        boolean lastWasWhite = false;
-        boolean reachedNonWhite = false;
-
-        int len = string.length();
-        int c;
-        for (int i = 0; i < len; i+= Character.charCount(c)) {
-            c = string.codePointAt(i);
-            if (isActuallyWhitespace(c)) {
-                if ((stripLeading && !reachedNonWhite) || lastWasWhite)
-                    continue;
-                accum.append(' ');
-                lastWasWhite = true;
-            }
-            else if (!isInvisibleChar(c)) {
-                accum.appendCodePoint(c);
-                lastWasWhite = false;
-                reachedNonWhite = true;
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean in(final String needle, final String... haystack) {
-        final int len = haystack.length;
-        for (int i = 0; i < len; i++) {
-            if (haystack[i].equals(needle))
-               return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean inSorted(String needle, String[] haystack) {
-        if (haystack.length <= 8) { // Parser benchmarking showed that it's faster to scan than binary search for these lengths
-            for (int i = 0; i < haystack.length; i++) {
-                if (needle.equals(haystack[i]))
-                    return true;
-            }
-            return false;
-        }
-        return Arrays.binarySearch(haystack, needle) >= 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Tests that a String contains only ASCII characters.
-     @param string scanned string
-     @return true if all characters are in range 0 - 127
+     *     Tests that a String contains only ASCII characters.
+     *     @param string scanned string
+     *     @return true if all characters are in range 0 - 127
      */
     public static boolean isAscii(String string) {
-        Validate.notNull(string);
-        for (int i = 0; i < string.length(); i++) {
-            int c = string.charAt(i);
-            if (c > 127) { // ascii range
-                return false;
-            }
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static final Pattern extraDotSegmentsPattern = Pattern.compile("^/(?>(?>\\.\\.?/)+)");
+
     /**
      * Create a new absolute URL, from a provided existing absolute URL and a relative URL component.
      * @param base the existing absolute base URL
@@ -298,17 +213,7 @@ public final class StringUtil {
      * @throws MalformedURLException if an error occurred generating the URL
      */
     public static URL resolve(URL base, String relUrl) throws MalformedURLException {
-        relUrl = stripControlChars(relUrl);
-        // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
-        if (relUrl.startsWith("?"))
-            relUrl = base.getPath() + relUrl;
-        // workaround: //example.com + ./foo = //example.com/./foo, not //example.com/foo
-        URL url = new URL(base, relUrl);
-        String fixedFile = extraDotSegmentsPattern.matcher(url.getFile()).replaceFirst("/");
-        if (url.getRef() != null) {
-            fixedFile = fixedFile + "#" + url.getRef();
-        }
-        return new URL(url.getProtocol(), url.getHost(), url.getPort(), fixedFile);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -318,35 +223,23 @@ public final class StringUtil {
      * @return an absolute URL if one was able to be generated, or the empty string if not
      */
     public static String resolve(String baseUrl, String relUrl) {
-        // workaround: java will allow control chars in a path URL and may treat as relative, but Chrome / Firefox will strip and may see as a scheme. Normalize to browser's view.
-        baseUrl = stripControlChars(baseUrl); relUrl = stripControlChars(relUrl);
-        try {
-            URL base;
-            try {
-                base = new URL(baseUrl);
-            } catch (MalformedURLException e) {
-                // the base is unsuitable, but the attribute/rel may be abs on its own, so try that
-                URL abs = new URL(relUrl);
-                return abs.toExternalForm();
-            }
-            return resolve(base, relUrl).toExternalForm();
-        } catch (MalformedURLException e) {
-            // it may still be valid, just that Java doesn't have a registered stream handler for it, e.g. tel
-            // we test here vs at start to normalize supported URLs (e.g. HTTP -> http)
-            return validUriScheme.matcher(relUrl).find() ? relUrl : "";
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
+
     private static final Pattern validUriScheme = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+-.]*:");
 
-    private static final Pattern controlChars = Pattern.compile("[\\x00-\\x1f]*"); // matches ascii 0 - 31, to strip from url
+    // matches ascii 0 - 31, to strip from url
+    private static final Pattern controlChars = Pattern.compile("[\\x00-\\x1f]*");
+
     private static String stripControlChars(final String input) {
         return controlChars.matcher(input).replaceAll("");
     }
 
     private static final int InitBuilderSize = 1024;
+
     private static final int MaxBuilderSize = 8 * 1024;
-    private static final SoftPool<StringBuilder> BuilderPool = new SoftPool<>(
-        () -> new StringBuilder(InitBuilderSize));
+
+    private static final SoftPool<StringBuilder> BuilderPool = new SoftPool<>(() -> new StringBuilder(InitBuilderSize));
 
     /**
      * Maintains cached StringBuilders in a flyweight pattern, to minimize new StringBuilder GCs. The StringBuilder is
@@ -356,7 +249,7 @@ public final class StringUtil {
      * @return an empty StringBuilder
      */
     public static StringBuilder borrowBuilder() {
-        return BuilderPool.borrow();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -366,23 +259,16 @@ public final class StringUtil {
      * @return the string value of the released String Builder (as an incentive to release it!).
      */
     public static String releaseBuilder(StringBuilder sb) {
-        Validate.notNull(sb);
-        String string = sb.toString();
-        releaseBuilderVoid(sb);
-        return string;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Releases a borrowed builder, but does not call .toString() on it. Useful in case you already have that string.
-     @param sb the StringBuilder to release.
-     @see #releaseBuilder(StringBuilder)
+     *     Releases a borrowed builder, but does not call .toString() on it. Useful in case you already have that string.
+     *     @param sb the StringBuilder to release.
+     *     @see #releaseBuilder(StringBuilder)
      */
     public static void releaseBuilderVoid(StringBuilder sb) {
-        // if it hasn't grown too big, reset it and return it to the pool:
-        if (sb.length() <= MaxBuilderSize) {
-            sb.delete(0, sb.length()); // make sure it's emptied on release
-            BuilderPool.release(sb);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -393,24 +279,18 @@ public final class StringUtil {
      * @return A {@code Collector} which concatenates CharSequence elements, separated by the specified delimiter
      */
     public static Collector<CharSequence, ?, String> joining(String delimiter) {
-        return Collector.of(() -> new StringJoiner(delimiter),
-            StringJoiner::add,
-            (j1, j2) -> {
-                j1.append(j2.complete());
-                return j1;
-            },
-            StringJoiner::complete);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isAsciiLetter(char c) {
-        return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isDigit(char c) {
-        return c >= '0' && c <= '9';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static boolean isHexDigit(char c) {
-        return isDigit(c) || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

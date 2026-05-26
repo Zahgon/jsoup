@@ -7,10 +7,15 @@ import org.jsoup.parser.Tag;
 import org.jsoup.select.NodeVisitor;
 import org.jspecify.annotations.Nullable;
 
-/** Base Printer */
+/**
+ * Base Printer
+ */
 class Printer implements NodeVisitor {
+
     final Node root;
+
     final QuietAppendable accum;
+
     final OutputSettings settings;
 
     Printer(Node root, QuietAppendable accum, OutputSettings settings) {
@@ -20,47 +25,44 @@ class Printer implements NodeVisitor {
     }
 
     void addHead(Element el, int depth) {
-        el.outerHtmlHead(accum, settings);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void addTail(Element el, int depth) {
-        el.outerHtmlTail(accum, settings);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void addText(TextNode textNode, int textOptions, int depth) {
-        int options = Entities.ForText | textOptions;
-        Entities.escape(accum, textNode.coreValue(), settings, options);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void addNode(LeafNode node, int depth) {
-        node.outerHtmlHead(accum, settings);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void indent(int depth) {
-        accum.append('\n').append(StringUtil.padding(depth * settings.indentAmount(), settings.maxPaddingWidth()));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void head(Node node, int depth) {
-        if (node.getClass() == TextNode.class)  addText((TextNode) node, 0, depth); // Excludes CData; falls to addNode
-        else if (node instanceof Element)       addHead((Element) node, depth);
-        else                                    addNode((LeafNode) node, depth);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void tail(Node node, int depth) {
-        if (node instanceof Element) { // otherwise a LeafNode
-            addTail((Element) node, depth);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** Pretty Printer */
+    /**
+     * Pretty Printer
+     */
     static class Pretty extends Printer {
+
         boolean preserveWhitespace = false;
 
         Pretty(Node root, QuietAppendable accum, OutputSettings settings) {
             super(root, accum, settings);
-
             // check if there is a pre on stack
             for (Node node = root; node != null; node = node.parentNode()) {
                 if (tagIs(Tag.PreserveWhitespace, node)) {
@@ -72,170 +74,90 @@ class Printer implements NodeVisitor {
 
         @Override
         void addHead(Element el, int depth) {
-            if (shouldIndent(el))
-                indent(depth);
-            super.addHead(el, depth);
-            if (tagIs(Tag.PreserveWhitespace, el)) preserveWhitespace = true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         void addTail(Element el, int depth) {
-            if (shouldIndent(nextNonBlank(el.firstChild()))) {
-                indent(depth);
-            }
-            super.addTail(el, depth);
-
-            // clear the preserveWhitespace if this element is not, and there are none on the stack above
-            if (preserveWhitespace && el.tag.is(Tag.PreserveWhitespace)) {
-                for (Element parent = el.parent(); parent != null; parent = parent.parent()) {
-                    if (parent.tag().preserveWhitespace()) return; // keep
-                }
-                preserveWhitespace = false;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         void addNode(LeafNode node, int depth) {
-            if (shouldIndent(node))
-                indent(depth);
-            super.addNode(node, depth);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         void addText(TextNode node, int textOptions, int depth) {
-            if (!preserveWhitespace) {
-                textOptions |= Entities.Normalise;
-                textOptions = textTrim(node, textOptions);
-
-                if (!node.isBlank() && isBlockEl(node.parentNode) && shouldIndent(node))
-                    indent(depth);
-            }
-
-            super.addText(node, textOptions, depth);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         int textTrim(TextNode node, int options) {
-            if (!isBlockEl(node.parentNode)) return options; // don't trim inline, whitespace significant
-            Node prev = node.previousSibling();
-            Node next = node.nextSibling();
-
-            // if previous is not an inline element
-            if (!(prev instanceof Element && !isBlockEl(prev))) {
-                // if there is no previous sib; or not a text node and should be indented
-                if (prev == null || !(prev instanceof TextNode) && shouldIndent(prev))
-                    options |= Entities.TrimLeading;
-            }
-
-            if (next == null || !(next instanceof TextNode) && shouldIndent(next)) {
-                options |= Entities.TrimTrailing;
-            } else { // trim trailing whitespace if the next non-empty TextNode has leading whitespace
-                next = nextNonBlank(next);
-                if (next instanceof TextNode && StringUtil.isWhitespace(next.nodeValue().codePointAt(0)))
-                    options |= Entities.TrimTrailing;
-            }
-
-            return options;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         boolean shouldIndent(@Nullable Node node) {
-            if (node == null || node == root || preserveWhitespace || isBlankText(node))
-                return false;
-            if (isBlockEl(node))
-                return true;
-
-            Node prevSib = previousNonblank(node);
-            if (isBlockEl(prevSib)) return true;
-
-            Element parent = node.parentNode;
-            if (!isBlockEl(parent) || parent.tag().is(Tag.InlineContainer) || !hasNonTextNodes(parent))
-                return false;
-
-            return prevSib == null ||
-                (!(prevSib instanceof TextNode) &&
-                    (isBlockEl(prevSib) || !(prevSib instanceof Element)));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         boolean isBlockEl(@Nullable Node node) {
-            if (node == null) return false;
-            if (node instanceof Element) {
-                Element el = (Element) node;
-                if (el.nameIs("br")) return true; // give <br> a newline; actually an inline tag
-                return el.isBlock() ||
-                    (!el.tag.isKnownTag() && (el.parentNode instanceof Document || hasChildBlocks(el)));
-            }
-
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Returns true if any of the Element's child nodes should indent. Checks the last 5 nodes only (to minimize
-         scans).
+         *         Returns true if any of the Element's child nodes should indent. Checks the last 5 nodes only (to minimize
+         *         scans).
          */
         static boolean hasChildBlocks(Element el) {
-            Element child = el.firstElementChild();
-            for (int i = 0; i < maxScan && child != null; i++) {
-                if (child.isBlock() || !child.tag.isKnownTag()) return true;
-                child = child.nextElementSibling();
-            }
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
+
         static private final int maxScan = 5;
 
         static boolean hasNonTextNodes(Element el) {
-            Node child = el.firstChild();
-            for (int i = 0; i < maxScan && child != null; i++) {
-                if (!(child instanceof TextNode)) return true;
-                child = child.nextSibling();
-            }
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        static @Nullable Node previousNonblank(Node node) {
-            Node prev = node.previousSibling();
-            while (isBlankText(prev)) prev = prev.previousSibling();
-            return prev;
+        @Nullable
+        static Node previousNonblank(Node node) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        static @Nullable Node nextNonBlank(@Nullable Node node) {
-            while (isBlankText(node)) node = node.nextSibling();
-            return node;
+        @Nullable
+        static Node nextNonBlank(@Nullable Node node) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         static boolean isBlankText(@Nullable Node node) {
-            return node instanceof TextNode && ((TextNode) node).isBlank();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         static boolean tagIs(int option, @Nullable Node node) {
-            return node instanceof Element && ((Element) node).tag.is(option);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Outline Printer */
+    /**
+     * Outline Printer
+     */
     static class Outline extends Pretty {
+
         Outline(Node root, QuietAppendable accum, OutputSettings settings) {
             super(root, accum, settings);
         }
 
         @Override
         boolean isBlockEl(@Nullable Node node) {
-            return node != null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         boolean shouldIndent(@Nullable Node node) {
-            if (node == null || node == root || preserveWhitespace || isBlankText(node))
-                return false;
-            if (node instanceof TextNode) {
-                return node.previousSibling() != null || node.nextSibling() != null;
-            }
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static Printer printerFor(Node root, QuietAppendable accum) {
-        OutputSettings settings = NodeUtils.outputSettings(root);
-        if (settings.outline())     return new Printer.Outline(root, accum, settings);
-        if (settings.prettyPrint()) return new Printer.Pretty(root, accum, settings);
-        return new Printer(root, accum, settings);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

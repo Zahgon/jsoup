@@ -3,14 +3,15 @@ package org.jsoup.nodes;
 import org.jsoup.helper.Validate;
 import org.jsoup.internal.QuietAppendable;
 import org.jspecify.annotations.Nullable;
-
 import java.util.List;
 
 /**
- A node that does not hold any children. E.g.: {@link TextNode}, {@link DataNode}, {@link Comment}.
+ * A node that does not hold any children. E.g.: {@link TextNode}, {@link DataNode}, {@link Comment}.
  */
 public abstract class LeafNode extends Node {
-    Object value; // either a string, tracked string, or attributes object
+
+    // either a string, tracked string, or attributes object
+    Object value;
 
     public LeafNode() {
         value = "";
@@ -21,14 +22,14 @@ public abstract class LeafNode extends Node {
         value = coreValue;
     }
 
-    @Override protected final boolean hasAttributes() {
-        return value instanceof Attributes;
+    @Override
+    protected final boolean hasAttributes() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final Attributes attributes() {
-        ensureAttributes();
-        return (Attributes) value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void ensureAttributes() {
@@ -44,143 +45,112 @@ public abstract class LeafNode extends Node {
     }
 
     String coreValue() {
-        if (value instanceof Attributes)   return ((Attributes) value).get(nodeName());
-        if (value instanceof TrackedValue) return ((TrackedValue) value).coreValue;
-        return (String) value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override @Nullable
+    @Override
+    @Nullable
     public Element parent() {
-        return parentNode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String nodeValue() {
-        return coreValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void coreValue(String value) {
-        if (this.value instanceof Attributes)
-            ((Attributes) this.value).put(nodeName(), value);
-        else if (this.value instanceof TrackedValue)
-            ((TrackedValue) this.value).coreValue = value;
-        else
-            this.value = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String attr(String key) {
-        if (!hasAttributes())
-            return nodeName().equals(key) ? coreValue() : EmptyString;
-        return super.attr(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Node attr(String key, String value) {
-        if (!hasAttributes() && key.equals(nodeName())) {
-            coreValue(value);
-        } else {
-            ensureAttributes();
-            super.attr(key, value);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean hasAttr(String key) {
-        ensureAttributes();
-        return super.hasAttr(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Node removeAttr(String key) {
-        ensureAttributes();
-        return super.removeAttr(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String absUrl(String key) {
-        ensureAttributes();
-        return super.absUrl(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String baseUri() {
-        return parentNode != null ? parentNode.baseUri() : "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void doSetBaseUri(String baseUri) {
-        // noop
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int childNodeSize() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Node empty() {
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected List<Node> ensureChildNodes() {
-        return EmptyNodes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    void outerHtmlTail(QuietAppendable accum, Document.OutputSettings out) {}
+    void outerHtmlTail(QuietAppendable accum, Document.OutputSettings out) {
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
     @Override
     protected LeafNode doClone(Node parent) {
-        LeafNode clone = (LeafNode) super.doClone(parent);
-
-        // Object value could be plain string, tracked string, or attributes - need to clone.
-        if (hasAttributes())
-            clone.value = ((Attributes) value).clone();
-        else if (value instanceof TrackedValue)
-            clone.value = ((TrackedValue) value).copy();
-
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override Range.@Nullable Spans spans() {
-        if (value instanceof TrackedValue)
-            return ((TrackedValue) value).spans;
-        return super.spans();
+    @Override
+    Range.@Nullable Spans spans() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override Range.Spans ensureSpans() {
-        // Leaf nodes normally hold just their core string. When source ranges are tracked, keep the string plus spans
-        // in a small wrapper so leaf nodes do not expand to Attributes just for parser metadata. If attributes are
-        // later requested, ensureAttributes() moves these same spans into the Attributes object.
-        if (value instanceof TrackedValue)
-            return ((TrackedValue) value).spans;
-        if (value instanceof Attributes)
-            return ((Attributes) value).ensureSpans();
-
-        TrackedValue trackedValue = new TrackedValue((String) value);
-        value = trackedValue;
-        return trackedValue.spans;
+    @Override
+    Range.Spans ensureSpans() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Holds a compact leaf value plus ranges without expanding to Attributes.
+     *     Holds a compact leaf value plus ranges without expanding to Attributes.
      */
     private static final class TrackedValue {
+
         String coreValue;
+
         final Range.Spans spans;
 
         /**
-         Creates a tracked leaf value around the core text.
+         *         Creates a tracked leaf value around the core text.
          */
         TrackedValue(String coreValue) {
             this(coreValue, new Range.Spans());
         }
 
         /**
-         Creates a tracked leaf value around copied range spans.
+         *         Creates a tracked leaf value around copied range spans.
          */
         TrackedValue(String coreValue, Range.Spans spans) {
             this.coreValue = coreValue;
@@ -188,10 +158,10 @@ public abstract class LeafNode extends Node {
         }
 
         /**
-         Returns a copy so cloned leaf nodes can mutate range spans independently.
+         *         Returns a copy so cloned leaf nodes can mutate range spans independently.
          */
         TrackedValue copy() {
-            return new TrackedValue(coreValue, spans.copy());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

@@ -4,53 +4,36 @@ import org.jsoup.internal.StringUtil;
 import org.jspecify.annotations.Nullable;
 
 /**
- A value holder for Tokens, as the stream is Tokenized. Can hold a String or a StringBuilder.
- <p>The goal is to minimize String copies -- the tokenizer tries to read the entirety of the token's data in one it, and
- set that as the simple String value. But if it turns out we need to append, fall back to a StringBuilder, which we get
- out of the pool (to reduce the GC load).</p>
+ * A value holder for Tokens, as the stream is Tokenized. Can hold a String or a StringBuilder.
+ * <p>The goal is to minimize String copies -- the tokenizer tries to read the entirety of the token's data in one it, and
+ * set that as the simple String value. But if it turns out we need to append, fall back to a StringBuilder, which we get
+ * out of the pool (to reduce the GC load).</p>
  */
 class TokenData {
-    private @Nullable String value;
-    private @Nullable StringBuilder builder;
 
-    TokenData() {}
+    @Nullable
+    private String value;
+
+    @Nullable
+    private StringBuilder builder;
+
+    TokenData() {
+    }
 
     void set(String str) {
-        reset();
-        value = str;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void append(String str) {
-        if (builder != null) {
-            builder.append(str);
-        } else if (value != null) {
-            flipToBuilder();
-            builder.append(str);
-        } else {
-            value = str;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void append(char c) {
-        if (builder != null) {
-            builder.append(c);
-        } else if (value != null) {
-            flipToBuilder();
-            builder.append(c);
-        } else {
-            value = String.valueOf(c);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void appendCodePoint(int codepoint) {
-        if (builder != null) {
-            builder.appendCodePoint(codepoint);
-        } else if (value != null) {
-            flipToBuilder();
-            builder.appendCodePoint(codepoint);
-        } else {
-            value = String.valueOf(Character.toChars(codepoint));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void flipToBuilder() {
@@ -60,33 +43,19 @@ class TokenData {
     }
 
     boolean hasData() {
-        return builder != null || value != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void reset() {
-        if (builder != null) {
-            StringUtil.releaseBuilderVoid(builder);
-            builder = null;
-        }
-        value = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     String value() {
-        if (builder != null) {
-            // in rare case we get hit twice, don't toString the builder twice
-            value = builder.toString();
-            StringUtil.releaseBuilder(builder);
-            builder = null;
-            return value;
-        }
-        return value != null ? value : "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        // for debug views; no side effects
-        if (builder != null) return builder.toString();
-        return value != null ? value : "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

@@ -6,18 +6,25 @@ import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document.OutputSettings.Syntax;
 import org.jspecify.annotations.Nullable;
 
-
 /**
  * A {@code <!DOCTYPE>} node.
  */
 public class DocumentType extends LeafNode {
+
     // todo needs a bit of a chunky cleanup. this level of detail isn't needed
     public static final String PUBLIC_KEY = "PUBLIC";
+
     public static final String SYSTEM_KEY = "SYSTEM";
+
     private static final String NameKey = "name";
-    private static final String PubSysKey = "pubSysKey"; // PUBLIC or SYSTEM
+
+    // PUBLIC or SYSTEM
+    private static final String PubSysKey = "pubSysKey";
+
     private static final String PublicId = "publicId";
+
     private static final String SystemId = "systemId";
+
     private static final String InternalSubsetKey = Attributes.internalKey("doctypeInternalSubset");
 
     /**
@@ -30,24 +37,20 @@ public class DocumentType extends LeafNode {
         super(name);
         Validate.notNull(publicId);
         Validate.notNull(systemId);
-        attributes()
-            .add(NameKey, name)
-            .add(PublicId, publicId)
-            .add(SystemId, systemId);
+        attributes().add(NameKey, name).add(PublicId, publicId).add(SystemId, systemId);
         updatePubSyskey();
     }
 
     public void setPubSysKey(@Nullable String value) {
-        if (value != null)
-            attr(PubSysKey, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Sets the raw XML internal subset for serialization.
-     @param value the internal subset contents
+     *     Sets the raw XML internal subset for serialization.
+     *     @param value the internal subset contents
      */
     public void setInternalSubset(String value) {
-        attributes().put(InternalSubsetKey, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void updatePubSyskey() {
@@ -62,7 +65,7 @@ public class DocumentType extends LeafNode {
      * @return doctype name
      */
     public String name() {
-        return attr(NameKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -70,7 +73,7 @@ public class DocumentType extends LeafNode {
      * @return doctype Public ID
      */
     public String publicId() {
-        return attr(PublicId);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,35 +81,18 @@ public class DocumentType extends LeafNode {
      * @return doctype System ID
      */
     public String systemId() {
-        return attr(SystemId);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String nodeName() {
-        return "#doctype";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
-        if (out.syntax() == Syntax.html && !has(PublicId) && !has(SystemId)) {
-            // looks like a html5 doctype, go lowercase for aesthetics
-            accum.append("<!doctype");
-        } else {
-            accum.append("<!DOCTYPE");
-        }
-        if (has(NameKey))
-            accum.append(" ").append(attr(NameKey));
-        if (has(PubSysKey))
-            accum.append(" ").append(attr(PubSysKey));
-        if (has(PublicId))
-            accum.append(" \"").append(attr(PublicId)).append('"');
-        if (has(SystemId))
-            accum.append(" \"").append(attr(SystemId)).append('"');
-        if (attributes().hasKey(InternalSubsetKey)) // only if via the xml parser; html parser will drop
-            accum.append(" [").append(attr(InternalSubsetKey)).append(']');
-        accum.append('>');
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 
     private boolean has(final String attribute) {
         return !StringUtil.isBlank(attr(attribute));

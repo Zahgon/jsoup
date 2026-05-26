@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.parser.StreamParser;
 import org.jspecify.annotations.Nullable;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.BufferedInputStream;
@@ -21,28 +20,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- The Connection interface is a convenient HTTP client and session object to fetch content from the web, and parse them
- into Documents.
- <p>To start a new session, use either {@link org.jsoup.Jsoup#newSession()} or {@link org.jsoup.Jsoup#connect(String)}.
- Connections contain {@link Connection.Request} and {@link Connection.Response} objects (once executed). Configuration
- settings (URL, timeout, useragent, etc) set on a session will be applied by default to each subsequent request.</p>
- <p>To start a new request from the session, use {@link #newRequest()}.</p>
- <p>Cookies are stored in memory for the duration of the session. For that reason, do not use one single session for all
- requests in a long-lived application, or you are likely to run out of memory, unless care is taken to clean up the
- cookie store. The cookie store for the session is available via {@link #cookieStore()}. You may provide your own
- implementation via {@link #cookieStore(java.net.CookieStore)} before making requests.</p>
- <p>Request configuration can be made using either the shortcut methods in Connection (e.g. {@link #userAgent(String)}),
- or by methods in the {@link Connection.Request} object directly. All request configuration must be made before the request is
- executed. When used as an ongoing session, initialize all defaults prior to making multi-threaded {@link
-#newRequest()}s.</p>
- <p>Note that the term "Connection" used here does not mean that a long-lived connection is held against a server for
- the lifetime of the Connection object. A socket connection is only made at the point of request execution ({@link
-#execute()}, {@link #get()}, or {@link #post()}), and the server's response consumed.</p>
- <p>For multi-threaded implementations, it is important to use a {@link #newRequest()} for each request. The session may
- be shared across concurrent threads, but a not a specific request.</p>
- <p><b>HTTP/2</b> support: On JVM 11 and above, requests use {@link java.net.http.HttpClient}, which supports
- HTTP/2. To use the legacy {@link java.net.HttpURLConnection} instead, set
- <code>System.setProperty("jsoup.useHttpClient", "false")</code>.</p>
+ *  The Connection interface is a convenient HTTP client and session object to fetch content from the web, and parse them
+ *  into Documents.
+ *  <p>To start a new session, use either {@link org.jsoup.Jsoup#newSession()} or {@link org.jsoup.Jsoup#connect(String)}.
+ *  Connections contain {@link Connection.Request} and {@link Connection.Response} objects (once executed). Configuration
+ *  settings (URL, timeout, useragent, etc) set on a session will be applied by default to each subsequent request.</p>
+ *  <p>To start a new request from the session, use {@link #newRequest()}.</p>
+ *  <p>Cookies are stored in memory for the duration of the session. For that reason, do not use one single session for all
+ *  requests in a long-lived application, or you are likely to run out of memory, unless care is taken to clean up the
+ *  cookie store. The cookie store for the session is available via {@link #cookieStore()}. You may provide your own
+ *  implementation via {@link #cookieStore(java.net.CookieStore)} before making requests.</p>
+ *  <p>Request configuration can be made using either the shortcut methods in Connection (e.g. {@link #userAgent(String)}),
+ *  or by methods in the {@link Connection.Request} object directly. All request configuration must be made before the request is
+ *  executed. When used as an ongoing session, initialize all defaults prior to making multi-threaded {@link
+ * #newRequest()}s.</p>
+ *  <p>Note that the term "Connection" used here does not mean that a long-lived connection is held against a server for
+ *  the lifetime of the Connection object. A socket connection is only made at the point of request execution ({@link
+ * #execute()}, {@link #get()}, or {@link #post()}), and the server's response consumed.</p>
+ *  <p>For multi-threaded implementations, it is important to use a {@link #newRequest()} for each request. The session may
+ *  be shared across concurrent threads, but a not a specific request.</p>
+ *  <p><b>HTTP/2</b> support: On JVM 11 and above, requests use {@link java.net.http.HttpClient}, which supports
+ *  HTTP/2. To use the legacy {@link java.net.HttpURLConnection} instead, set
+ *  <code>System.setProperty("jsoup.useHttpClient", "false")</code>.</p>
  */
 @SuppressWarnings("unused")
 public interface Connection {
@@ -51,12 +50,13 @@ public interface Connection {
      * GET and POST http methods.
      */
     enum Method {
+
         GET(false),
         POST(true),
         PUT(true),
         DELETE(true),
         /**
-         Note that unfortunately, PATCH is not supported in many JDKs.
+         *         Note that unfortunately, PATCH is not supported in many JDKs.
          */
         PATCH(true),
         HEAD(false),
@@ -74,38 +74,38 @@ public interface Connection {
          * @return if body needed
          */
         public final boolean hasBody() {
-            return hasBody;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     /**
-     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
-     may then be independently changed on the returned {@link Connection.Request} object).
-     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
-     @since 1.14.1
+     *     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
+     *     may then be independently changed on the returned {@link Connection.Request} object).
+     *     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
+     *     @since 1.14.1
      */
     Connection newRequest();
 
     /**
-     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
-     may then be independently changed on the returned {@link Connection.Request} object).
-     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
-     @param url URL for the new request
-     @since 1.17.1
+     *     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
+     *     may then be independently changed on the returned {@link Connection.Request} object).
+     *     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
+     *     @param url URL for the new request
+     *     @since 1.17.1
      */
     default Connection newRequest(String url) {
-        return newRequest().url(url);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
-     may then be independently changed on the returned {@link Connection.Request} object).
-     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
-     @param url URL for the new request
-     @since 1.17.1
+     *     Creates a new request, using this Connection as the session-state and to initialize the connection settings (which
+     *     may then be independently changed on the returned {@link Connection.Request} object).
+     *     @return a new Connection object, with a shared Cookie Store and initialized settings from this Connection and Request
+     *     @param url URL for the new request
+     *     @since 1.17.1
      */
     default Connection newRequest(URL url) {
-        return newRequest().url(url);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,16 +146,16 @@ public interface Connection {
     Connection userAgent(String userAgent);
 
     /**
-     Set the total maximum request duration. If a timeout occurs, an {@link java.net.SocketTimeoutException} will be
-     thrown.
-     <p>The default timeout is <b>30 seconds</b> (30,000 millis). A timeout of zero is treated as an infinite timeout.</p>
-     <p>This timeout specifies the combined maximum duration of the connection time and the time to read
-     the full response.</p>
-     <p>Implementation note: when this <code>Connection</code> is backed by <code>HttpURLConnection</code> (rather than <code>HttpClient</code>, as used in JVM 11+), this timeout is implemented by setting both the socket connect and read timeouts to half of the specified value.</p>
-
-     @param millis number of milliseconds (thousandths of a second) before timing out connects or reads.
-     @return this Connection, for chaining
-     @see #maxBodySize(int)
+     *     Set the total maximum request duration. If a timeout occurs, an {@link java.net.SocketTimeoutException} will be
+     *     thrown.
+     *     <p>The default timeout is <b>30 seconds</b> (30,000 millis). A timeout of zero is treated as an infinite timeout.</p>
+     *     <p>This timeout specifies the combined maximum duration of the connection time and the time to read
+     *     the full response.</p>
+     *     <p>Implementation note: when this <code>Connection</code> is backed by <code>HttpURLConnection</code> (rather than <code>HttpClient</code>, as used in JVM 11+), this timeout is implemented by setting both the socket connect and read timeouts to half of the specified value.</p>
+     *
+     *     @param millis number of milliseconds (thousandths of a second) before timing out connects or reads.
+     *     @return this Connection, for chaining
+     *     @see #maxBodySize(int)
      */
     Connection timeout(int millis);
 
@@ -211,29 +211,29 @@ public interface Connection {
     Connection ignoreContentType(boolean ignoreContentType);
 
     /**
-     Set a custom SSL socket factory for HTTPS connections.
-     <p>Note: if set, the legacy <code>HttpURLConnection</code> will be used instead of the JVM's
-     <code>HttpClient</code>.</p>
-
-     @param sslSocketFactory SSL socket factory
-     @return this Connection, for chaining
-     @see #sslContext(SSLContext)
-     @deprecated use {@link #sslContext(SSLContext)} instead; will be removed in jsoup 1.24.1.
+     *     Set a custom SSL socket factory for HTTPS connections.
+     *     <p>Note: if set, the legacy <code>HttpURLConnection</code> will be used instead of the JVM's
+     *     <code>HttpClient</code>.</p>
+     *
+     *     @param sslSocketFactory SSL socket factory
+     *     @return this Connection, for chaining
+     *     @see #sslContext(SSLContext)
+     *     @deprecated use {@link #sslContext(SSLContext)} instead; will be removed in jsoup 1.24.1.
      */
     @Deprecated
     Connection sslSocketFactory(SSLSocketFactory sslSocketFactory);
 
     /**
-     Set a custom SSL context for HTTPS connections.
-     <p>Note: when using the legacy <code>HttpURLConnection</code>, only the <code>SSLSocketFactory</code> from the
-     context will be used.</p>
-
-     @param sslContext SSL context
-     @return this Connection, for chaining
-     @since 1.21.2
+     *     Set a custom SSL context for HTTPS connections.
+     *     <p>Note: when using the legacy <code>HttpURLConnection</code>, only the <code>SSLSocketFactory</code> from the
+     *     context will be used.</p>
+     *
+     *     @param sslContext SSL context
+     *     @return this Connection, for chaining
+     *     @since 1.21.2
      */
     default Connection sslContext(SSLContext sslContext) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -287,16 +287,16 @@ public interface Connection {
     Connection data(Map<String, String> data);
 
     /**
-     Add one or more request {@code key, val} data parameter pairs.
-     <p>Multiple parameters may be set at once, e.g.:
-     <code>.data("name", "jsoup", "language", "Java", "language", "English");</code> creates a query string like:
-     <code>{@literal ?name=jsoup&language=Java&language=English}</code></p>
-     <p>For GET requests, data parameters will be sent on the request query string. For POST (and other methods that
-     contain a body), they will be sent as body form parameters, unless the body is explicitly set by
-     {@link #requestBody(String)}, in which case they will be query string parameters.</p>
-
-     @param keyvals a set of key value pairs.
-     @return this Connection, for chaining
+     *     Add one or more request {@code key, val} data parameter pairs.
+     *     <p>Multiple parameters may be set at once, e.g.:
+     *     <code>.data("name", "jsoup", "language", "Java", "language", "English");</code> creates a query string like:
+     *     <code>{@literal ?name=jsoup&language=Java&language=English}</code></p>
+     *     <p>For GET requests, data parameters will be sent on the request query string. For POST (and other methods that
+     *     contain a body), they will be sent as body form parameters, unless the body is explicitly set by
+     *     {@link #requestBody(String)}, in which case they will be query string parameters.</p>
+     *
+     *     @param keyvals a set of key value pairs.
+     *     @return this Connection, for chaining
      */
     Connection data(String... keyvals);
 
@@ -305,7 +305,8 @@ public interface Connection {
      * @param key the data key
      * @return null if not set
      */
-    @Nullable KeyVal data(String key);
+    @Nullable
+    KeyVal data(String key);
 
     /**
      * Set a POST (or PUT) request body. Useful when a server expects a plain request body (such as JSON), and not a set
@@ -321,23 +322,23 @@ public interface Connection {
     Connection requestBody(String body);
 
     /**
-     Set the request body. Useful for posting data such as byte arrays or files, and the server expects a single request
-     body (and not a multipart upload). E.g.:
-     <code><pre> Jsoup.connect(url)
-     .requestBody(new ByteArrayInputStream(bytes))
-     .header("Content-Type", "application/octet-stream")
-     .post();
-     </pre></code>
-     <p>Or, use a FileInputStream to data from disk.</p>
-     <p>You should close the stream in a finally block.</p>
-
-     @param stream the input stream to send.
-     @return this Request, for chaining
-     @see #requestBody(String)
-     @since 1.20.1
+     *     Set the request body. Useful for posting data such as byte arrays or files, and the server expects a single request
+     *     body (and not a multipart upload). E.g.:
+     *     <code><pre> Jsoup.connect(url)
+     *     .requestBody(new ByteArrayInputStream(bytes))
+     *     .header("Content-Type", "application/octet-stream")
+     *     .post();
+     *     </pre></code>
+     *     <p>Or, use a FileInputStream to data from disk.</p>
+     *     <p>You should close the stream in a finally block.</p>
+     *
+     *     @param stream the input stream to send.
+     *     @return this Request, for chaining
+     *     @see #requestBody(String)
+     *     @since 1.20.1
      */
     default Connection requestBodyStream(InputStream stream) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -357,7 +358,7 @@ public interface Connection {
      * @return this Connection, for chaining
      * @see org.jsoup.Connection.Request#headers()
      */
-    Connection headers(Map<String,String> headers);
+    Connection headers(Map<String, String> headers);
 
     /**
      * Set a cookie to be sent in the request.
@@ -375,17 +376,17 @@ public interface Connection {
     Connection cookies(Map<String, String> cookies);
 
     /**
-     Provide a custom or pre-filled CookieStore to be used on requests made by this Connection.
-     @param cookieStore a cookie store to use for subsequent requests
-     @return this Connection, for chaining
-     @since 1.14.1
+     *     Provide a custom or pre-filled CookieStore to be used on requests made by this Connection.
+     *     @param cookieStore a cookie store to use for subsequent requests
+     *     @return this Connection, for chaining
+     *     @since 1.14.1
      */
     Connection cookieStore(CookieStore cookieStore);
 
     /**
-     Get the cookie store used by this Connection.
-     @return the cookie store
-     @since 1.14.1
+     *     Get the cookie store used by this Connection.
+     *     @return the cookie store
+     *     @since 1.14.1
      */
     CookieStore cookieStore();
 
@@ -406,61 +407,61 @@ public interface Connection {
     Connection postDataCharset(String charset);
 
     /**
-     Set the authenticator to use for this connection, enabling requests to URLs, and via proxies, that require
-     authentication credentials.
-     <p>The authentication scheme used is automatically detected during the request execution.
-     Supported schemes (subject to the platform) are {@code basic}, {@code digest}, {@code NTLM},
-     and {@code Kerberos}.</p>
-
-     <p>To use, supply a {@link RequestAuthenticator} function that:
-     <ol>
-     <li>validates the URL that is requesting authentication, and</li>
-     <li>returns the appropriate credentials (username and password)</li>
-     </ol>
-     </p>
-
-     <p>For example, to authenticate both to a proxy and a downstream web server:
-     <code><pre>
-     Connection session = Jsoup.newSession()
-         .proxy("proxy.example.com", 8080)
-         .auth(auth -&gt; {
-             if (auth.isServer()) { // provide credentials for the request url
-                 Validate.isTrue(auth.url().getHost().equals("example.com"));
-                 // check that we're sending credentials were we expect, and not redirected out
-                 return auth.credentials("username", "password");
-             } else { // auth.isProxy()
-                 return auth.credentials("proxy-user", "proxy-password");
-             }
-         });
-
-     Connection.Response response = session.newRequest("https://example.com/adminzone/").execute();
-     </pre></code>
-     </p>
-
-     <p>The system may cache the authentication and use it for subsequent requests to the same resource.</p>
-
-     <p><b>Implementation notes</b></p>
-     <p>For compatibility, on a Java 8 platform, authentication is set up via the system-wide default
-     {@link java.net.Authenticator#setDefault(Authenticator)} method via a ThreadLocal delegator. Whilst the
-     authenticator used is request specific and thread-safe, if you have other calls to {@code setDefault}, they will be
-     incompatible with this implementation.</p>
-     <p>On Java 9 and above, the preceding note does not apply; authenticators are directly set on the request. </p>
-     <p>If you are attempting to authenticate to a proxy that uses the {@code basic} scheme and will be fetching HTTPS
-     URLs, you need to configure your Java platform to enable that, by setting the
-     {@code jdk.http.auth.tunneling.disabledSchemes} system property to {@code ""}.
-     This must be executed prior to any authorization attempts. E.g.:
-     <code><pre>
-     static {
-        System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
-        // removes Basic, which is otherwise excluded from auth for CONNECT tunnels
-     }</pre></code>
-     </p>
+     *     Set the authenticator to use for this connection, enabling requests to URLs, and via proxies, that require
+     *     authentication credentials.
+     *     <p>The authentication scheme used is automatically detected during the request execution.
+     *     Supported schemes (subject to the platform) are {@code basic}, {@code digest}, {@code NTLM},
+     *     and {@code Kerberos}.</p>
+     *
+     *     <p>To use, supply a {@link RequestAuthenticator} function that:
+     *     <ol>
+     *     <li>validates the URL that is requesting authentication, and</li>
+     *     <li>returns the appropriate credentials (username and password)</li>
+     *     </ol>
+     *     </p>
+     *
+     *     <p>For example, to authenticate both to a proxy and a downstream web server:
+     *     <code><pre>
+     *     Connection session = Jsoup.newSession()
+     *         .proxy("proxy.example.com", 8080)
+     *         .auth(auth -&gt; {
+     *             if (auth.isServer()) { // provide credentials for the request url
+     *                 Validate.isTrue(auth.url().getHost().equals("example.com"));
+     *                 // check that we're sending credentials were we expect, and not redirected out
+     *                 return auth.credentials("username", "password");
+     *             } else { // auth.isProxy()
+     *                 return auth.credentials("proxy-user", "proxy-password");
+     *             }
+     *         });
+     *
+     *     Connection.Response response = session.newRequest("https://example.com/adminzone/").execute();
+     *     </pre></code>
+     *     </p>
+     *
+     *     <p>The system may cache the authentication and use it for subsequent requests to the same resource.</p>
+     *
+     *     <p><b>Implementation notes</b></p>
+     *     <p>For compatibility, on a Java 8 platform, authentication is set up via the system-wide default
+     *     {@link java.net.Authenticator#setDefault(Authenticator)} method via a ThreadLocal delegator. Whilst the
+     *     authenticator used is request specific and thread-safe, if you have other calls to {@code setDefault}, they will be
+     *     incompatible with this implementation.</p>
+     *     <p>On Java 9 and above, the preceding note does not apply; authenticators are directly set on the request. </p>
+     *     <p>If you are attempting to authenticate to a proxy that uses the {@code basic} scheme and will be fetching HTTPS
+     *     URLs, you need to configure your Java platform to enable that, by setting the
+     *     {@code jdk.http.auth.tunneling.disabledSchemes} system property to {@code ""}.
+     *     This must be executed prior to any authorization attempts. E.g.:
+     *     <code><pre>
+     *     static {
+     *        System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
+     *        // removes Basic, which is otherwise excluded from auth for CONNECT tunnels
+     *     }</pre></code>
+     *     </p>
      * @param authenticator the authenticator to use in this connection
      * @return this Connection, for chaining
      * @since 1.17.1
      */
     default Connection auth(@Nullable RequestAuthenticator authenticator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -524,15 +525,15 @@ public interface Connection {
     Connection response(Response response);
 
     /**
-     Set the response progress handler, which will be called periodically as the response body is downloaded. Since
-     documents are parsed as they are downloaded, this is also a good proxy for the parse progress.
-     <p>The Response object is supplied as the progress context, and may be read from to obtain headers etc.</p>
-     @param handler the progress handler
-     @return this Connection, for chaining
-     @since 1.18.1
+     *     Set the response progress handler, which will be called periodically as the response body is downloaded. Since
+     *     documents are parsed as they are downloaded, this is also a good proxy for the parse progress.
+     *     <p>The Response object is supplied as the progress context, and may be read from to obtain headers etc.</p>
+     *     @param handler the progress handler
+     *     @return this Connection, for chaining
+     *     @since 1.18.1
      */
     default Connection onResponseProgress(Progress<Response> handler) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -541,6 +542,7 @@ public interface Connection {
      */
     @SuppressWarnings("UnusedReturnValue")
     interface Base<T extends Base<T>> {
+
         /**
          * Get the URL of this Request or Response. For redirected responses, this will be the final destination URL.
          * @return URL
@@ -579,7 +581,8 @@ public interface Connection {
          * @see #hasHeader(String)
          * @see #cookie(String)
          */
-        @Nullable String header(String name);
+        @Nullable
+        String header(String name);
 
         /**
          * Get the values of a header.
@@ -639,7 +642,6 @@ public interface Connection {
          * request/response object.</p>
          * @return headers
          * @see #multiHeaders()
-
          */
         Map<String, String> headers();
 
@@ -654,7 +656,8 @@ public interface Connection {
          * @param name name of cookie to retrieve.
          * @return value of cookie, or null if not set
          */
-        @Nullable String cookie(String name);
+        @Nullable
+        String cookie(String name);
 
         /**
          * Set a cookie in this request/response.
@@ -679,12 +682,12 @@ public interface Connection {
         T removeCookie(String name);
 
         /**
-         Retrieve the request/response cookies as a map. For response cookies, if duplicate cookie names were sent, the
-         last one set will be the one included. For session management, rather than using these response cookies, prefer
-         to use {@link Jsoup#newSession()} and related methods.
-
-         @return simple cookie map
-         @see #cookieStore()
+         *         Retrieve the request/response cookies as a map. For response cookies, if duplicate cookie names were sent, the
+         *         last one set will be the one included. For session management, rather than using these response cookies, prefer
+         *         to use {@link Jsoup#newSession()} and related methods.
+         *
+         *         @return simple cookie map
+         *         @see #cookieStore()
          */
         Map<String, String> cookies();
     }
@@ -694,11 +697,13 @@ public interface Connection {
      */
     @SuppressWarnings("UnusedReturnValue")
     interface Request extends Base<Request> {
+
         /**
          * Get the proxy used for this request.
          * @return the proxy; <code>null</code> if not enabled.
          */
-        @Nullable Proxy proxy();
+        @Nullable
+        Proxy proxy();
 
         /**
          * Update the proxy for this request.
@@ -786,42 +791,43 @@ public interface Connection {
          * Get the current custom SSL socket factory, if any.
          * @return custom SSL socket factory if set, null otherwise
          */
-        @Nullable SSLSocketFactory sslSocketFactory();
+        @Nullable
+        SSLSocketFactory sslSocketFactory();
 
         /**
-         Set a custom SSL socket factory for HTTPS connections.
-         <p>Note: if set, the legacy <code>HttpURLConnection</code> will be used instead of the JVM's
-         <code>HttpClient</code>.</p>
-
-         @param sslSocketFactory SSL socket factory
-         @see #sslContext(SSLContext)
-         @deprecated use {@link #sslContext(SSLContext)} instead; will be removed in jsoup 1.24.1.
+         *         Set a custom SSL socket factory for HTTPS connections.
+         *         <p>Note: if set, the legacy <code>HttpURLConnection</code> will be used instead of the JVM's
+         *         <code>HttpClient</code>.</p>
+         *
+         *         @param sslSocketFactory SSL socket factory
+         *         @see #sslContext(SSLContext)
+         *         @deprecated use {@link #sslContext(SSLContext)} instead; will be removed in jsoup 1.24.1.
          */
         @Deprecated
         void sslSocketFactory(SSLSocketFactory sslSocketFactory);
 
         /**
-         Get the current custom SSL context, if any.
-
-         @return custom SSL context if set, null otherwise
-         @since 1.21.2
+         *         Get the current custom SSL context, if any.
+         *
+         *         @return custom SSL context if set, null otherwise
+         *         @since 1.21.2
          */
         @Nullable
         default SSLContext sslContext() {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Set a custom SSL context for HTTPS connections.
-         <p>Note: when using the legacy <code>HttpURLConnection</code>, only the <code>SSLSocketFactory</code> from the
-         context will be used.</p>
-
-         @param sslContext SSL context
-         @return this Request, for chaining
-         @since 1.21.2
+         *         Set a custom SSL context for HTTPS connections.
+         *         <p>Note: when using the legacy <code>HttpURLConnection</code>, only the <code>SSLSocketFactory</code> from the
+         *         context will be used.</p>
+         *
+         *         @param sslContext SSL context
+         *         @return this Request, for chaining
+         *         @since 1.21.2
          */
         default Request sslContext(SSLContext sslContext) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -855,26 +861,27 @@ public interface Connection {
          * Get the current request body.
          * @return null if not set.
          */
-        @Nullable String requestBody();
+        @Nullable
+        String requestBody();
 
         /**
-         Set the request body. Useful for posting data such as byte arrays or files, and the server expects a single
-         request body (and not a multipart upload). E.g.:
-         <code><pre> Jsoup.connect(url)
-         .requestBody(new ByteArrayInputStream(bytes))
-         .header("Content-Type", "application/octet-stream")
-         .post();
-         </pre></code>
-         <p>Or, use a FileInputStream to data from disk.</p>
-         <p>You should close the stream in a finally block.</p>
-
-         @param stream the input stream to send.
-         @return this Request, for chaining
-         @see #requestBody(String)
-         @since 1.20.1
+         *         Set the request body. Useful for posting data such as byte arrays or files, and the server expects a single
+         *         request body (and not a multipart upload). E.g.:
+         *         <code><pre> Jsoup.connect(url)
+         *         .requestBody(new ByteArrayInputStream(bytes))
+         *         .header("Content-Type", "application/octet-stream")
+         *         .post();
+         *         </pre></code>
+         *         <p>Or, use a FileInputStream to data from disk.</p>
+         *         <p>You should close the stream in a finally block.</p>
+         *
+         *         @param stream the input stream to send.
+         *         @return this Request, for chaining
+         *         @see #requestBody(String)
+         *         @since 1.20.1
          */
         default Request requestBodyStream(InputStream stream) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -904,25 +911,25 @@ public interface Connection {
         String postDataCharset();
 
         /**
-         Set the authenticator to use for this request.
-         See {@link Connection#auth(RequestAuthenticator) Connection.auth(authenticator)} for examples and
-         implementation notes.
+         *         Set the authenticator to use for this request.
+         *         See {@link Connection#auth(RequestAuthenticator) Connection.auth(authenticator)} for examples and
+         *         implementation notes.
          * @param authenticator the authenticator
          * @return this Request, for chaining.
          * @since 1.17.1
          */
-        default Request auth(@Nullable RequestAuthenticator authenticator)  {
-            throw new UnsupportedOperationException();
+        default Request auth(@Nullable RequestAuthenticator authenticator) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Get the RequestAuthenticator, if any, that will be used on this request.
+         *         Get the RequestAuthenticator, if any, that will be used on this request.
          * @return the RequestAuthenticator, or {@code null} if not set
          * @since 1.17.1
          */
         @Nullable
         default RequestAuthenticator auth() {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -947,7 +954,8 @@ public interface Connection {
          * Get the character set name of the response, derived from the content-type header.
          * @return character set name if set, <b>null</b> if not
          */
-        @Nullable String charset();
+        @Nullable
+        String charset();
 
         /**
          * Set / override the response character set. When the document body is parsed it will be with this charset.
@@ -960,70 +968,71 @@ public interface Connection {
          * Get the response content type (e.g. "text/html");
          * @return the response content type, or <b>null</b> if one was not set
          */
-        @Nullable String contentType();
+        @Nullable
+        String contentType();
 
         /**
-         Read and parse the body of the response as a Document. If you intend to parse the same response multiple times,
-         you should {@link #readFully()} first, which will buffer the body into memory.
-
-         @return a parsed Document
-         @throws IOException if an IO exception occurs whilst reading the body.
-         @see #readFully()
+         *         Read and parse the body of the response as a Document. If you intend to parse the same response multiple times,
+         *         you should {@link #readFully()} first, which will buffer the body into memory.
+         *
+         *         @return a parsed Document
+         *         @throws IOException if an IO exception occurs whilst reading the body.
+         *         @see #readFully()
          */
         Document parse() throws IOException;
 
         /**
-         Read the response body, and returns it as a plain String.
-
-         @return body
-         @throws IOException if an IO exception occurs whilst reading the body.
-         @since 1.21.1
+         *         Read the response body, and returns it as a plain String.
+         *
+         *         @return body
+         *         @throws IOException if an IO exception occurs whilst reading the body.
+         *         @since 1.21.1
          */
         default String readBody() throws IOException {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Get the body of the response as a plain String.
-
-         <p>Will throw an UncheckedIOException if the body has not been buffered and an error occurs whilst reading the
-         body; use {@link #readFully()} first to buffer the body and catch any exceptions explicitly. Or more simply,
-         {@link #readBody()}.</p>
-
-         @return body
-         @throws UncheckedIOException if an IO exception occurs whilst reading the body.
-         @see #readBody()
-         @see #readFully()
+         *         Get the body of the response as a plain String.
+         *
+         *         <p>Will throw an UncheckedIOException if the body has not been buffered and an error occurs whilst reading the
+         *         body; use {@link #readFully()} first to buffer the body and catch any exceptions explicitly. Or more simply,
+         *         {@link #readBody()}.</p>
+         *
+         *         @return body
+         *         @throws UncheckedIOException if an IO exception occurs whilst reading the body.
+         *         @see #readBody()
+         *         @see #readFully()
          */
         String body();
 
         /**
-         Get the body of the response as an array of bytes.
-
-         <p>Will throw an UncheckedIOException if the body has not been buffered and an error occurs whilst reading the
-         body; use {@link #readFully()} first to buffer the body and catch any exceptions explicitly.</p>
-
-         @return body bytes
-         @throws UncheckedIOException if an IO exception occurs whilst reading the body.
-         @see #readFully()
+         *         Get the body of the response as an array of bytes.
+         *
+         *         <p>Will throw an UncheckedIOException if the body has not been buffered and an error occurs whilst reading the
+         *         body; use {@link #readFully()} first to buffer the body and catch any exceptions explicitly.</p>
+         *
+         *         @return body bytes
+         *         @throws UncheckedIOException if an IO exception occurs whilst reading the body.
+         *         @see #readFully()
          */
         byte[] bodyAsBytes();
 
         /**
-         Read the body of the response into a local buffer, so that {@link #parse()} may be called repeatedly on the same
-         connection response. Otherwise, once the response is read, its InputStream will have been drained and may not be
-         re-read.
-
-         <p>Subsequent calls methods than consume the body, such as {@link #parse()}, {@link #body()},
-         {@link #bodyAsBytes()}, will not need to read the body again, and will not throw exceptions.</p>
-         <p>Calling {@link #readBody()}} has the same effect.</p>
-
-         @return this response, for chaining
-         @throws IOException if an IO exception occurs during buffering.
-         @since 1.21.1
+         *         Read the body of the response into a local buffer, so that {@link #parse()} may be called repeatedly on the same
+         *         connection response. Otherwise, once the response is read, its InputStream will have been drained and may not be
+         *         re-read.
+         *
+         *         <p>Subsequent calls methods than consume the body, such as {@link #parse()}, {@link #body()},
+         *         {@link #bodyAsBytes()}, will not need to read the body again, and will not throw exceptions.</p>
+         *         <p>Calling {@link #readBody()}} has the same effect.</p>
+         *
+         *         @return this response, for chaining
+         *         @throws IOException if an IO exception occurs during buffering.
+         *         @since 1.21.1
          */
         default Response readFully() throws IOException {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1039,25 +1048,25 @@ public interface Connection {
         Response bufferUp();
 
         /**
-         Get the body of the response as a (buffered) InputStream. You should close the input stream when you're done
-         with it.
-         <p>Other body methods (like readFully, body, parse, etc) will generally not work in conjunction with this method,
-         as it consumes the InputStream.</p>
-         <p>Any configured max size or maximum read timeout applied to the connection will not be applied to this stream,
-         unless {@link #readFully()} is called prior.</p>
-         <p>This method is useful for writing large responses to disk, without buffering them completely into memory
-         first.</p>
-         @return the response body input stream
+         *         Get the body of the response as a (buffered) InputStream. You should close the input stream when you're done
+         *         with it.
+         *         <p>Other body methods (like readFully, body, parse, etc) will generally not work in conjunction with this method,
+         *         as it consumes the InputStream.</p>
+         *         <p>Any configured max size or maximum read timeout applied to the connection will not be applied to this stream,
+         *         unless {@link #readFully()} is called prior.</p>
+         *         <p>This method is useful for writing large responses to disk, without buffering them completely into memory
+         *         first.</p>
+         *         @return the response body input stream
          */
         BufferedInputStream bodyStream();
 
         /**
-         Returns a {@link StreamParser} that will parse the Response progressively.
+         *         Returns a {@link StreamParser} that will parse the Response progressively.
          * @return a StreamParser, prepared to parse this response.
          * @throws IOException if an IO exception occurs preparing the parser.
          */
         default StreamParser streamParser() throws IOException {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1103,7 +1112,8 @@ public interface Connection {
          * Get the input stream associated with this keyval, if any
          * @return input stream if set, or null
          */
-        @Nullable InputStream inputStream();
+        @Nullable
+        InputStream inputStream();
 
         /**
          * Does this keyval have an input stream?
@@ -1124,6 +1134,7 @@ public interface Connection {
          * Get the current Content Type, or {@code null} if not set.
          * @return the current Content Type.
          */
-        @Nullable String contentType();
+        @Nullable
+        String contentType();
     }
 }

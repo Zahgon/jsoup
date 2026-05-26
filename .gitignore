@@ -11,3 +11,8 @@ bin/
 .vscode/
 .java-version
 .DS_Store
+
+.aider*
+logs/
+.commit0_scripts/
+.github/workflows/

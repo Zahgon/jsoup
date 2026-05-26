@@ -7,7 +7,6 @@ import org.jsoup.nodes.LeafNode;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.NodeIterator;
 import org.jsoup.nodes.TextNode;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -16,8 +15,11 @@ import java.util.WeakHashMap;
  * Base structural evaluator.
  */
 abstract class StructuralEvaluator extends Evaluator {
+
     final Evaluator evaluator;
-    boolean wantsNodes; // if the evaluator requested nodes, not just elements
+
+    // if the evaluator requested nodes, not just elements
+    boolean wantsNodes;
 
     public StructuralEvaluator(Evaluator evaluator) {
         this.evaluator = evaluator;
@@ -26,7 +28,7 @@ abstract class StructuralEvaluator extends Evaluator {
 
     @Override
     boolean wantsNodes() {
-        return wantsNodes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // Memoize inner matches, to save repeated re-evaluations of parent, sibling etc.
@@ -34,84 +36,65 @@ abstract class StructuralEvaluator extends Evaluator {
     final ThreadLocal<Map<Node, Map<Node, Boolean>>> threadMemo = ThreadLocal.withInitial(WeakHashMap::new);
 
     boolean memoMatches(final Element root, final Node node) {
-        Map<Node, Map<Node, Boolean>> rootMemo = threadMemo.get();
-        Map<Node, Boolean> memo = rootMemo.computeIfAbsent(root, r -> new WeakHashMap<>());
-        return memo.computeIfAbsent(node, test -> evaluator.matches(root, test));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @Override protected void reset() {
-        threadMemo.remove();
-        evaluator.reset();
-        super.reset();
+    @Override
+    protected void reset() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean matches(Element root, Element element) {
-        return evaluateMatch(root, element);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     boolean matches(Element root, LeafNode leafNode) {
-        return evaluateMatch(root, leafNode);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     abstract boolean evaluateMatch(Element root, Node node);
 
     static class Root extends Evaluator {
+
         @Override
         public boolean matches(Element root, Element element) {
-            return root == element;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return 1;
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override public String toString() {
-            return ">";
+        @Override
+        public String toString() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class Has extends StructuralEvaluator {
-        static final SoftPool<NodeIterator<Node>> NodeIterPool =
-            new SoftPool<>(() -> new NodeIterator<>(new TextNode(""), Node.class));
-        // the element here is just a placeholder so this can be final - gets set in restart()
 
-        private final boolean checkSiblings; // evaluating against siblings (or children)
+        static final SoftPool<NodeIterator<Node>> NodeIterPool = new SoftPool<>(() -> new NodeIterator<>(new TextNode(""), Node.class));
+
+        // the element here is just a placeholder so this can be final - gets set in restart()
+        // evaluating against siblings (or children)
+        private final boolean checkSiblings;
 
         public Has(Evaluator evaluator) {
             super(evaluator);
             checkSiblings = evalWantsSiblings(evaluator);
         }
 
-        @Override public boolean matches(Element root, Element element) {
-            if (checkSiblings) { // evaluating against siblings
-                for (Element sib = element.firstElementSibling(); sib != null; sib = sib.nextElementSibling()) {
-                    if (sib != element && evaluator.matches(element, sib)) { // don't match against self
-                        return true;
-                    }
-                }
-            }
-            // otherwise we only want to match children (or below), and not the input element. And we want to minimize GCs so reusing the Iterator obj
-            NodeIterator<Node> it = NodeIterPool.borrow();
-            it.restart(element);
-            try {
-                while (it.hasNext()) {
-                    Node node = it.next();
-                    if (node == element) continue; // don't match self, only descendants
-                    if (evaluator.matches(element, node)) {
-                        return true;
-                    }
-                }
-            } finally {
-                NodeIterPool.release(it);
-            }
-            return false;
+        @Override
+        public boolean matches(Element root, Element element) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         boolean evaluateMatch(Element root, Node node) {
-            return false; // unused; :has(::comment)) goes via implicit root combinator
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /* Test if the :has sub-clause wants sibling elements (vs nested elements) - will be a Combining eval */
@@ -126,96 +109,97 @@ abstract class StructuralEvaluator extends Evaluator {
             return false;
         }
 
-        @Override protected int cost() {
-            return 10 * evaluator.cost();
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format(":has(%s)", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Implements the :is(sub-query) pseudo-selector */
+    /**
+     * Implements the :is(sub-query) pseudo-selector
+     */
     static class Is extends StructuralEvaluator {
+
         public Is(Evaluator evaluator) {
             super(evaluator);
         }
 
         @Override
         boolean evaluateMatch(Element root, Node node) {
-            return evaluator.matches(root, node);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return 2 + evaluator.cost();
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format(":is(%s)", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class Not extends StructuralEvaluator {
+
         public Not(Evaluator evaluator) {
             super(evaluator);
         }
 
         @Override
         boolean evaluateMatch(Element root, Node node) {
-            return !memoMatches(root, node);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return 2 + evaluator.cost();
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format(":not(%s)", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     /**
-     Any Ancestor (i.e., ascending parent chain.).
+     *     Any Ancestor (i.e., ascending parent chain.).
      */
     static class Ancestor extends StructuralEvaluator {
+
         public Ancestor(Evaluator evaluator) {
             super(evaluator);
         }
 
         @Override
         boolean evaluateMatch(Element root, Node node) {
-            if (root == node)
-                return false;
-
-            for (Node parent = node.parent(); parent != null; parent = parent.parent()) {
-                if (memoMatches(root, parent))
-                    return true;
-                if (parent == root)
-                    break;
-            }
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int cost() {
-            return 8 * evaluator.cost(); // probably lower than has(), but still significant, depending on doc and el depth.
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format("%s ", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     /**
-     Holds a list of evaluators for one > two > three immediate parent matches, and the final direct evaluator under
-     test. To match, these are effectively ANDed together, starting from the last, matching up to the first.
+     *     Holds a list of evaluators for one > two > three immediate parent matches, and the final direct evaluator under
+     *     test. To match, these are effectively ANDed together, starting from the last, matching up to the first.
      */
     static class ImmediateParentRun extends StructuralEvaluator {
+
         final ArrayList<Evaluator> evaluators = new ArrayList<>();
+
         int cost = 2;
 
         public ImmediateParentRun(Evaluator evaluator) {
@@ -225,90 +209,72 @@ abstract class StructuralEvaluator extends Evaluator {
         }
 
         void add(Evaluator evaluator) {
-            evaluators.add(evaluator);
-            cost += evaluator.cost();
-            wantsNodes |= evaluator.wantsNodes();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override boolean evaluateMatch(Element root, Node node) {
-            if (node == root)
-                return false; // cannot match as the second eval (first parent test) would be above the root
-
-            for (int i = evaluators.size() -1; i >= 0; --i) {
-                if (node == null)
-                    return false;
-                Evaluator eval = evaluators.get(i);
-                if (!eval.matches(root, node))
-                    return false;
-                node = node.parent();
-            }
-            return true;
+        @Override
+        boolean evaluateMatch(Element root, Node node) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return cost;
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void reset() {
-            for (Evaluator evaluator : evaluators) {
-                evaluator.reset();
-            }
-            super.reset();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return StringUtil.join(evaluators, " > ");
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class PreviousSibling extends StructuralEvaluator {
+
         public PreviousSibling(Evaluator evaluator) {
             super(evaluator);
         }
 
         // matches any previous sibling, so can be same in Element only or wantsNodes context
-        @Override boolean evaluateMatch(Element root, Node node) {
-            if (root == node) return false;
-
-            for (Node sib = node.firstSibling(); sib != null; sib = sib.nextSibling()) {
-                if (sib == node) break;
-                if (memoMatches(root, sib)) return true;
-            }
-
-            return false;
+        @Override
+        boolean evaluateMatch(Element root, Node node) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return 3 * evaluator.cost();
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format("%s ~ ", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class ImmediatePreviousSibling extends StructuralEvaluator {
+
         public ImmediatePreviousSibling(Evaluator evaluator) {
             super(evaluator);
         }
 
-        @Override boolean evaluateMatch(Element root, Node node) {
-            if (root == node) return false;
-
-            Node prev = wantsNodes ? node.previousSibling() : node.previousElementSibling();
-            return prev != null && memoMatches(root, prev);
+        @Override
+        boolean evaluateMatch(Element root, Node node) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Override protected int cost() {
-            return 2 + evaluator.cost();
+        @Override
+        protected int cost() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return String.format("%s + ", evaluator);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

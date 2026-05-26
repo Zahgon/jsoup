@@ -6,13 +6,14 @@ import org.jsoup.internal.QuietAppendable;
  * A Character Data node, to support CDATA sections.
  */
 public class CDataNode extends TextNode {
+
     public CDataNode(String text) {
         super(text);
     }
 
     @Override
     public String nodeName() {
-        return "#cdata";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -21,19 +22,16 @@ public class CDataNode extends TextNode {
      */
     @Override
     public String text() {
-        return getWholeText();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
-        accum
-            .append("<![CDATA[")
-            .append(getWholeText())
-            .append("]]>");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public CDataNode clone() {
-        return (CDataNode) super.clone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

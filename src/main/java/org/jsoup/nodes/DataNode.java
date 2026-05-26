@@ -3,29 +3,31 @@ package org.jsoup.nodes;
 import org.jsoup.internal.QuietAppendable;
 
 /**
- A data node, for contents of style, script tags etc, where contents should not show in text().
-
- @author Jonathan Hedley, jonathan@hedley.net */
+ * A data node, for contents of style, script tags etc, where contents should not show in text().
+ *
+ * @author Jonathan Hedley, jonathan@hedley.net
+ */
 public class DataNode extends LeafNode {
 
     /**
-     Create a new DataNode.
-     @param data data contents
+     *     Create a new DataNode.
+     *     @param data data contents
      */
     public DataNode(String data) {
         super(data);
     }
 
-    @Override public String nodeName() {
-        return "#data";
+    @Override
+    public String nodeName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the data contents of this node. Will be unescaped and with original new lines, space etc.
-     @return data
+     *     Get the data contents of this node. Will be unescaped and with original new lines, space etc.
+     *     @return data
      */
     public String getWholeData() {
-        return coreValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -34,30 +36,16 @@ public class DataNode extends LeafNode {
      * @return this node, for chaining
      */
     public DataNode setWholeData(String data) {
-        coreValue(data);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
-        /* For XML output, escape the DataNode in a CData section. The data may contain pseudo-CData content if it was
-        parsed as HTML, so don't double up Cdata. Output in polyglot HTML / XHTML / XML format. */
-        final String data = getWholeData();
-        if (out.syntax() == Document.OutputSettings.Syntax.xml && !data.contains("<![CDATA[")) {
-            if (parentNameIs("script"))
-                accum.append("//<![CDATA[\n").append(data).append("\n//]]>");
-            else if (parentNameIs("style"))
-                accum.append("/*<![CDATA[*/\n").append(data).append("\n/*]]>*/");
-            else
-                accum.append("<![CDATA[").append(data).append("]]>");
-        } else {
-            // In HTML, data is not escaped in the output of data nodes, so < and & in script, style is OK
-            accum.append(data);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public DataNode clone() {
-        return (DataNode) super.clone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

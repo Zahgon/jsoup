@@ -3,50 +3,48 @@ package org.jsoup.nodes;
 import org.jsoup.internal.QuietAppendable;
 import org.jsoup.parser.Parser;
 import org.jspecify.annotations.Nullable;
-
 import java.util.List;
 
 /**
- A comment node.
-
- @author Jonathan Hedley, jonathan@hedley.net */
+ * A comment node.
+ *
+ * @author Jonathan Hedley, jonathan@hedley.net
+ */
 public class Comment extends LeafNode {
+
     /**
-     Create a new comment node.
-     @param data The contents of the comment
+     *     Create a new comment node.
+     *     @param data The contents of the comment
      */
     public Comment(String data) {
         super(data);
     }
 
-    @Override public String nodeName() {
-        return "#comment";
+    @Override
+    public String nodeName() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the contents of the comment.
-     @return comment content
+     *     Get the contents of the comment.
+     *     @return comment content
      */
     public String getData() {
-        return coreValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Comment setData(String data) {
-        coreValue(data);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     void outerHtmlHead(QuietAppendable accum, Document.OutputSettings out) {
-        accum
-            .append("<!--")
-            .append(getData())
-            .append("-->");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Comment clone() {
-        return (Comment) super.clone();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -57,8 +55,7 @@ public class Comment extends LeafNode {
      * @see #asXmlDeclaration()
      */
     public boolean isXmlDeclaration() {
-        String data = getData();
-        return isXmlDeclarationData(data);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static boolean isXmlDeclarationData(String data) {
@@ -70,12 +67,8 @@ public class Comment extends LeafNode {
      * @return an XML declaration if it could be parsed as one, null otherwise.
      * @see #isXmlDeclaration()
      */
-    public @Nullable XmlDeclaration asXmlDeclaration() {
-        String fragment = "<" + getData() + ">";
-        Parser parser = Parser.xmlParser();
-        List<Node> nodes = parser.parseFragmentInput(fragment, null, "");
-        if (!nodes.isEmpty() && nodes.get(0) instanceof XmlDeclaration)
-            return (XmlDeclaration) nodes.get(0);
-        return null;
+    @Nullable
+    public XmlDeclaration asXmlDeclaration() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

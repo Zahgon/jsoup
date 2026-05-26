@@ -5,7 +5,6 @@ import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.NodeInternals;
 import org.jsoup.nodes.Range;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -13,16 +12,21 @@ import java.util.Objects;
  * Parse tokens for the Tokeniser.
  */
 abstract class Token {
+
     static final int UnsetPos = -1;
-    final TokenType type; // used in switches in TreeBuilder vs .getClass()
-    int startPos, endPos = UnsetPos; // position in CharacterReader this token was read from
+
+    // used in switches in TreeBuilder vs .getClass()
+    final TokenType type;
+
+    // position in CharacterReader this token was read from
+    int startPos, endPos = UnsetPos;
 
     private Token(TokenType type) {
         this.type = type;
     }
-    
+
     String tokenType() {
-        return this.getClass().getSimpleName();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -30,34 +34,40 @@ abstract class Token {
      * piece of data, which immediately get GCed.
      */
     Token reset() {
-        startPos = UnsetPos;
-        endPos = UnsetPos;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int startPos() {
-        return startPos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void startPos(int pos) {
-        startPos = pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int endPos() {
-        return endPos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void endPos(int pos) {
-        endPos = pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static final class Doctype extends Token {
+
         final TokenData name = new TokenData();
-        @Nullable String pubSysKey = null;
+
+        @Nullable
+        String pubSysKey = null;
+
         final TokenData publicIdentifier = new TokenData();
+
         final TokenData systemIdentifier = new TokenData();
+
         final TokenData internalSubset = new TokenData();
+
         boolean sawInternalSubset = false;
+
         boolean forceQuirks = false;
 
         Doctype() {
@@ -66,68 +76,79 @@ abstract class Token {
 
         @Override
         Token reset() {
-            super.reset();
-            name.reset();
-            pubSysKey = null;
-            publicIdentifier.reset();
-            systemIdentifier.reset();
-            internalSubset.reset();
-            sawInternalSubset = false;
-            forceQuirks = false;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         String getName() {
-            return name.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @Nullable String getPubSysKey() {
-            return pubSysKey;
+        @Nullable
+        String getPubSysKey() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         String getPublicIdentifier() {
-            return publicIdentifier.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public String getSystemIdentifier() {
-            return systemIdentifier.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         String getInternalSubset() {
-            return internalSubset.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         boolean hasInternalSubset() {
-            return sawInternalSubset;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public boolean isForceQuirks() {
-            return forceQuirks;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return "<!doctype " + getName() + ">";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static abstract class Tag extends Token {
+
         protected TokenData tagName = new TokenData();
-        @Nullable protected String normalName; // lc version of tag name, for case-insensitive tree build
+
+        // lc version of tag name, for case-insensitive tree build
+        @Nullable
+        protected String normalName;
+
         boolean selfClosing = false;
-        @Nullable Attributes attributes; // start tags get attributes on construction. End tags get attributes on first new attribute (but only for parser convenience, not used).
+
+        // start tags get attributes on construction. End tags get attributes on first new attribute (but only for parser convenience, not used).
+        @Nullable
+        Attributes attributes;
 
         final private TokenData attrName = new TokenData();
+
         final private TokenData attrValue = new TokenData();
-        private boolean hasEmptyAttrValue = false; // distinguish boolean attribute from empty string value
+
+        // distinguish boolean attribute from empty string value
+        private boolean hasEmptyAttrValue = false;
 
         // attribute source range tracking
         final TreeBuilder treeBuilder;
+
         final boolean trackSource;
+
         private static final int AttrRangeWidth = 4;
+
         int attrNameStart, attrNameEnd, attrValStart, attrValEnd;
-        private @Nullable String @Nullable [] attrRangeNames;
+
+        @Nullable
+        private String @Nullable [] attrRangeNames;
+
         private int @Nullable [] attrRangePositions;
+
         private int attrRangeCount;
 
         Tag(TokenType type, TreeBuilder treeBuilder) {
@@ -138,23 +159,13 @@ abstract class Token {
 
         @Override
         Tag reset() {
-            super.reset();
-            tagName.reset();
-            normalName = null;
-            selfClosing = false;
-            attributes = null;
-            if (attrRangeNames != null)
-                Arrays.fill(attrRangeNames, 0, attrRangeCount, null);
-            attrRangeCount = 0;
-            resetPendingAttr();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private void resetPendingAttr() {
             attrName.reset();
             attrValue.reset();
             hasEmptyAttrValue = false;
-
             if (trackSource)
                 attrNameStart = attrNameEnd = attrValStart = attrValEnd = UnsetPos;
         }
@@ -165,41 +176,20 @@ abstract class Token {
         private static final int MaxAttributes = 512;
 
         final void newAttribute() {
-            if (attributes == null)
-                attributes = new Attributes();
-
-            if (attrName.hasData() && attributes.size() < MaxAttributes) {
-                // the tokeniser has skipped whitespace control chars, but trimming could collapse to empty for other control codes, so verify here
-                String name = attrName.value();
-                name = name.trim();
-                if (!name.isEmpty()) {
-                    String value;
-                    if (attrValue.hasData())
-                        value = attrValue.value();
-                    else if (hasEmptyAttrValue)
-                        value = "";
-                    else
-                        value = null;
-                    // note that we add, not put. So that the first is kept, and rest are deduped, once in a context where case sensitivity is known, and we can warn for duplicates.
-                    attributes.add(name, value);
-
-                    trackAttributeRange(name);
-                }
-            }
-            resetPendingAttr();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private void trackAttributeRange(String name) {
             if (treeBuilder.trackSourceRange && isStartTag()) {
                 // if there's no value (e.g. boolean), make it an implicit range at current
-                if (!attrValue.hasData()) attrValStart = attrValEnd = attrNameEnd;
-
+                if (!attrValue.hasData())
+                    attrValStart = attrValEnd = attrNameEnd;
                 addAttributeRange(name, attrNameStart, attrNameEnd, attrValStart, attrValEnd);
             }
         }
 
         /**
-         Stages an attribute range until the attributes are normalized and deduplicated.
+         *         Stages an attribute range until the attributes are normalized and deduplicated.
          */
         private void addAttributeRange(String name, int nameStart, int nameEnd, int valueStart, int valueEnd) {
             ensureAttributeRangeCapacity(attrRangeCount + 1);
@@ -215,7 +205,7 @@ abstract class Token {
         }
 
         /**
-         Grows parser-local attribute range staging arrays.
+         *         Grows parser-local attribute range staging arrays.
          */
         private void ensureAttributeRangeCapacity(int minSize) {
             if (attrRangeNames != null && attrRangeNames.length >= minSize)
@@ -224,144 +214,106 @@ abstract class Token {
             if (size < minSize)
                 size = minSize;
             attrRangeNames = attrRangeNames == null ? new String[size] : Arrays.copyOf(attrRangeNames, size);
-            attrRangePositions = attrRangePositions == null ?
-                new int[size * AttrRangeWidth] :
-                Arrays.copyOf(attrRangePositions, size * AttrRangeWidth);
+            attrRangePositions = attrRangePositions == null ? new int[size * AttrRangeWidth] : Arrays.copyOf(attrRangePositions, size * AttrRangeWidth);
         }
 
         /**
-         Attaches staged attribute ranges after parser normalization and deduplication have settled attribute slots.
+         *         Attaches staged attribute ranges after parser normalization and deduplication have settled attribute slots.
          */
         final void finaliseAttributeRanges(ParseSettings settings) {
-            if (!treeBuilder.trackSourceRange || attrRangeCount == 0 || attributes == null)
-                return;
-            assert attrRangeNames != null;
-            assert attrRangePositions != null;
-            int count = attrRangeCount;
-            attrRangeCount = 0;
-            for (int i = 0; i < count; i++) {
-                String stagedName = Objects.requireNonNull(attrRangeNames[i]);
-                String rangeName = settings.normalizeAttribute(stagedName);
-                Range.AttributeRange existing = attributes.sourceRange(rangeName);
-                if (!existing.isTracked()) {
-                    int rangeIndex = attrRangeIndex(i);
-                    NodeInternals.attributeRange(
-                        attributes,
-                        rangeName,
-                        treeBuilder.lineMap(),
-                        attrRangePositions[rangeIndex],
-                        attrRangePositions[rangeIndex + 1],
-                        attrRangePositions[rangeIndex + 2],
-                        attrRangePositions[rangeIndex + 3]
-                    );
-                }
-                attrRangeNames[i] = null;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Maps a staged attribute range to its first source offset slot.
+         *         Maps a staged attribute range to its first source offset slot.
          */
         private static int attrRangeIndex(int index) {
             return index * AttrRangeWidth;
         }
 
         final boolean hasAttributes() {
-            return attributes != null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final boolean hasAttributeIgnoreCase(String key) {
-            return attributes != null && attributes.hasKeyIgnoreCase(key);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void finaliseTag() {
-            // finalises for emit
-            if (attrName.hasData()) {
-                newAttribute();
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        /** Preserves case */
-        final String name() { // preserves case, for input into Tag.valueOf (which may drop case)
-            return tagName.value();
+        /**
+         * Preserves case
+         */
+        final String name() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        /** Lower case */
-        final String normalName() { // lower case, used in tree building for working out where in tree it should go
-            Validate.isFalse(normalName == null || normalName.isEmpty());
-            return normalName;
+        /**
+         * Lower case
+         */
+        final String normalName() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final String toStringName() {
-            String name = tagName.value();
-            return (name.isEmpty()) ? "[unset]" : name;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final Tag name(String name) {
-            tagName.set(name);
-            normalName = ParseSettings.normalName(tagName.value());
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final boolean isSelfClosing() {
-            return selfClosing;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         // these appenders are rarely hit in not null state-- caused by null chars.
         final void appendTagName(String append) {
-            // might have null chars - need to replace with null replacement character
-            append = append.replace(TokeniserState.nullChar, Tokeniser.replacementChar);
-            tagName.append(append);
-            normalName = ParseSettings.normalName(tagName.value());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendTagName(char append) {
-            appendTagName(String.valueOf(append)); // so that normalname gets updated too
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendAttributeName(String append, int startPos, int endPos) {
-            // might have null chars because we eat in one pass - need to replace with null replacement character
-            append = append.replace(TokeniserState.nullChar, Tokeniser.replacementChar);
-            attrName.append(append);
-            attrNamePos(startPos, endPos);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendAttributeName(char append, int startPos, int endPos) {
-            attrName.append(append);
-            attrNamePos(startPos, endPos);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendAttributeValue(String append, int startPos, int endPos) {
-            attrValue.append(append);
-            attrValPos(startPos, endPos);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendAttributeValue(char append, int startPos, int endPos) {
-            attrValue.append(append);
-            attrValPos(startPos, endPos);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         final void appendAttributeValue(int[] appendCodepoints, int startPos, int endPos) {
-            for (int codepoint : appendCodepoints) {
-                attrValue.appendCodePoint(codepoint);
-            }
-            attrValPos(startPos, endPos);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-        
+
         final void setEmptyAttributeValue() {
-            hasEmptyAttrValue = true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private void attrNamePos(int startPos, int endPos) {
             if (trackSource) {
-                attrNameStart = attrNameStart > UnsetPos ? attrNameStart : startPos; // latches to first
+                // latches to first
+                attrNameStart = attrNameStart > UnsetPos ? attrNameStart : startPos;
                 attrNameEnd = endPos;
             }
         }
 
         private void attrValPos(int startPos, int endPos) {
             if (trackSource) {
-                attrValStart = attrValStart > UnsetPos ? attrValStart : startPos; // latches to first
+                // latches to first
+                attrValStart = attrValStart > UnsetPos ? attrValStart : startPos;
                 attrValEnd = endPos;
             }
         }
@@ -379,49 +331,40 @@ abstract class Token {
 
         @Override
         Tag reset() {
-            super.reset();
-            attributes = null;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         StartTag nameAttr(String name, Attributes attributes) {
-            this.tagName.set(name);
-            this.attributes = attributes;
-            normalName = ParseSettings.normalName(name);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            String closer = isSelfClosing() ? "/>" : ">";
-            if (hasAttributes() && attributes.size() > 0)
-                return "<" + toStringName() + " " + attributes.toString() + closer;
-            else
-                return "<" + toStringName() + closer;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    final static class EndTag extends Tag{
+    final static class EndTag extends Tag {
+
         EndTag(TreeBuilder treeBuilder) {
             super(TokenType.EndTag, treeBuilder);
         }
 
         @Override
         public String toString() {
-            return "</" + toStringName() + ">";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     final static class Comment extends Token {
+
         private final TokenData data = new TokenData();
+
         boolean bogus = false;
 
         @Override
         Token reset() {
-            super.reset();
-            data.reset();
-            bogus = false;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         Comment() {
@@ -429,33 +372,34 @@ abstract class Token {
         }
 
         String getData() {
-            return data.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         Comment append(String append) {
-            data.append(append);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         Comment append(char append) {
-            data.append(append);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return "<!--" + getData() + "-->";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     static class Character extends Token {
+
         final TokenData data = new TokenData();
 
         Character() {
             super(TokenType.Character);
         }
 
-        /** Deep copy */
+        /**
+         * Deep copy
+         */
         Character(Character source) {
             super(TokenType.Character);
             this.startPos = source.startPos;
@@ -465,47 +409,38 @@ abstract class Token {
 
         @Override
         Token reset() {
-            super.reset();
-            data.reset();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         Character data(String str) {
-            data.set(str);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         Character append(String str) {
-            data.append(str);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         String getData() {
-            return data.value();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return getData();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
-         Normalize null chars in the data. If replace is true, replaces with the replacement char; if false, removes.
+         *         Normalize null chars in the data. If replace is true, replaces with the replacement char; if false, removes.
          */
         public void normalizeNulls(boolean replace) {
-            String data = this.data.value();
-            if (data.indexOf(TokeniserState.nullChar) == -1) return;
-
-            data = (replace ?
-                data.replace(TokeniserState.nullChar, Tokeniser.replacementChar) :
-                data.replace(nullString, ""));
-            this.data.set(data);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private static final String nullString = String.valueOf(TokeniserState.nullChar);
     }
 
     final static class CData extends Character {
+
         CData(String data) {
             super();
             this.data(data);
@@ -513,16 +448,17 @@ abstract class Token {
 
         @Override
         public String toString() {
-            return "<![CDATA[" + getData() + "]]>";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     /**
-     XmlDeclaration - extends Tag for pseudo attribute support
+     *     XmlDeclaration - extends Tag for pseudo attribute support
      */
     final static class XmlDecl extends Tag {
-        boolean isDeclaration = true; // <!..>, or <?...?> if false (a processing instruction)
+
+        // <!..>, or <?...?> if false (a processing instruction)
+        boolean isDeclaration = true;
 
         public XmlDecl(TreeBuilder treeBuilder) {
             super(TokenType.XmlDecl, treeBuilder);
@@ -530,97 +466,92 @@ abstract class Token {
 
         @Override
         XmlDecl reset() {
-            super.reset();
-            isDeclaration = true;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            String open = isDeclaration ? "<!" : "<?";
-            String close = isDeclaration ? ">" : "?>";
-            if (hasAttributes() && attributes.size() > 0)
-                return open + toStringName() + " " + attributes.toString() + close;
-            else
-                return open + toStringName() + close;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     final static class EOF extends Token {
+
         EOF() {
             super(Token.TokenType.EOF);
         }
 
         @Override
         Token reset() {
-            super.reset();
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return "";
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     final boolean isDoctype() {
-        return type == TokenType.Doctype;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final Doctype asDoctype() {
-        return (Doctype) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isStartTag() {
-        return type == TokenType.StartTag;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final StartTag asStartTag() {
-        return (StartTag) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isEndTag() {
-        return type == TokenType.EndTag;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final EndTag asEndTag() {
-        return (EndTag) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isComment() {
-        return type == TokenType.Comment;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final Comment asComment() {
-        return (Comment) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isCharacter() {
-        return type == TokenType.Character;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isCData() {
-        return this instanceof CData;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final Character asCharacter() {
-        return (Character) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final XmlDecl asXmlDecl() {
-        return (XmlDecl) this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final boolean isEOF() {
-        return type == TokenType.EOF;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public enum TokenType {
+
         Doctype,
         StartTag,
         EndTag,
         Comment,
-        Character, // note no CData - treated in builder as an extension of Character
+        // note no CData - treated in builder as an extension of Character
+        Character,
         XmlDecl,
         EOF
     }

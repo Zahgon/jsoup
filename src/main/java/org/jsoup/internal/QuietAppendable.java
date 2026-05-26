@@ -1,12 +1,11 @@
 package org.jsoup.internal;
 
 import org.jsoup.SerializationException;
-
 import java.io.IOException;
 
 /**
- A jsoup internal class to wrap an Appendable and throw IOExceptions as SerializationExceptions.
- <p>Only implements the appendable methods we actually use.</p>
+ * A jsoup internal class to wrap an Appendable and throw IOExceptions as SerializationExceptions.
+ * <p>Only implements the appendable methods we actually use.</p>
  */
 public abstract class QuietAppendable {
 
@@ -14,13 +13,16 @@ public abstract class QuietAppendable {
 
     public abstract QuietAppendable append(char c);
 
-    public abstract QuietAppendable append(char[] chars, int offset, int len); // via StringBuilder, not Appendable
+    // via StringBuilder, not Appendable
+    public abstract QuietAppendable append(char[] chars, int offset, int len);
 
     static final class BaseAppendable extends QuietAppendable {
+
         private final Appendable a;
 
         @FunctionalInterface
         private interface Action {
+
             void append() throws IOException;
         }
 
@@ -39,22 +41,25 @@ public abstract class QuietAppendable {
 
         @Override
         public BaseAppendable append(CharSequence csq) {
-            return quiet(() -> a.append(csq));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public BaseAppendable append(char c) {
-            return quiet(() -> a.append(c));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public QuietAppendable append(char[] chars, int offset, int len) {
-            return quiet(() -> a.append(new String(chars, offset, len)));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** A version that wraps a StringBuilder, and so doesn't need the exception wrap. */
+    /**
+     * A version that wraps a StringBuilder, and so doesn't need the exception wrap.
+     */
     static final class StringBuilderAppendable extends QuietAppendable {
+
         private final StringBuilder sb;
 
         private StringBuilderAppendable(StringBuilder sb) {
@@ -63,30 +68,26 @@ public abstract class QuietAppendable {
 
         @Override
         public StringBuilderAppendable append(CharSequence csq) {
-            sb.append(csq);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public StringBuilderAppendable append(char c) {
-            sb.append(c);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public QuietAppendable append(char[] chars, int offset, int len) {
-            sb.append(chars, offset, len);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public String toString() {
-            return sb.toString();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public static QuietAppendable wrap(Appendable a) {
-        if (a instanceof StringBuilder) return new StringBuilderAppendable((StringBuilder) a);
-        else                            return new BaseAppendable(a);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

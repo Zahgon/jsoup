@@ -12,32 +12,40 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.Evaluator;
 import org.jsoup.select.Selector;
 import org.jspecify.annotations.Nullable;
-
 import java.nio.charset.Charset;
 import java.util.List;
-
 import static org.jsoup.parser.Parser.NamespaceHtml;
 
 /**
- A HTML Document.
-
- @author Jonathan Hedley, jonathan@hedley.net */
+ * A HTML Document.
+ *
+ * @author Jonathan Hedley, jonathan@hedley.net
+ */
 public class Document extends Element {
-    private @Nullable Connection connection; // the connection this doc was fetched from, if any
+
+    // the connection this doc was fetched from, if any
+    @Nullable
+    private Connection connection;
+
     private OutputSettings outputSettings = new OutputSettings();
-    private Parser parser; // the parser used to parse this document
+
+    // the parser used to parse this document
+    private Parser parser;
+
     private QuirksMode quirksMode = QuirksMode.noQuirks;
+
     private final String location;
 
     /**
-     Create a new, empty Document, in the specified namespace.
-     @param namespace the namespace of this Document's root node.
-     @param baseUri base URI of document
-     @see org.jsoup.Jsoup#parse
-     @see #createShell
+     *     Create a new, empty Document, in the specified namespace.
+     *     @param namespace the namespace of this Document's root node.
+     *     @param baseUri base URI of document
+     *     @see org.jsoup.Jsoup#parse
+     *     @see #createShell
      */
     public Document(String namespace, String baseUri) {
-        this(namespace, baseUri, Parser.htmlParser()); // default HTML parser, but overridable
+        // default HTML parser, but overridable
+        this(namespace, baseUri, Parser.htmlParser());
     }
 
     private Document(String namespace, String baseUri, Parser parser) {
@@ -47,29 +55,22 @@ public class Document extends Element {
     }
 
     /**
-     Create a new, empty Document, in the HTML namespace.
-     @param baseUri base URI of document
-     @see org.jsoup.Jsoup#parse
-     @see #Document(String namespace, String baseUri)
+     *     Create a new, empty Document, in the HTML namespace.
+     *     @param baseUri base URI of document
+     *     @see org.jsoup.Jsoup#parse
+     *     @see #Document(String namespace, String baseUri)
      */
     public Document(String baseUri) {
         this(NamespaceHtml, baseUri);
     }
 
     /**
-     Create a valid, empty shell of an HTML document, suitable for adding more elements to.
-     @param baseUri baseUri of document
-     @return document with html, head, and body elements.
+     *     Create a valid, empty shell of an HTML document, suitable for adding more elements to.
+     *     @param baseUri baseUri of document
+     *     @return document with html, head, and body elements.
      */
     public static Document createShell(String baseUri) {
-        Validate.notNull(baseUri);
-
-        Document doc = new Document(baseUri);
-        Element html = doc.appendElement("html");
-        html.appendElement("head");
-        html.appendElement("body");
-
-        return doc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,39 +80,31 @@ public class Document extends Element {
      * @return location
      */
     public String location() {
-        return location;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Returns the Connection (Request/Response) object that was used to fetch this document, if any; otherwise, a new
-     default Connection object. This can be used to continue a session, preserving settings and cookies, etc.
-     @return the Connection (session) associated with this Document, or an empty one otherwise.
-     @see Connection#newRequest()
+     *     Returns the Connection (Request/Response) object that was used to fetch this document, if any; otherwise, a new
+     *     default Connection object. This can be used to continue a session, preserving settings and cookies, etc.
+     *     @return the Connection (session) associated with this Document, or an empty one otherwise.
+     *     @see Connection#newRequest()
      */
     public Connection connection() {
-        if (connection == null)
-            return Jsoup.newSession();
-        else
-            return connection;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns this Document's doctype.
      * @return document type, or null if not set
      */
-    public @Nullable DocumentType documentType() {
-        for (Node node : childNodes) {
-            if (node instanceof DocumentType)
-                return (DocumentType) node;
-            else if (!(node instanceof LeafNode)) // scans forward across comments, text, processing instructions etc
-                break;
-        }
-        return null;
+    @Nullable
+    public DocumentType documentType() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Find the root HTML element, or create it if it doesn't exist.
-     @return the root HTML element.
+     *     Find the root HTML element, or create it if it doesn't exist.
+     *     @return the root HTML element.
      */
     private Element htmlEl() {
         Element el = firstElementChild();
@@ -124,183 +117,145 @@ public class Document extends Element {
     }
 
     /**
-     Get this document's {@code head} element.
-     <p>
-     As a side effect, if this Document does not already have an HTML structure, it will be created. If you do not want
-     that, use {@code #selectFirst("head")} instead.
-
-     @return {@code head} element.
+     *     Get this document's {@code head} element.
+     *     <p>
+     *     As a side effect, if this Document does not already have an HTML structure, it will be created. If you do not want
+     *     that, use {@code #selectFirst("head")} instead.
+     *
+     *     @return {@code head} element.
      */
     public Element head() {
-        final Element html = htmlEl();
-        Element el = html.firstElementChild();
-        while (el != null) {
-            if (el.nameIs("head"))
-                return el;
-            el = el.nextElementSibling();
-        }
-        return html.prependElement("head");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get this document's {@code <body>} or {@code <frameset>} element.
-     <p>
-     As a <b>side-effect</b>, if this Document does not already have an HTML structure, it will be created with a {@code
-    <body>} element. If you do not want that, use {@code #selectFirst("body")} instead.
-
-     @return {@code body} element for documents with a {@code <body>}, a new {@code <body>} element if the document
-     had no contents, or the outermost {@code <frameset> element} for frameset documents.
+     *     Get this document's {@code <body>} or {@code <frameset>} element.
+     *     <p>
+     *     As a <b>side-effect</b>, if this Document does not already have an HTML structure, it will be created with a {@code
+     *    <body>} element. If you do not want that, use {@code #selectFirst("body")} instead.
+     *
+     *     @return {@code body} element for documents with a {@code <body>}, a new {@code <body>} element if the document
+     *     had no contents, or the outermost {@code <frameset> element} for frameset documents.
      */
     public Element body() {
-        final Element html = htmlEl();
-        Element el = html.firstElementChild();
-        while (el != null) {
-            if (el.nameIs("body") || el.nameIs("frameset"))
-                return el;
-            el = el.nextElementSibling();
-        }
-        return html.appendElement("body");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get each of the {@code <form>} elements contained in this document.
-     @return a List of FormElement objects, which will be empty if there are none.
-     @see Elements#forms()
-     @see FormElement#elements()
-     @since 1.15.4
+     *     Get each of the {@code <form>} elements contained in this document.
+     *     @return a List of FormElement objects, which will be empty if there are none.
+     *     @see Elements#forms()
+     *     @see FormElement#elements()
+     *     @since 1.15.4
      */
     public List<FormElement> forms() {
-        return select("form").forms();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Selects the first {@link FormElement} in this document that matches the query. If none match, throws an
-     {@link IllegalArgumentException}.
-     @param cssQuery a {@link Selector} CSS query
-     @return the first matching {@code <form>} element
-     @throws IllegalArgumentException if no match is found
-     @since 1.15.4
+     *     Selects the first {@link FormElement} in this document that matches the query. If none match, throws an
+     *     {@link IllegalArgumentException}.
+     *     @param cssQuery a {@link Selector} CSS query
+     *     @return the first matching {@code <form>} element
+     *     @throws IllegalArgumentException if no match is found
+     *     @since 1.15.4
      */
     public FormElement expectForm(String cssQuery) {
-        Elements els = select(cssQuery);
-        for (Element el : els) {
-            if (el instanceof FormElement) return (FormElement) el;
-        }
-        Validate.fail("No form elements matched the query '%s' in the document.", cssQuery);
-        return null; // (not really)
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the string contents of the document's {@code title} element.
-     @return Trimmed title, or empty string if none set.
+     *     Get the string contents of the document's {@code title} element.
+     *     @return Trimmed title, or empty string if none set.
      */
     public String title() {
-        // title is a preserve whitespace tag (for document output), but normalised here
-        Element titleEl = head().selectFirst(titleEval);
-        return titleEl != null ? StringUtil.normaliseWhitespace(titleEl.text()).trim() : "";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
+
     private static final Evaluator titleEval = new Evaluator.Tag("title");
 
     /**
-     Set the document's {@code title} element. Updates the existing element, or adds {@code title} to {@code head} if
-     not present
-     @param title string to set as title
+     *     Set the document's {@code title} element. Updates the existing element, or adds {@code title} to {@code head} if
+     *     not present
+     *     @param title string to set as title
      */
     public void title(String title) {
-        Validate.notNull(title);
-        Element titleEl = head().selectFirst(titleEval);
-        if (titleEl == null) // add to head
-            titleEl = head().appendElement("title");
-        titleEl.text(title);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Create a new Element, with this document's base uri. Does not make the new element a child of this document.
-     @param tagName element tag name (e.g. {@code a})
-     @return new element
+     *     Create a new Element, with this document's base uri. Does not make the new element a child of this document.
+     *     @param tagName element tag name (e.g. {@code a})
+     *     @return new element
      */
     public Element createElement(String tagName) {
-        return new Element(
-            parser.tagSet().valueOf(tagName, parser.defaultNamespace(), ParseSettings.preserveCase),
-            searchUpForAttribute(this, BaseUriKey)
-        );
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String outerHtml() {
-        return super.html(); // no outer wrapper tag
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Set the text of the {@code body} of this document. Any existing nodes within the body will be cleared.
-     @param text un-encoded text
-     @return this document
+     *     Set the text of the {@code body} of this document. Any existing nodes within the body will be cleared.
+     *     @param text un-encoded text
+     *     @return this document
      */
     @Override
     public Element text(String text) {
-        body().text(text); // overridden to not nuke doc structure
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String nodeName() {
-        return "#document";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Set the output character set of this Document. This method is equivalent to
-     {@link OutputSettings#charset(java.nio.charset.Charset) OutputSettings.charset(Charset)}, but additionally adds or
-     updates the charset / encoding element within the Document.
-
-     <p>If there's no existing element with charset / encoding information yet, one will
-     be created. Obsolete charset / encoding definitions are removed.</p>
-
-     <p><b>Elements used:</b></p>
-
-     <ul>
-     <li><b>HTML:</b> <i>&lt;meta charset="CHARSET"&gt;</i></li>
-     <li><b>XML:</b> <i>&lt;?xml version="1.0" encoding="CHARSET"&gt;</i></li>
-     </ul>
-
-     @param charset Charset
-     @see OutputSettings#charset(java.nio.charset.Charset)
+     *     Set the output character set of this Document. This method is equivalent to
+     *     {@link OutputSettings#charset(java.nio.charset.Charset) OutputSettings.charset(Charset)}, but additionally adds or
+     *     updates the charset / encoding element within the Document.
+     *
+     *     <p>If there's no existing element with charset / encoding information yet, one will
+     *     be created. Obsolete charset / encoding definitions are removed.</p>
+     *
+     *     <p><b>Elements used:</b></p>
+     *
+     *     <ul>
+     *     <li><b>HTML:</b> <i>&lt;meta charset="CHARSET"&gt;</i></li>
+     *     <li><b>XML:</b> <i>&lt;?xml version="1.0" encoding="CHARSET"&gt;</i></li>
+     *     </ul>
+     *
+     *     @param charset Charset
+     *     @see OutputSettings#charset(java.nio.charset.Charset)
      */
     public void charset(Charset charset) {
-        outputSettings.charset(charset);
-        ensureMetaCharsetElement();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Get the output character set of this Document. This method is equivalent to {@link OutputSettings#charset()}.
-
-     @return the current Charset
-     @see OutputSettings#charset()
+     *     Get the output character set of this Document. This method is equivalent to {@link OutputSettings#charset()}.
+     *
+     *     @return the current Charset
+     *     @see OutputSettings#charset()
      */
     public Charset charset() {
-        return outputSettings.charset();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Document clone() {
-        Document clone = (Document) super.clone();
-        if (attributes != null) clone.attributes = attributes.clone();
-        clone.outputSettings = this.outputSettings.clone();
-        // parser is pointer copy
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Document shallowClone() {
-        Document clone = new Document(this.tag().namespace(), baseUri(), parser); // preserves parser pointer
-        if (attributes != null) clone.attributes = attributes.clone();
-        clone.outputSettings = this.outputSettings.clone();
-        return clone;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-    
 
     private void ensureMetaCharsetElement() {
         OutputSettings.Syntax syntax = outputSettings().syntax();
-
         if (syntax == OutputSettings.Syntax.html) {
             Element metaCharset = selectFirst("meta[charset]");
             if (metaCharset != null) {
@@ -308,7 +263,8 @@ public class Document extends Element {
             } else {
                 head().appendElement("meta").attr("charset", charset().displayName());
             }
-            select("meta[name=charset]").remove(); // Remove obsolete elements
+            // Remove obsolete elements
+            select("meta[name=charset]").remove();
         } else if (syntax == OutputSettings.Syntax.xml) {
             XmlDeclaration decl = ensureXmlDecl();
             decl.attr("version", "1.0");
@@ -320,51 +276,62 @@ public class Document extends Element {
         Node node = firstChild();
         if (node instanceof XmlDeclaration) {
             XmlDeclaration decl = (XmlDeclaration) node;
-            if (decl.name().equals("xml")) return decl;
+            if (decl.name().equals("xml"))
+                return decl;
         }
         XmlDeclaration decl = new XmlDeclaration("xml", false);
         prependChild(decl);
         return decl;
     }
 
-
     /**
      * A Document's output settings control the form of the text() and html() methods.
      */
     public static class OutputSettings implements Cloneable {
+
         /**
          * The output serialization syntax.
          */
-        public enum Syntax {html, xml}
+        public enum Syntax {
+
+            html, xml
+        }
+
         private Entities.EscapeMode escapeMode = Entities.EscapeMode.base;
+
         private Charset charset = DataUtil.UTF_8;
+
         private boolean prettyPrint = true;
+
         private boolean outline = false;
+
         private int indentAmount = 1;
+
         private int maxPaddingWidth = 30;
+
         private Syntax syntax = Syntax.html;
 
         /**
-         Create a new OutputSettings object, with the default settings (UTF-8, HTML, EscapeMode.base, pretty-printing,
-         indent amount of 1).
+         *         Create a new OutputSettings object, with the default settings (UTF-8, HTML, EscapeMode.base, pretty-printing,
+         *         indent amount of 1).
          */
         public OutputSettings() {
         }
 
         /**
-         Get the document's current entity escape mode:
-         <ul>
-         <li><code>xhtml</code>, the minimal named entities in XHTML / XML</li>
-         <li><code>base</code>, which provides a limited set of named HTML
-         entities and escapes other characters as numbered entities for maximum compatibility</li>
-         <li><code>extended</code>,
-         which uses the complete set of HTML named entities.</li>
-         </ul>
-         <p>The default escape mode is <code>base</code>.
-         @return the document's current escape mode
+         *         Get the document's current entity escape mode:
+         *         <ul>
+         *         <li><code>xhtml</code>, the minimal named entities in XHTML / XML</li>
+         *         <li><code>base</code>, which provides a limited set of named HTML
+         *         entities and escapes other characters as numbered entities for maximum compatibility</li>
+         *         <li><code>extended</code>,
+         *         which uses the complete set of HTML named entities.</li>
+         *         </ul>
+         *         <p>The default escape mode is <code>base</code>.
+         *         @return the document's current escape mode
          */
         public Entities.EscapeMode escapeMode() {
-            return escapeMode;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -374,8 +341,7 @@ public class Document extends Element {
          * @return the document's output settings, for chaining
          */
         public OutputSettings escapeMode(Entities.EscapeMode escapeMode) {
-            this.escapeMode = escapeMode;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -387,7 +353,7 @@ public class Document extends Element {
          * @return the document's current charset.
          */
         public Charset charset() {
-            return charset;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -396,8 +362,7 @@ public class Document extends Element {
          * @return the document's output settings, for chaining
          */
         public OutputSettings charset(Charset charset) {
-            this.charset = charset;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -406,8 +371,7 @@ public class Document extends Element {
          * @return the document's output settings, for chaining
          */
         public OutputSettings charset(String charset) {
-            charset(Charset.forName(charset));
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -415,7 +379,7 @@ public class Document extends Element {
          * @return current syntax
          */
         public Syntax syntax() {
-            return syntax;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -427,10 +391,7 @@ public class Document extends Element {
          * @return the document's output settings, for chaining
          */
         public OutputSettings syntax(Syntax syntax) {
-            this.syntax = syntax;
-            if (syntax == Syntax.xml)
-                this.escapeMode(Entities.EscapeMode.xhtml);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -439,7 +400,7 @@ public class Document extends Element {
          * @return if pretty printing is enabled.
          */
         public boolean prettyPrint() {
-            return prettyPrint;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -448,27 +409,25 @@ public class Document extends Element {
          * @return this, for chaining
          */
         public OutputSettings prettyPrint(boolean pretty) {
-            prettyPrint = pretty;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-        
+
         /**
          * Get if outline mode is enabled. Default is false. If enabled, the HTML output methods will consider
          * all tags as block.
          * @return if outline mode is enabled.
          */
         public boolean outline() {
-            return outline;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-        
+
         /**
          * Enable or disable HTML outline mode.
          * @param outlineMode new outline setting
          * @return this, for chaining
          */
         public OutputSettings outline(boolean outlineMode) {
-            outline = outlineMode;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -476,7 +435,7 @@ public class Document extends Element {
          * @return the current indent amount
          */
         public int indentAmount() {
-            return indentAmount;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -485,9 +444,7 @@ public class Document extends Element {
          * @return this, for chaining
          */
         public OutputSettings indentAmount(int indentAmount) {
-            Validate.isTrue(indentAmount >= 0);
-            this.indentAmount = indentAmount;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -496,7 +453,7 @@ public class Document extends Element {
          * @return the current indent amount
          */
         public int maxPaddingWidth() {
-            return maxPaddingWidth;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -506,23 +463,12 @@ public class Document extends Element {
          * @return this, for chaining
          */
         public OutputSettings maxPaddingWidth(int maxPaddingWidth) {
-            Validate.isTrue(maxPaddingWidth >= -1);
-            this.maxPaddingWidth = maxPaddingWidth;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public OutputSettings clone() {
-            OutputSettings clone;
-            try {
-                clone = (OutputSettings) super.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
-            clone.charset(charset.name()); // new charset, coreCharset, and charset encoder
-            clone.escapeMode = Entities.EscapeMode.valueOf(escapeMode.name());
-            // indentAmount, maxPaddingWidth, and prettyPrint are primitives so object.clone() will handle
-            return clone;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -531,7 +477,7 @@ public class Document extends Element {
      * @return the document's current output settings.
      */
     public OutputSettings outputSettings() {
-        return outputSettings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -540,22 +486,20 @@ public class Document extends Element {
      * @return this document, for chaining.
      */
     public Document outputSettings(OutputSettings outputSettings) {
-        Validate.notNull(outputSettings);
-        this.outputSettings = outputSettings;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public enum QuirksMode {
+
         noQuirks, quirks, limitedQuirks
     }
 
     public QuirksMode quirksMode() {
-        return quirksMode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Document quirksMode(QuirksMode quirksMode) {
-        this.quirksMode = quirksMode;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -563,7 +507,7 @@ public class Document extends Element {
      * @return the parser
      */
     public Parser parser() {
-        return parser;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -573,22 +517,19 @@ public class Document extends Element {
      * @return this document, for chaining.
      */
     public Document parser(Parser parser) {
-        this.parser = parser;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
-     Set the Connection used to fetch this document. This Connection is used as a session object when further requests are
-     made (e.g. when a form is submitted).
-
-     @param connection to set
-     @return this document, for chaining
-     @see Connection#newRequest()
-     @since 1.14.1
+     *     Set the Connection used to fetch this document. This Connection is used as a session object when further requests are
+     *     made (e.g. when a form is submitted).
+     *
+     *     @param connection to set
+     *     @return this document, for chaining
+     *     @see Connection#newRequest()
+     *     @since 1.14.1
      */
     public Document connection(Connection connection) {
-        Validate.notNull(connection);
-        this.connection = connection;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
